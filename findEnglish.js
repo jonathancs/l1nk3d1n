@@ -1,102 +1,123 @@
-const cheerio = require('cheerio')
-const { first } = require('cheerio/lib/api/traversing')
-const fs = require('fs')
+const cheerio = require("cheerio");
+const { first } = require("cheerio/lib/api/traversing");
+const fs = require("fs");
 const path = require("path");
-const testFolder = './toBeScrapped/';
-const englishFolder = './withEnglish/';
-profilesToBeScraped = []
+const testFolder = "./toBeScrapped/";
+const englishFolder = "./withEnglish/";
+profilesToBeScraped = [];
 
 async function everything() {
+  await saveAllFilesToArray();
 
-      await saveAllFilesToArray()
+  // documentation below
 
-      // documentation below
+  async function saveAllFilesToArray() {
+    fs.readdir(testFolder, (err, files) => {
+      files.forEach((file) => {
+        profilesToBeScraped.push(file);
+      //   console.log(file); // unit testing
+      });
 
-      async function saveAllFilesToArray() {
+      for (let i = 0; i < profilesToBeScraped.length; i++) {
+        let currentProfile = profilesToBeScraped[i];
 
-            fs.readdir(testFolder, (err, files) => {
-                  files.forEach(file => {
-                        profilesToBeScraped.push(file)
-                        console.log(file)
-                  });
+        fs.readFile(testFolder + currentProfile, "utf8", (err, html) => {
+          if (err) {
+            console.error(err);
+            // run into a bug of having a FOLDER inside this aimed folder. Since it is a FOLDER, the code TRYES to read it, but fails, then notifies an error. i tried to look into the code of listing ONLY files with a specific extension, but it seemed hard for the time being, i can just work without that folder inside.
+            return;
+          }
 
-                  for (let i = 0; i < profilesToBeScraped.length; i++) {
-                        let currentProfile = profilesToBeScraped[i];
-                        
-                        fs.readFile(testFolder + currentProfile, 'utf8' , (err, html) => {
-                              if (err) {
-                                    console.error(err)
-                                    // run into a bug of having a FOLDER inside this aimed folder. Since it is a FOLDER, the code TRYES to read it, but fails, then notifies an error. i tried to look into the code of listing ONLY files with a specific extension, but it seemed hard for the time being, i can just work without that folder inside.
-                                    return
-                              }
-                        
-                              let $ = cheerio.load(html)
-                              let keywordsCounter = 0
-                  
-                              let wholeHTML = $('body').text()
+          let $ = cheerio.load(html);
+          let wholeHTML = $("body").text();
 
-                              // if (wholeHTML.match(/inglês/g) || []) {console.log((wholeHTML.match(/inglês/g) || []).length)} // unit test
-                              
-                              if ((wholeHTML.match(/inglês/g) || []).length > 0) {keywordsCounter++}
-                              if ((wholeHTML.match(/ingles/g) || []).length > 0) {keywordsCounter++}
-                              if ((wholeHTML.match(/english/g) || []).length > 0) {keywordsCounter++}
-                              if ((wholeHTML.match(/inglês/g) || []).length > 0) {keywordsCounter++}
+          let languagesLIs = $("li.pv-accomplishment-entity");
 
-                              async function moveToEnglishFolder() {
+          for (let i = 0; i < languagesLIs.length; i++) {
+            let loopedLanguage = $("li.pv-accomplishment-entity").eq(i).text();
+            englishLevel = "";
 
-                                    const currentPath = path.join(__dirname, testFolder, currentProfile);
-                                    const destinationPath = path.join(__dirname, englishFolder, currentProfile);
-
-                                    fs.rename(currentPath, destinationPath, function (err) {
-                                          if (err) {
-                                                throw err
-                                          } else {
-                                                console.log("Successfully moved the file!");
-                                          }
-                                    });
-
-                              }
-                              
-                              // console.log((wholeHTML.match(/inglês/g) || []).length)
-                              
-                              
-                              // if () {}
-
-                              // proximo passo a pensar:
-                              // como evito copiar linhas de codigo mudando apenas o regex?
-                  
-                              // if (body.match(/ingles/g) || []) {}
-                  
-                              // fs.writeFile("test2.txt", firstText, function (err) { if (err) { console.log(err); } });
-                  
-                              
-                        })
-                                    
-                                    
-                  }
-            });
-
-      }
-      
-
-      async function readFiles_DetectEnglish() {
-
-                              
+            if (loopedLanguage.match(/english/gim)) {
+              englishLevel = $("li.pv-accomplishment-entity")
+                .eq(i)
+                .children()
+                .next()
+                .text();
             
+            } else if (loopedLanguage.match(/inglês/gim)) {
+                  englishLevel = $("li.pv-accomplishment-entity")
+                    .eq(i)
+                    .children()
+                    .next()
+                    .text();
+            
+            } else if (loopedLanguage.match(/ingles/gim)) {
+                  englishLevel = $("li.pv-accomplishment-entity")
+                    .eq(i)
+                    .children()
+                    .next()
+                    .text();
+            }
+
+            // console.log(englishLevel); // unit testing
+
+            if (englishLevel.match(/nível avançado/gim)) {
+              moveToEnglishFolder();
+            }
+          }
+
+          //     if ((wholeHTML.match(/inglês/g) || []).length > 0) {
+          //       keywordsCounter++;
+          //     }
+          //     if ((wholeHTML.match(/ingles/g) || []).length > 0) {
+          //       keywordsCounter++;
+          //     }
+          //     if ((wholeHTML.match(/english/g) || []).length > 0) {
+          //       keywordsCounter++;
+          //     }
+          //     if ((wholeHTML.match(/inglês/g) || []).length > 0) {
+          //       keywordsCounter++;
+          //     }
+
+          async function moveToEnglishFolder() {
+            const currentPath = path.join(
+              __dirname,
+              testFolder,
+              currentProfile
+            );
+            const destinationPath = path.join(
+              __dirname,
+              englishFolder,
+              currentProfile
+            );
+
+            fs.rename(currentPath, destinationPath, function (err) {
+              if (err) {
+                throw err;
+              } else {
+            //     console.log("Successfully moved the file!"); // unit testing
+              }
+            });
+          }
+
+          // console.log((wholeHTML.match(/inglês/g) || []).length)
+
+          // if () {}
+
+          // proximo passo a pensar:
+          // como evito copiar linhas de codigo mudando apenas o regex?
+
+          // if (body.match(/ingles/g) || []) {}
+
+          // fs.writeFile("test2.txt", firstText, function (err) { if (err) { console.log(err); } });
+        });
       }
+    });
+  }
 
-      
-      
 }
-                  
-                  
-everything()
 
-
-
-
-
-
+everything();
 
 /*
 

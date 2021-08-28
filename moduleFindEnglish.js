@@ -20,16 +20,14 @@ async function executeScript() {
 
 		for (let i = 0; i < languagesLIs.length; i++) {
 			let loopedLanguage = $('li.pv-accomplishment-entity').eq(i).text()
-			languageLevelVerifier = ''
+			englishLevel = ''
 
 			if (loopedLanguage.match(/english/igm))
-			{languageLevelVerifier = $('li.pv-accomplishment-entity').eq(i).children().next().text()}
+			{englishLevel = $('li.pv-accomplishment-entity').eq(i).children().next().text()}
 
-			console.log(languageLevelVerifier)
+			console.log(englishLevel)
 
-			
-
-			
+			if (englishLevel.match(/nível avançado/igm) ) {}
 			
 		}
 
