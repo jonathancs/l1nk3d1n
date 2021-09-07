@@ -43,12 +43,20 @@ async function everything() {
                 .children()
                 .next()
                 .text();
+<<<<<<< HEAD
+=======
+
+>>>>>>> d5e030c3c37c4b48d765b9ba30a4318fd53676b5
             } else if (loopedLanguage.match(/inglês/gim)) {
               englishLevel = $("li.pv-accomplishment-entity")
                 .eq(i)
                 .children()
                 .next()
                 .text();
+<<<<<<< HEAD
+=======
+
+>>>>>>> d5e030c3c37c4b48d765b9ba30a4318fd53676b5
             } else if (loopedLanguage.match(/ingles/gim)) {
               englishLevel = $("li.pv-accomplishment-entity")
                 .eq(i)
@@ -59,9 +67,7 @@ async function everything() {
 
             // console.log(englishLevel); // unit testing
 
-            if (englishLevel.match(/nível avançado/gim)) {
-              moveToEnglishFolder();
-            }
+            if (englishLevel.match(/avançado/gim)) {moveToEnglishFolder()} else if (englishLevel.match(/fluente/gim)) {moveToEnglishFolder()}
           }
 
           //     if ((wholeHTML.match(/inglês/g) || []).length > 0) {
@@ -118,7 +124,7 @@ everything();
 
 /*
 
-//PROFILE PARTS 
+//PROFILE PARTS
 
 // BIO
 document.querySelector('[class="pv-profile-section__card-header"]').nextElementSibling
