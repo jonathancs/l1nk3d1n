@@ -15,7 +15,7 @@ async function everything() {
     fs.readdir(testFolder, (err, files) => {
       files.forEach((file) => {
         profilesToBeScraped.push(file);
-      //   console.log(file); // unit testing
+        //   console.log(file); // unit testing
       });
 
       for (let i = 0; i < profilesToBeScraped.length; i++) {
@@ -43,20 +43,18 @@ async function everything() {
                 .children()
                 .next()
                 .text();
-            
             } else if (loopedLanguage.match(/inglês/gim)) {
-                  englishLevel = $("li.pv-accomplishment-entity")
-                    .eq(i)
-                    .children()
-                    .next()
-                    .text();
-            
+              englishLevel = $("li.pv-accomplishment-entity")
+                .eq(i)
+                .children()
+                .next()
+                .text();
             } else if (loopedLanguage.match(/ingles/gim)) {
-                  englishLevel = $("li.pv-accomplishment-entity")
-                    .eq(i)
-                    .children()
-                    .next()
-                    .text();
+              englishLevel = $("li.pv-accomplishment-entity")
+                .eq(i)
+                .children()
+                .next()
+                .text();
             }
 
             // console.log(englishLevel); // unit testing
@@ -95,7 +93,7 @@ async function everything() {
               if (err) {
                 throw err;
               } else {
-            //     console.log("Successfully moved the file!"); // unit testing
+                //     console.log("Successfully moved the file!"); // unit testing
               }
             });
           }
@@ -114,7 +112,6 @@ async function everything() {
       }
     });
   }
-
 }
 
 everything();
