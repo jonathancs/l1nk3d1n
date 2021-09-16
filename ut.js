@@ -1,19 +1,67 @@
-let p = new Promise((resolve, reject) => {
+/* SCRIPT FOR UNIT TESTING ON THE PROFILE */
 
-  for (i = 0; i < 1000; i++) {
-    console.log([i])
-    
-  }
+const cheerio = require('cheerio')
+const { first } = require('cheerio/lib/api/traversing')
+const fs = require('fs')
+const path = require("path");
+const currentProfile = './toBeScrapped/Ana Goreanu _ LinkedIn 20210827.html'
 
-  if (i == 1000) {
-    Resolve("Success");
-  } else {
-    reject("Failed");
-  }
-});
+async function executeScript() {
 
-p
- .then(() => {console.log("deu?");console.log(i)})
- .catch(() => {console.log("deu erro");console.log(i)})
+	fs.readFile(currentProfile, 'utf8' , (err, html) => {
+		if (err) {
+			console.error(err)
+			return
+		}
+				
+		let $ = cheerio.load(html)
+		let wholeHTML = $('body').text()
 
- 
+
+		let languagesLIs = $('li.pv-accomplishment-entity').eq(0).children().next().text()
+
+		console.log(languagesLIs)
+
+			
+
+			
+			
+	})
+}
+
+
+                              
+executeScript()
+
+
+
+
+
+
+
+/*
+
+//PROFILE PARTS 
+
+// BIO
+document.querySelector('[class="pv-profile-section__card-header"]').nextElementSibling
+
+// position title
+document.querySelectorAll('[class="pv-entity__secondary-title t-14 t-black t-normal"]')[0].previousElementSibling.previousElementSibling.innerText
+
+// experience time
+document.querySelectorAll('[class="pv-entity__bullet-item-v2"]')[0]
+
+// experiences bio
+document.querySelectorAll('[class="pv-entity__extra-details t-14 t-black--light ember-view"]')[0]
+
+// languages
+document.querySelector('[class="pv-accomplishments-block__list-container"]').children[0].children[0]
+
+// when i is the english element at unknown position
+document.querySelector('[class="pv-accomplishments-block__list-container"]').children[0].children[i].children[1].innerText
+
+
+document.querySelector('h4[class="pv-accomplishment-entity__title t-14 t-bold"]')
+*/
+

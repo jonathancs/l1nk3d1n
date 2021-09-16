@@ -6,16 +6,16 @@ const testFolder = "./toBeScrapped/";
 const englishFolder = "./withEnglish/";
 profilesToBeScraped = [];
 
-async function everything() {
-	await saveAllFilesToArray();
+function everything() {
+	saveAllFilesToArray();
 
 	// documentation below
 
-	async function saveAllFilesToArray() {
+	function saveAllFilesToArray() {
 		fs.readdir(testFolder, (err, files) => {
 			files.forEach((file) => {
 				profilesToBeScraped.push(file);
-				console.log(file); // unit testing
+				//   console.log(file); // unit testing
 			});
 
 			for (let i = 0; i < profilesToBeScraped.length; i++) {
@@ -182,7 +182,7 @@ async function everything() {
 
 
 
-					async function moveToenglishFolder() {
+					function moveToenglishFolder() {
 						if (err) {
 							console.error(err);
 							return;

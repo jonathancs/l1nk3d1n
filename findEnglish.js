@@ -2,29 +2,36 @@ const cheerio = require("cheerio");
 const { first } = require("cheerio/lib/api/traversing");
 const fs = require("fs");
 const path = require("path");
-const testFolder = "./toBeScrapped/";
+const { moveMessagePortToContext } = require("worker_threads");
+const folderToBeScrapped = "./toBeScrapped/";
 const englishFolder = "./withEnglish/";
 profilesToBeScraped = [];
 
 async function everything() {
-  await saveAllFilesToArray();
+  
+  await saveAllFilesToArray(); // this will read all the files in the folder and save it to the array, to be scraped afterwards.
 
   // documentation below
 
   async function saveAllFilesToArray() {
-    fs.readdir(testFolder, (err, files) => {
+    fs.readdir(folderToBeScrapped, (err, files) => {
       files.forEach((file) => {
         profilesToBeScraped.push(file);
         //   console.log(file); // unit testing
       });
 
+      /*
+        i couldn't manage to save this array to the memory, that's why you have this code inside the FS.READDIR
+      */
+      
+      // this will loop the list of profiles to be scraped
       for (let i = 0; i < profilesToBeScraped.length; i++) {
         let currentProfile = profilesToBeScraped[i];
 
-        fs.readFile(testFolder + currentProfile, "utf8", (err, html) => {
+        // this will READ the looped file and apply the english filters
+        fs.readFile(folderToBeScrapped + currentProfile, "utf8", (err, html) => {
           if (err) {
             console.error(err);
-            // run into a bug of having a FOLDER inside this aimed folder. Since it is a FOLDER, the code TRYES to read it, but fails, then notifies an error. i tried to look into the code of listing ONLY files with a specific extension, but it seemed hard for the time being, i can just work without that folder inside.
             return;
           }
 
@@ -37,26 +44,21 @@ async function everything() {
             let loopedLanguage = $("li.pv-accomplishment-entity").eq(i).text();
             englishLevel = "";
 
+
             if (loopedLanguage.match(/english/gim)) {
               englishLevel = $("li.pv-accomplishment-entity")
                 .eq(i)
                 .children()
                 .next()
                 .text();
-<<<<<<< HEAD
-=======
 
->>>>>>> d5e030c3c37c4b48d765b9ba30a4318fd53676b5
             } else if (loopedLanguage.match(/inglês/gim)) {
               englishLevel = $("li.pv-accomplishment-entity")
                 .eq(i)
                 .children()
                 .next()
                 .text();
-<<<<<<< HEAD
-=======
 
->>>>>>> d5e030c3c37c4b48d765b9ba30a4318fd53676b5
             } else if (loopedLanguage.match(/ingles/gim)) {
               englishLevel = $("li.pv-accomplishment-entity")
                 .eq(i)
@@ -68,25 +70,15 @@ async function everything() {
             // console.log(englishLevel); // unit testing
 
             if (englishLevel.match(/avançado/gim)) {moveToEnglishFolder()} else if (englishLevel.match(/fluente/gim)) {moveToEnglishFolder()}
+
+            
           }
-
-          //     if ((wholeHTML.match(/inglês/g) || []).length > 0) {
-          //       keywordsCounter++;
-          //     }
-          //     if ((wholeHTML.match(/ingles/g) || []).length > 0) {
-          //       keywordsCounter++;
-          //     }
-          //     if ((wholeHTML.match(/english/g) || []).length > 0) {
-          //       keywordsCounter++;
-          //     }
-          //     if ((wholeHTML.match(/inglês/g) || []).length > 0) {
-          //       keywordsCounter++;
-          //     }
-
+          
+          // this is the code to change the folder's directory
           async function moveToEnglishFolder() {
             const currentPath = path.join(
               __dirname,
-              testFolder,
+              folderToBeScrapped,
               currentProfile
             );
             const destinationPath = path.join(
@@ -118,6 +110,7 @@ async function everything() {
       }
     });
   }
+
 }
 
 everything();
