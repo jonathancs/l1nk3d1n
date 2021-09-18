@@ -25,7 +25,6 @@ async function everything() {
 	  fs.readFile(testFolder + currentProfile, "utf8", (err, html) => {
 	    if (err) {
 		console.error(err);
-		// run into a bug of having a FOLDER inside this aimed folder. Since it is a FOLDER, the code TRYES to read it, but fails, then notifies an error. i tried to look into the code of listing ONLY files with a specific extension, but it seemed hard for the time being, i can just work without that folder inside.
 		return;
 	    }
 
