@@ -1,47 +1,79 @@
-/* SCRIPT FOR UNIT TESTING ON THE PROFILE */
-
-const cheerio = require('cheerio')
-const { first } = require('cheerio/lib/api/traversing')
-const fs = require('fs')
+const cheerio = require("cheerio");
+const { first } = require("cheerio/lib/api/traversing");
+const fs = require("fs");
 const path = require("path");
-const currentProfile = './toBeScrapped/Ana Goreanu _ LinkedIn 20210827.html'
+const { moveMessagePortToContext } = require("worker_threads");
+const xfile = "./zprofiles/node/www.linkedin.com__in_▪️-henrique-schmitt-20b2a010a node.html"
 
-async function executeScript() {
+async function everything() {
 
-	fs.readFile(currentProfile, 'utf8' , (err, html) => {
+	// this will READ the looped file and apply the english filters
+	fs.readFile(xfile, "utf8", (err, html) => {
 		if (err) {
-			console.error(err)
-			return
+			console.error(err);
+			return;
 		}
-				
-		let $ = cheerio.load(html)
-		let wholeHTML = $('body').text()
+
+		let $ = cheerio.load(html);
+		let wholeHTML = $("body").text();
+
+		// test to know if profile loaded.
+		let title = $('.text-body-medium.break-words').text();
+		console.log(title)
+
+		let languagesLIs = $("li.pv-accomplishment-entity");
+
+		for (let i = 0; i < languagesLIs.length; i++) {
+			let loopedLanguage = $("li.pv-accomplishment-entity").eq(i).text();
+			englishLevel = "";
 
 
-		let languagesLIs = $('li.pv-accomplishment-entity').eq(0).children().next().text()
+			if (loopedLanguage.match(/english/gim)) {
+				try {
+					englishLevel = $("li.pv-accomplishment-entity")
+						.eq(i)
+						.children()
+						.next()
+						.text()
+					console.log(englishLevel)
+				} catch (error) { englishLevel = 0 }
 
-		console.log(languagesLIs)
 
-			
+			} else if (loopedLanguage.match(/inglês/gim)) {
+				try {
+					englishLevel = $("li.pv-accomplishment-entity")
+						.eq(i)
+						.children()
+						.next()
+						.text()
+					console.log(englishLevel)
+				} catch (error) { englishLevel = 0 }
 
-			
-			
-	})
+
+			} else if (loopedLanguage.match(/ingles/gim)) {
+				try {
+					englishLevel = $("li.pv-accomplishment-entity")
+						.eq(i)
+						.children()
+						.next()
+						.text()
+					console.log(englishLevel)
+				} catch (error) { englishLevel = 0 }
+
+			}
+
+			// console.log(englishLevel); // unit testing
+
+		}
+
+	});
 }
 
-
-                              
-executeScript()
-
-
-
-
-
-
+everything();
 
 /*
 
-//PROFILE PARTS 
+//PROFILE PARTS
 
 // BIO
 document.querySelector('[class="pv-profile-section__card-header"]').nextElementSibling
@@ -60,8 +92,4 @@ document.querySelector('[class="pv-accomplishments-block__list-container"]').chi
 
 // when i is the english element at unknown position
 document.querySelector('[class="pv-accomplishments-block__list-container"]').children[0].children[i].children[1].innerText
-
-
-document.querySelector('h4[class="pv-accomplishment-entity__title t-14 t-bold"]')
 */
-
