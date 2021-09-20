@@ -3,8 +3,8 @@ const { first } = require("cheerio/lib/api/traversing");
 const fs = require("fs");
 const path = require("path");
 const { moveMessagePortToContext } = require("worker_threads");
-const folderToBeScrapped = "./toBeScrapped/";
-const englishFolder = "./withEnglish/";
+const folderToBeScrapped = "./zprofiles/1english/";
+const techFolder = "./techFolder/";
 profilesToBeScraped = [];
 
 async function everything() {
@@ -40,16 +40,14 @@ async function everything() {
 
 					let title = $('.text-body-medium.break-words').text();
 
-					if (title.match(/ qualidade/gim)) {moveToEnglishFolder() ; console.log(title)} 
-						else if (title.match(/ test/gim)) {moveToEnglishFolder() ; console.log(title)}
-						else if (title.match(/ automa/gim)) {moveToEnglishFolder() ; console.log(title)}
-						else if (title.match(/ qa/gim)) {moveToEnglishFolder() ; console.log(title)}
-						else if (title.match(/ quality/gim)) {moveToEnglishFolder() ; console.log(title)}
-						else if (title.match(/ sdet/gim)) {moveToEnglishFolder() ; console.log(title)}
+					if (title.match(/ Go /gim)) {moveTotechFolder() ; console.log(title)} 
+						else if (title.match(/ Go, /gim)) {moveTotechFolder() ; console.log(title)}
+						else if (title.match(/ Go./gim)) {moveTotechFolder() ; console.log(title)}
+						else if (title.match(/ Golang/gim)) {moveTotechFolder() ; console.log(title)}
 
 
 					// this is the code to change the folder's directory
-					async function moveToEnglishFolder() {
+					async function moveTotechFolder() {
 						const currentPath = path.join(
 							__dirname,
 							folderToBeScrapped,
@@ -57,7 +55,7 @@ async function everything() {
 						);
 						const destinationPath = path.join(
 							__dirname,
-							englishFolder,
+							techFolder,
 							currentProfile
 						);
 
