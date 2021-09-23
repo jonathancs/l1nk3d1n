@@ -3,7 +3,7 @@ const { first } = require("cheerio/lib/api/traversing");
 const fs = require("fs");
 const path = require("path");
 const { moveMessagePortToContext } = require("worker_threads");
-const folderToBeScrapped = "./zprofiles/node/";
+const folderToBeScrapped = "./zprofiles/java/";
 const englishFolder = "./withEnglish/";
 profilesToBeScraped = [];
 
