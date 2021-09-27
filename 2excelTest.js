@@ -1,10 +1,28 @@
+/*
+
+    TO DO
+
+    experience time
+
+    path to local file
+
+    set filters for QA
+
+    fix currentCompany, some are blank, some get the title.
+
+    add styling: color, borders, filter, table formating by data, column width.
+
+
+*/
+
+
 // scraper packages
 const cheerio = require("cheerio");
 const xlsx = require("xlsx");
 const fs = require("fs");
 const {first} = require("cheerio/lib/api/traversing");
 const {moveMessagePortToContext} = require("worker_threads");
-const folderToBeScrapped = "./toBeScrapped/";
+const folderToBeScrapped = "./toBeScrapped/a/";
 const technicalFolder = "./techFolder/";
 profilesToBeScraped = [];
 
@@ -76,16 +94,39 @@ async function initialize() {
                     // currentCompany
                     rawCurrentCompany = $("h3.t-16.t-black.t-bold").eq(0).children().text();
                     currentCompany = rawCurrentCompany.replace(/Nome da empresa/gim, "");
-                    console.log(currentCompany.trim());
 
                     // yearsOfExperience
 
                     // xSenior
                     wholeHTML = $("body").text();
+                    fs.appendFile("./log.txt", wholeHTML + "\n\n\n\n", function (error) {
+                        1 + 1;
+                    });
+                    xsenior = (wholeHTML.match(/ senior/gim) || []).length;
 
-                    // PENDING
+                    // xnode
+                    wholeHTML = $("body").text();
+                    xnode = (wholeHTML.match(/ node/gim) || []).length;
 
+                    // xjava
+                    wholeHTML = $("body").text();
+                    xjava = (wholeHTML.match(/ java /gim) || []).length;
 
+                    // x.net
+                    wholeHTML = $("body").text();
+                    xnet = (wholeHTML.match(/C#/gim) || []).length;
+
+                    // xReact: xreact,
+                    wholeHTML = $("body").text();
+                    xreact = (wholeHTML.match(/ react/gim) || []).length;
+
+                    // xAngular: xangular,
+                    wholeHTML = $("body").text();
+                    xangular = (wholeHTML.match(/ angular/gim) || []).length;
+
+                    // xReactNative: xreactNative,
+                    wholeHTML = $("body").text();
+                    xreactNative = (wholeHTML.match(/ react native/gim) || []).length;
 
                     /*
 
@@ -108,10 +149,6 @@ async function initialize() {
                         document.querySelector('[class="pv-entity__position-group-pager pv-profile-section__list-item ember-view"]').children().eq(0).children().eq(0).children().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1)
 
                    */
-
-                    // xNode: xnode,
-                    // xJava: xjava,
-                    // xNet: xnet,
 
                     // experiences
                     // let experiencesLIs = $("li.pv-entity__position-group-pager.pv-profile-section__list-item.ember-view");
@@ -139,17 +176,17 @@ async function initialize() {
                             connectionState: connectionState,
                             currentCompany: currentCompany,
                             // yearsOfExperience: yearsOfExperience,
-                            // xSenior : xsenior,
-                            // xNode: xnode,
-                            // xJava: xjava,
-                            // xNet: xnet,
+                            xSenior: xsenior,
+                            xNode: xnode,
+                            xJava: xjava,
+                            xNet: xnet,
                             // xGolang: xgolang,
-                            // xReact: xreact,
-                            // xAngular: xangular,
+                            xReact: xreact,
+                            xAngular: xangular,
                             // xVue: xvue,
                             // xIos: xios,
                             // xAndroid: xandroid,
-                            // xReactNative: xreactNative,
+                            xReactNative: xreactNative,
                             // xFullstack: xfullstack,
                             // xTest: xtest,
                             // xQuality: xquality,
