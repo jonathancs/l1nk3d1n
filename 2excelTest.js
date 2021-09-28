@@ -1,17 +1,13 @@
 /*
-
     TO DO
 
     experience time
 
     path to local file
 
-    set filters for QA
-
     fix currentCompany, some are blank, some get the title.
 
     add styling: color, borders, filter, table formating by data, column width.
-
 
 */
 
@@ -20,6 +16,7 @@
 const cheerio = require("cheerio");
 const xlsx = require("xlsx");
 const fs = require("fs");
+const path = require("path");
 const {first} = require("cheerio/lib/api/traversing");
 const {moveMessagePortToContext} = require("worker_threads");
 const folderToBeScrapped = "./toBeScrapped/a/";
@@ -46,7 +43,7 @@ async function initialize() {
             });
 
             // this will loop the list of profiles to be scraped
-            for (let i = 0; i < profilesToBeScraped.length; i++) {
+            for (i = 0; i < profilesToBeScraped.length; i++) {
                 currentProfile = profilesToBeScraped[i];
 
                 // this will READ the looped file and apply the filters
@@ -57,6 +54,7 @@ async function initialize() {
                     }
 
                     let $ = cheerio.load(html);
+                    wholeHTML = $("body").text();
 
                     // obtain URL
                     let rawURL = $(".ember-view.link-without-visited-state.cursor-pointer.text-heading-small.inline-block.break-words").attr("href");
@@ -95,38 +93,41 @@ async function initialize() {
                     rawCurrentCompany = $("h3.t-16.t-black.t-bold").eq(0).children().text();
                     currentCompany = rawCurrentCompany.replace(/Nome da empresa/gim, "");
 
-                    // yearsOfExperience
-
                     // xSenior
-                    wholeHTML = $("body").text();
-                    fs.appendFile("./log.txt", wholeHTML + "\n\n\n\n", function (error) {
-                        1 + 1;
-                    });
                     xsenior = (wholeHTML.match(/ senior/gim) || []).length;
 
                     // xnode
-                    wholeHTML = $("body").text();
                     xnode = (wholeHTML.match(/ node/gim) || []).length;
 
                     // xjava
-                    wholeHTML = $("body").text();
                     xjava = (wholeHTML.match(/ java /gim) || []).length;
 
                     // x.net
-                    wholeHTML = $("body").text();
                     xnet = (wholeHTML.match(/C#/gim) || []).length;
 
                     // xReact: xreact,
-                    wholeHTML = $("body").text();
                     xreact = (wholeHTML.match(/ react/gim) || []).length;
 
                     // xAngular: xangular,
-                    wholeHTML = $("body").text();
                     xangular = (wholeHTML.match(/ angular/gim) || []).length;
 
                     // xReactNative: xreactNative,
-                    wholeHTML = $("body").text();
                     xreactNative = (wholeHTML.match(/ react native/gim) || []).length;
+
+                    // xFullstack: xfullstack,
+                    xfullstack = ((wholeHTML.match(/ fullstack/gim) || []).length) + ((wholeHTML.match(/ full stack/gim) || []).length)
+
+                    // xTest: xtest,
+                    xtest = (wholeHTML.match(/ test/gim) || []).length;
+
+                    // xQuality: xquality,
+                    xquality = ((wholeHTML.match(/ quality/gim) || []).length) + ((wholeHTML.match(/ qualidade/gim) || []).length) + (wholeHTML.match(/ qa /gim) || []).length;
+                    
+                    // xAutomation: xautomation,
+                    xautomation = ((wholeHTML.match(/ automa/gim) || []).length)
+
+                    // xCypress: xcypress,
+                    xcypress = ((wholeHTML.match(/ cypress/gim) || []).length)
 
                     /*
 
@@ -136,7 +137,7 @@ async function initialize() {
 
                         ROLE AT EXP
 
-                        document.querySelector('[class="pv-entity__position-group-pager pv-profile-section__list-item ember-view"]').children().eq(0).children().eq(0).children().eq(0).children().eq(0).children().eq(1).children().eq(0)
+                        
 
 
                         DOUBLE EXP TIME
@@ -169,6 +170,7 @@ async function initialize() {
                             // Country: {},
 
                             URL: url,
+                            // 'local file path': localFilePath,
                             dateOfEntry: dateOfEntry,
                             name: candidateName,
                             location: location,
@@ -187,46 +189,46 @@ async function initialize() {
                             // xIos: xios,
                             // xAndroid: xandroid,
                             xReactNative: xreactNative,
-                            // xFullstack: xfullstack,
-                            // xTest: xtest,
-                            // xQuality: xquality,
-                            // xAutomation: xautomation,
-                            // xCypress: xcypress,
+                            xFullstack: xfullstack,
+                            xTest: xtest,
+                            xQuality: xquality,
+                            xAutomation: xautomation,
+                            xCypress: xcypress,
 
                             // biography: biography,
-                            // firstExperienceTitle: firstExperienceTitle,
+                            // firstExperienceTitle: expRole0,
                             // firstExperienceCompany: firstExperienceCompany,
                             // firstExperienceTime: firstExperienceTime,
                             // firstExperienceDescription: firstExperienceDescription,
-                            // secondExperienceTitle: secondExperienceTitle,
+                            // secondExperienceTitle: expRole2,
                             // secondExperienceCompany: secondExperienceCompany,
                             // secondExperienceTime: secondExperienceTime,
                             // secondExperienceDescription: secondExperienceDescription,
-                            // thirdExperienceTitle: thirdExperienceTitle,
+                            // thirdExperienceTitle: expRole3,
                             // thirdExperienceCompany: thirdExperienceCompany,
                             // thirdExperienceTime: thirdExperienceTime,
                             // thirdExperienceDescription: thirdExperienceDescription,
-                            // fourthExperienceTitle: fourthExperienceTitle,
+                            // fourthExperienceTitle: expRole4,
                             // fourthExperienceCompany: fourthExperienceCompany,
                             // fourthExperienceTime: fourthExperienceTime,
                             // fourthExperienceDescription: fourthExperienceDescription,
-                            // fifthExperienceTitle: fifthExperienceTitle,
+                            // fifthExperienceTitle: expRole5,
                             // fifthExperienceCompany: fifthExperienceCompany,
                             // fifthExperienceTime: fifthExperienceTime,
                             // fifthExperienceDescription: fifthExperienceDescription,
-                            // sixthExperienceTitle: sixthExperienceTitle,
+                            // sixthExperienceTitle: expRole6,
                             // sixthExperienceCompany: sixthExperienceCompany,
                             // sixthExperienceTime: sixthExperienceTime,
                             // sixthExperienceDescription: sixthExperienceDescription,
-                            // seventhExperienceTitle: seventhExperienceTitle,
+                            // seventhExperienceTitle: expRole7,
                             // seventhExperienceCompany: seventhExperienceCompany,
                             // seventhExperienceTime: seventhExperienceTime,
                             // seventhExperienceDescription: seventhExperienceDescription,
-                            // eigthExperienceTitle: eigthExperienceTitle,
+                            // eigthExperienceTitle: expRole8,
                             // eigthExperienceCompany: eigthExperienceCompany,
                             // eigthExperienceTime: eigthExperienceTime,
                             // eigthExperienceDescription: eigthExperienceDescription,
-                            // ninethExperienceTitle: ninethExperienceTitle,
+                            // ninethExperienceTitle: expRole9,
                             // ninethExperienceCompany: ninethExperienceCompany,
                             // ninethExperienceTime: ninethExperienceTime,
                             // ninethExperienceDescription: ninethExperienceDescription
@@ -248,6 +250,7 @@ async function initialize() {
     async function moveTotechnicalFolder() {
         const currentPath = path.join(__dirname, folderToBeScrapped, currentProfile);
         const destinationPath = path.join(__dirname, technicalFolder, currentProfile);
+        console.log(currentPath)
 
         fs.rename(currentPath, destinationPath, function (err) {
             if (err) {
