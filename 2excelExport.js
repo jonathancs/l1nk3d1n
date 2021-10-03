@@ -19,7 +19,7 @@ const fs = require("fs");
 const path = require("path");
 const {first} = require("cheerio/lib/api/traversing");
 const {moveMessagePortToContext} = require("worker_threads");
-const folderToBeScrapped = "./toBeScrapped/a/";
+const folderToBeScrapped = "./zprofiles/1english/";
 const technicalFolder = "./techFolder/";
 profilesToBeScraped = [];
 
@@ -100,7 +100,7 @@ async function initialize() {
                     xnode = (wholeHTML.match(/ node/gim) || []).length;
 
                     // xjava
-                    xjava = (wholeHTML.match(/ java /gim) || []).length;
+                    xjava = ((wholeHTML.match(/ java /gim) || []).length) + ((wholeHTML.match(/ java,/gim) || []).length) + ((wholeHTML.match(/ java./gim) || []).length)
 
                     // x.net
                     xnet = (wholeHTML.match(/C#/gim) || []).length;
@@ -121,13 +121,43 @@ async function initialize() {
                     xtest = (wholeHTML.match(/ test/gim) || []).length;
 
                     // xQuality: xquality,
-                    xquality = ((wholeHTML.match(/ quality/gim) || []).length) + ((wholeHTML.match(/ qualidade/gim) || []).length) + (wholeHTML.match(/ qa /gim) || []).length;
+                    xquality = ((wholeHTML.match(/ quality/gim) || []).length) + ((wholeHTML.match(/ qualidade/gim) || []).length) + (wholeHTML.match(/ qa/gim) || []).length;
                     
                     // xAutomation: xautomation,
                     xautomation = ((wholeHTML.match(/ automa/gim) || []).length)
 
                     // xCypress: xcypress,
                     xcypress = ((wholeHTML.match(/ cypress/gim) || []).length)
+
+                    // english level
+                    let languagesLIs = $("li.pv-accomplishment-entity");
+                    for (let i = 0; i < languagesLIs.length; i++) {
+                        let loopedLanguage = $("li.pv-accomplishment-entity").eq(i).text();
+                        englishLevel = "";
+            
+            
+                        if (loopedLanguage.match(/english/gim)) {
+                          englishLevel = $("li.pv-accomplishment-entity")
+                            .eq(i)
+                            .children()
+                            .next()
+                            .text();
+            
+                        } else if (loopedLanguage.match(/inglês/gim)) {
+                          englishLevel = $("li.pv-accomplishment-entity")
+                            .eq(i)
+                            .children()
+                            .next()
+                            .text();
+            
+                        } else if (loopedLanguage.match(/ingles/gim)) {
+                          englishLevel = $("li.pv-accomplishment-entity")
+                            .eq(i)
+                            .children()
+                            .next()
+                            .text();
+                        }
+                    }
 
                     /*
 
@@ -194,6 +224,7 @@ async function initialize() {
                             xQuality: xquality,
                             xAutomation: xautomation,
                             xCypress: xcypress,
+                            englishLevel: englishLevel
 
                             // biography: biography,
                             // firstExperienceTitle: expRole0,
