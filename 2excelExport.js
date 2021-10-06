@@ -54,9 +54,9 @@ async function initialize() {
                 let rawURL = $(".ember-view.link-without-visited-state.cursor-pointer.text-heading-small.inline-block.break-words").attr("href");
                 url = rawURL.split("detail")[0];
 
-                // obtain path
-                currentPath = path.join(__dirname, folderToBeScrapped, currentProfile);
-                localFilePath = currentPath
+                // obtain file name
+                fileName = currentProfile
+
 
                 // get current date
                 var today = new Date();
@@ -183,7 +183,7 @@ async function initialize() {
                         // Country: {},
 
                         URL: url,
-                        "local file path": localFilePath,
+                        "file name": fileName,
                         dateOfEntry: dateOfEntry,
                         name: candidateName,
                         location: location,
@@ -259,7 +259,7 @@ async function initialize() {
                 // this is the code to change the folder's directory
 
                 async function moveTotechnicalFolder() {
-                    
+                    const currentPath = path.join(__dirname, folderToBeScrapped, currentProfile);
                     const destinationPath = path.join(__dirname, technicalFolder, currentProfile);
                     fs.rename(currentPath, destinationPath, function (err) {
                         if (err) {
