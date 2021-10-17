@@ -18,7 +18,7 @@ const fs = require("fs");
 const path = require("path");
 const {first} = require("cheerio/lib/api/traversing");
 const {moveMessagePortToContext} = require("worker_threads");
-const folderToBeScrapped = "./toBeScrapped/a/";
+const folderToBeScrapped = "./zprofiles/1english/";
 const technicalFolder = "./techFolder/";
 profilesToBeScraped = [];
 
@@ -100,8 +100,17 @@ async function initialize() {
                 // xjava
                 xjava = (wholeHTML.match(/ java /gim) || []).length + (wholeHTML.match(/ java,/gim) || []).length + (wholeHTML.match(/ java./gim) || []).length;
 
+                // data
+                xdata = (wholeHTML.match(/data/gim) || []).length;
+                
+                // data science
+                xdatascience = ((wholeHTML.match(/data science/gim) || []).length) + ((wholeHTML.match(/ciência de dados/gim) || []).length) + ((wholeHTML.match(/ciencia de dados/gim) || []).length)
+
                 // x.net
                 xnet = (wholeHTML.match(/C#/gim) || []).length;
+
+                // golang
+                xgolang = ((wholeHTML.match(/golang/gim) || []).length) + ((wholeHTML.match(/ go /gim) || []).length) + ((wholeHTML.match(/ go,/gim) || []).length) + ((wholeHTML.match(/ go./gim) || []).length)
 
                 // xReact: xreact,
                 xreact = (wholeHTML.match(/ react/gim) || []).length;
@@ -194,8 +203,10 @@ async function initialize() {
                         xSenior: xsenior,
                         xNode: xnode,
                         xJava: xjava,
+                        xdata: xdata,
+                        xdatascience: xdatascience,
                         xNet: xnet,
-                        // xGolang: xgolang,
+                        xGolang: xgolang,
                         xReact: xreact,
                         xAngular: xangular,
                         // xVue: xvue,
