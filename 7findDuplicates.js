@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const {first} = require("cheerio/lib/api/traversing");
 const {moveMessagePortToContext} = require("worker_threads");
-const folderToBeScrapped = "./toBeScrapped/";
+const folderToBeScrapped = "./zprofiles/1english/";
 const destinyFolder = "./destinyFolder/";
 profilesToBeScraped = [];
 urlArray = []
@@ -32,19 +32,17 @@ async function initialize() {
                 // obtain URL
                 let rawURL = $(".ember-view.link-without-visited-state.cursor-pointer.text-heading-small.inline-block.break-words").attr("href");
                 url = rawURL.split("detail")[0];
-                urlArray.push(url)
+                fs.appendFile('./urls.txt', `'` + url + `',` + '\n', function (error) {1+1} )
+                fs.appendFile('./filesOrder.txt', `'` + currentProfile + `',` + '\n', function (error) {1+1} )
                 fileArray.push(currentProfile)
-
+                
             }
-
-            let duplicates = []
             
-            for (let i = 0; i < urlArray.length; i++) {
-              if (urlArray[i + 1] === urlArray[i]) {
-                // duplicates.push(fileArray[i])
-                fs.appendFile('./output.txt', `'` + fileArray[i] + `',` + '\n', function (error) {1+1} )
-              }
-            }
+            // for (let i = 0; i < urlArray.length; i++) {
+            //     if (urlArray[i + 1] === urlArray[i]) {
+            //         // duplicates.push(fileArray[i])
+            //   }
+            // }
             
             
         });
