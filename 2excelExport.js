@@ -1,16 +1,3 @@
-/*
-    TO DO
-
-    experience time
-
-    path to local file
-
-    fix currentCompany, some are blank, some get the title.
-
-    add styling: color, borders, filter, table formating by data, column width.
-
-*/
-
 // scraper packages
 const cheerio = require("cheerio");
 const xlsx = require("xlsx");
@@ -23,7 +10,7 @@ const technicalFolder = "./techFolder/";
 profilesToBeScraped = [];
 
 // Read the file into memory
-const workbook = xlsx.readFile("database.xlsx");
+const workbook = xlsx.readFile("db.xlsx");
 
 // Convert the xlsx to JSON
 let worksheets = {};
@@ -49,6 +36,13 @@ async function initialize() {
                 html = fs.readFileSync(folderToBeScrapped + currentProfile, {encoding: "utf8", flag: "r"});
                 let $ = cheerio.load(html);
                 wholeHTML = $("body").text();
+
+                // close chat-popups to not affect word counting
+                for (let i = 0; i < 7; i++) {
+                    try {document.querySelector('div[class="display-flex flex-column justify-center overflow-hidden"]').parentElement.parentElement.parentElement.remove()} catch (error) {1+1}
+                    
+                }
+                
 
                 // obtain URL
                 let rawURL = $(".ember-view.link-without-visited-state.cursor-pointer.text-heading-small.inline-block.break-words").attr("href");
@@ -100,17 +94,36 @@ async function initialize() {
                 // xjava
                 xjava = (wholeHTML.match(/ java /gim) || []).length + (wholeHTML.match(/ java,/gim) || []).length + (wholeHTML.match(/ java./gim) || []).length;
 
-                // data
-                xdata = (wholeHTML.match(/data/gim) || []).length;
+                // xpython
+                xpython = (wholeHTML.match(/ python /gim) || []).length
+
+                // devops
+                xdevops = (wholeHTML.match(/devops/gim) || []).length;
                 
                 // data science
                 xdatascience = ((wholeHTML.match(/data science/gim) || []).length) + ((wholeHTML.match(/ciência de dados/gim) || []).length) + ((wholeHTML.match(/ciencia de dados/gim) || []).length)
+
+                // Artificial Intelligence
+                xartificialintelligence = ((wholeHTML.match(/artificial intelligence/gim) || []).length) + ((wholeHTML.match(/Inteligência artificial/gim) || []).length) + ((wholeHTML.match(/Inteligencia artificial/gim) || []).length) + ((wholeHTML.match(/ IA /gim) || []).length) + ((wholeHTML.match(/ AI /gim) || []).length) + ((wholeHTML.match(/ IA,/gim) || []).length) + ((wholeHTML.match(/ AI,/gim) || []).length)
+
+
+                // machine learning
+                xmachinelearning = ((wholeHTML.match(/machine learning/gim) || []).length) + ((wholeHTML.match(/machine-learning/gim) || []).length)
+
+
+                // data architect
+                xdataarchitect = ((wholeHTML.match(/data architect/gim) || []).length) + ((wholeHTML.match(/arquiteto de dados/gim) || []).length)
+
+                // architect
+                xarchitect = ((wholeHTML.match(/architect/gim) || []).length) + ((wholeHTML.match(/arquiteto/gim) || []).length) + ((wholeHTML.match(/arquitetura/gim) || []).length) + ((wholeHTML.match(/arquitetação/gim) || []).length)
+
+
 
                 // x.net
                 xnet = (wholeHTML.match(/C#/gim) || []).length;
 
                 // golang
-                xgolang = ((wholeHTML.match(/golang/gim) || []).length) + ((wholeHTML.match(/ go /gim) || []).length) + ((wholeHTML.match(/ go,/gim) || []).length) + ((wholeHTML.match(/ go./gim) || []).length)
+                xgolang = ((wholeHTML.match(/golang/gim) || []).length) + ((wholeHTML.match(/ go /gim) || []).length)
 
                 // xReact: xreact,
                 xreact = (wholeHTML.match(/ react/gim) || []).length;
@@ -135,6 +148,9 @@ async function initialize() {
 
                 // xCypress: xcypress,
                 xcypress = (wholeHTML.match(/ cypress/gim) || []).length;
+                
+                // xSelenium: xselenium,
+                xselenium = (wholeHTML.match(/ selenium/gim) || []).length;
 
                 // english level
                 let languagesLIs = $("li.pv-accomplishment-entity");
@@ -203,8 +219,13 @@ async function initialize() {
                         xSenior: xsenior,
                         xNode: xnode,
                         xJava: xjava,
-                        xdata: xdata,
+                        xPython: xpython,
+                        xdevops: xdevops,
                         xdatascience: xdatascience,
+                        xArtificialIntelligence: xartificialintelligence,
+                        xMachineLearning: xmachinelearning,
+                        xDataArchitect: xdataarchitect,
+                        xArchitect: xarchitect,
                         xNet: xnet,
                         xGolang: xgolang,
                         xReact: xreact,
@@ -218,6 +239,7 @@ async function initialize() {
                         xQuality: xquality,
                         xAutomation: xautomation,
                         xCypress: xcypress,
+                        xSelenium: xselenium,
                         englishLevel: englishLevel,
 
                         // biography: biography,
@@ -265,7 +287,7 @@ async function initialize() {
                 // this needs to stay below the push method.
                 // Update the xlsx file
                 xlsx.utils.sheet_add_json(workbook.Sheets["Sheet1"], worksheets.Sheet1);
-                xlsx.writeFile(workbook, "database.xlsx");
+                xlsx.writeFile(workbook, "db.xlsx");
 
                 // this is the code to change the folder's directory
 
