@@ -5,12 +5,12 @@ const fs = require("fs");
 const path = require("path");
 const {first} = require("cheerio/lib/api/traversing");
 const {moveMessagePortToContext} = require("worker_threads");
-const folderToBeScrapped = "./zprofiles/1english/";
+const folderToBeScrapped = "./zprofiles/1english/teste/";
 const technicalFolder = "./techFolder/";
 profilesToBeScraped = [];
 
 // Read the file into memory
-const workbook = xlsx.readFile("db.xlsx");
+const workbook = xlsx.readFile("ddd.xlsx");
 
 // Convert the xlsx to JSON
 let worksheets = {};
@@ -167,39 +167,46 @@ async function initialize() {
                     }
                 }
 
-                /*
+                
+                // SIMPLE experience titles and time
+                let experiencesList = $('li.pv-entity__position-group-pager.pv-profile-section__list-item.ember-view')
+                for (let i = 0; i < experiencesList.length; i++) {
+                    let loopedExperienceText = experiencesList[i]
+            
+                        // access exp title's text
+                        // let loopedExperienceTitle = experiencesList.eq(i).children().children().children().children().children().eq(1).children().eq(0).text()
+             
+                        // // access exp total time
+                        // let loopedExperiencesTotalTime = experiencesList.eq(i).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        COMPANY NAME
+                        expTitle0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().eq(0).text()
+                        totalTime0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        document.querySelector('[class="pv-entity__position-group-pager pv-profile-section__list-item ember-view"]').children().eq(0).children().eq(0).children().eq(0).children().eq(0).children().eq(1).children().eq(2)
+                        expTitle1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().eq(0).text()
+                        totalTime1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        ROLE AT EXP
+                        expTitle2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().eq(0).text()
+                        totalTime2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        
+                        expTitle3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().eq(0).text()
+                        totalTime3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
+                        expTitle4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().eq(0).text()
+                        totalTime4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        DOUBLE EXP TIME
+                        expTitle5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().eq(0).text()
+                        totalTime5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        document.querySelector('[class="pv-entity__position-group-pager pv-profile-section__list-item ember-view"]').children().eq(0).children().eq(0).children().eq(0).children().eq(0).children().eq(1).children().eq(1)
+                        expTitle6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().eq(0).text()
+                        totalTime6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
+                        expTitle7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().eq(0).text()
+                        totalTime7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        BETTER TIME
+                        expTitle8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().eq(0).text()
+                        totalTime8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        document.querySelector('[class="pv-entity__position-group-pager pv-profile-section__list-item ember-view"]').children().eq(0).children().eq(0).children().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1)
-
-                   */
-
-                // experiences
-                // let experiencesLIs = $("li.pv-entity__position-group-pager.pv-profile-section__list-item.ember-view");
-
-                // for (let i = 0; i < experiencesLIs.length; i++) {
-                // let loopedExperience = $("li.pv-entity__position-group-pager.pv-profile-section__list-item.ember-view").eq(i);
-
-                // wordCounter = (loopedExperience.match(/java/igm) || []).length
-
-                // try { if (wordCounter > 0) { moveTotechnicalFolder() } } catch (error) {console.log('1')}
-
-                // }
+                }
 
                 // send data to xlsx
                 function updateSheet() {
@@ -242,55 +249,55 @@ async function initialize() {
                         xSelenium: xselenium,
                         englishLevel: englishLevel,
 
-                        // biography: biography,
-                        // firstExperienceTitle: expRole0,
-                        // firstExperienceCompany: firstExperienceCompany,
-                        // firstExperienceTime: firstExperienceTime,
-                        // firstExperienceDescription: firstExperienceDescription,
-                        // secondExperienceTitle: expRole2,
-                        // secondExperienceCompany: secondExperienceCompany,
-                        // secondExperienceTime: secondExperienceTime,
-                        // secondExperienceDescription: secondExperienceDescription,
-                        // thirdExperienceTitle: expRole3,
-                        // thirdExperienceCompany: thirdExperienceCompany,
-                        // thirdExperienceTime: thirdExperienceTime,
-                        // thirdExperienceDescription: thirdExperienceDescription,
-                        // fourthExperienceTitle: expRole4,
-                        // fourthExperienceCompany: fourthExperienceCompany,
-                        // fourthExperienceTime: fourthExperienceTime,
-                        // fourthExperienceDescription: fourthExperienceDescription,
-                        // fifthExperienceTitle: expRole5,
-                        // fifthExperienceCompany: fifthExperienceCompany,
-                        // fifthExperienceTime: fifthExperienceTime,
-                        // fifthExperienceDescription: fifthExperienceDescription,
-                        // sixthExperienceTitle: expRole6,
-                        // sixthExperienceCompany: sixthExperienceCompany,
-                        // sixthExperienceTime: sixthExperienceTime,
-                        // sixthExperienceDescription: sixthExperienceDescription,
-                        // seventhExperienceTitle: expRole7,
-                        // seventhExperienceCompany: seventhExperienceCompany,
-                        // seventhExperienceTime: seventhExperienceTime,
-                        // seventhExperienceDescription: seventhExperienceDescription,
-                        // eigthExperienceTitle: expRole8,
-                        // eigthExperienceCompany: eigthExperienceCompany,
-                        // eigthExperienceTime: eigthExperienceTime,
-                        // eigthExperienceDescription: eigthExperienceDescription,
-                        // ninethExperienceTitle: expRole9,
-                        // ninethExperienceCompany: ninethExperienceCompany,
-                        // ninethExperienceTime: ninethExperienceTime,
-                        // ninethExperienceDescription: ninethExperienceDescription
+                        
+                        firstExperienceTitle: expTitle0,
+                        firstExperienceTime: totalTime0,
+                        
+                        
+                        secondExperienceTitle: expTitle1,
+                        secondExperienceTime: totalTime1,
+                        
+                        
+                        thirdExperienceTitle: expTitle2,
+                        thirdExperienceTime: totalTime2,
+                        
+                        
+                        fourthExperienceTitle: expTitle3,
+                        fourthExperienceTime: totalTime3,
+                        
+                        
+                        fifthExperienceTitle: expTitle4,
+                        fifthExperienceTime: totalTime4,
+                        
+                        
+                        sixthExperienceTitle: expTitle5,
+                        sixthExperienceTime: totalTime5,
+                        
+                        
+                        seventhExperienceTitle: expTitle6,
+                        seventhExperienceTime: totalTime6,
+                        
+                        
+                        eigthExperienceTitle: expTitle7,
+                        eigthExperienceTime: totalTime7,
+                        
+                        
+                        ninethExperienceTitle: expTitle8,
+                        ninethExperienceTime: totalTime8,
+                        
                     });
                 }
 
                 updateSheet();
 
-                // this needs to stay below the push method.
-                // Update the xlsx file
+                // this updates the xlsx file
+                // it needs to stay below the push method. I tried to put above, but it only works here.
                 xlsx.utils.sheet_add_json(workbook.Sheets["Sheet1"], worksheets.Sheet1);
-                xlsx.writeFile(workbook, "db.xlsx");
+                xlsx.writeFile(workbook, "ddd.xlsx");
 
+                
+                
                 // this is the code to change the folder's directory
-
                 async function moveTotechnicalFolder() {
                     const currentPath = path.join(__dirname, folderToBeScrapped, currentProfile);
                     const destinationPath = path.join(__dirname, technicalFolder, currentProfile);
