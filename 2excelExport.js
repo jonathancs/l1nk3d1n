@@ -5,12 +5,12 @@ const fs = require("fs");
 const path = require("path");
 const {first} = require("cheerio/lib/api/traversing");
 const {moveMessagePortToContext} = require("worker_threads");
-const folderToBeScrapped = "./zprofiles/1english/teste/";
+const folderToBeScrapped = "./zprofiles/1english/";
 const technicalFolder = "./techFolder/";
 profilesToBeScraped = [];
 
 // Read the file into memory
-const workbook = xlsx.readFile("ddd.xlsx");
+const workbook = xlsx.readFile("db.xlsx");
 
 // Convert the xlsx to JSON
 let worksheets = {};
@@ -293,7 +293,7 @@ async function initialize() {
                 // this updates the xlsx file
                 // it needs to stay below the push method. I tried to put above, but it only works here.
                 xlsx.utils.sheet_add_json(workbook.Sheets["Sheet1"], worksheets.Sheet1);
-                xlsx.writeFile(workbook, "ddd.xlsx");
+                xlsx.writeFile(workbook, "db.xlsx");
 
                 
                 
