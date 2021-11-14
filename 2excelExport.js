@@ -3,10 +3,10 @@ const cheerio = require("cheerio");
 const xlsx = require("xlsx");
 const fs = require("fs");
 const path = require("path");
-const {first} = require("cheerio/lib/api/traversing");
-const {moveMessagePortToContext} = require("worker_threads");
-const folderToBeScrapped = "./zprofiles/1english/";
-const technicalFolder = "./techFolder/";
+const { first } = require("cheerio/lib/api/traversing");
+const { moveMessagePortToContext } = require("worker_threads");
+// const folderToBeScrapped = "./zprofiles/1english/";
+const folderToBeScrapped = "./selectedFolder/good/";
 profilesToBeScraped = [];
 
 // Read the file into memory
@@ -33,16 +33,16 @@ async function initialize() {
                 currentProfile = profilesToBeScraped[i];
 
                 // this will READ the looped file and extract the infos below
-                html = fs.readFileSync(folderToBeScrapped + currentProfile, {encoding: "utf8", flag: "r"});
+                html = fs.readFileSync(folderToBeScrapped + currentProfile, { encoding: "utf8", flag: "r" });
                 let $ = cheerio.load(html);
                 wholeHTML = $("body").text();
 
                 // close chat-popups to not affect word counting
                 for (let i = 0; i < 7; i++) {
-                    try {document.querySelector('div[class="display-flex flex-column justify-center overflow-hidden"]').parentElement.parentElement.parentElement.remove()} catch (error) {1+1}
-                    
+                    try { document.querySelector('div[class="display-flex flex-column justify-center overflow-hidden"]').parentElement.parentElement.parentElement.remove() } catch (error) { 1 + 1 }
+
                 }
-                
+
 
                 // obtain URL
                 let rawURL = $(".ember-view.link-without-visited-state.cursor-pointer.text-heading-small.inline-block.break-words").attr("href");
@@ -92,14 +92,20 @@ async function initialize() {
                 xnode = (wholeHTML.match(/ node/gim) || []).length;
 
                 // xjava
-                xjava = (wholeHTML.match(/ java /gim) || []).length + (wholeHTML.match(/ java,/gim) || []).length + (wholeHTML.match(/ java./gim) || []).length;
+                xjava = (wholeHTML.match(/java /gim) || []).length + (wholeHTML.match(/ java,/gim) || []).length + (wholeHTML.match(/ java./gim) || []).length;
 
                 // xpython
-                xpython = (wholeHTML.match(/ python /gim) || []).length
+                xpython = (wholeHTML.match(/python/gim) || []).length
+
+                // xflask
+                xflask = (wholeHTML.match(/flask/gim) || []).length
 
                 // devops
                 xdevops = (wholeHTML.match(/devops/gim) || []).length;
-                
+
+                // aws
+                xaws = (wholeHTML.match(/aws/gim) || []).length;
+
                 // data science
                 xdatascience = ((wholeHTML.match(/data science/gim) || []).length) + ((wholeHTML.match(/ciência de dados/gim) || []).length) + ((wholeHTML.match(/ciencia de dados/gim) || []).length)
 
@@ -148,7 +154,7 @@ async function initialize() {
 
                 // xCypress: xcypress,
                 xcypress = (wholeHTML.match(/ cypress/gim) || []).length;
-                
+
                 // xSelenium: xselenium,
                 xselenium = (wholeHTML.match(/ selenium/gim) || []).length;
 
@@ -167,48 +173,206 @@ async function initialize() {
                     }
                 }
 
-                
-                // SIMPLE experience titles and time
+                // attempt to get composed experiences out of the way until a solution is researched
+                try { document.querySelectorAll('class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
+                try { document.querySelectorAll('class="pv-entity__position-group-role-item"]')[1].remove() } catch (error) { 1 + 1 }
+                try { document.querySelectorAll('class="pv-entity__position-group-role-item"]')[2].remove() } catch (error) { 1 + 1 }
+                try { document.querySelectorAll('class="pv-entity__position-group-role-item"]')[3].remove() } catch (error) { 1 + 1 }
+                try { document.querySelectorAll('class="pv-entity__position-group-role-item"]')[4].remove() } catch (error) { 1 + 1 }
+                try { document.querySelectorAll('class="pv-entity__position-group-role-item"]')[5].remove() } catch (error) { 1 + 1 }
+
+
+                // INDIVIDUAL experience titles and time
                 let experiencesList = $('li.pv-entity__position-group-pager.pv-profile-section__list-item.ember-view')
-                for (let i = 0; i < experiencesList.length; i++) {
-                    let loopedExperienceText = experiencesList[i]
-            
-                        // access exp title's text
-                        // let loopedExperienceTitle = experiencesList.eq(i).children().children().children().children().children().eq(1).children().eq(0).text()
-             
-                        // // access exp total time
-                        // let loopedExperiencesTotalTime = experiencesList.eq(i).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        expTitle0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().eq(0).text()
-                        totalTime0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                expTitle0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().eq(0).text()
+                experiencetime0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        expTitle1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().eq(0).text()
-                        totalTime1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                expTitle1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().eq(0).text()
+                experiencetime1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        expTitle2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().eq(0).text()
-                        totalTime2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                expTitle2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().eq(0).text()
+                experiencetime2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        expTitle3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().eq(0).text()
-                        totalTime3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                expTitle3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().eq(0).text()
+                experiencetime3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        expTitle4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().eq(0).text()
-                        totalTime4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                expTitle4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().eq(0).text()
+                experiencetime4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        expTitle5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().eq(0).text()
-                        totalTime5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                expTitle5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().eq(0).text()
+                experiencetime5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        expTitle6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().eq(0).text()
-                        totalTime6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                expTitle6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().eq(0).text()
+                experiencetime6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        expTitle7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().eq(0).text()
-                        totalTime7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                expTitle7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().eq(0).text()
+                experiencetime7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                        expTitle8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().eq(0).text()
-                        totalTime8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                expTitle8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().eq(0).text()
+                experiencetime8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+
+
+                function convertExpTimeIntoNumber_0() {
+
+                    if (experiencetime0.includes('anos') && experiencetime0.includes('mês')) { experiencetime0 = experiencetime0.replace(' anos ', '.'); experiencetime0 = experiencetime0.replace('mês', '') }
+                    if (experiencetime0.includes('anos') && experiencetime0.includes('meses')) { experiencetime0 = experiencetime0.replace(' anos ', '.'); experiencetime0 = experiencetime0.replace('meses', '') }
+                    if (experiencetime0.includes('ano') && experiencetime0.includes('mês')) { experiencetime0 = experiencetime0.replace(' ano ', '.'); experiencetime0 = experiencetime0.replace(' mês', '') }
+                    if (experiencetime0.includes('ano') && experiencetime0.includes('meses')) { experiencetime0 = experiencetime0.replace(' ano ', '.'); experiencetime0 = experiencetime0.replace(' meses', '') }
+
+                    if (experiencetime0.includes('ano')) { experiencetime0 = experiencetime0.replace(/[^0-9.]/g, "") }
+                    if (experiencetime0.includes('mês')) { experiencetime0 = experiencetime0.replace(' mês', ''); experiencetime0 = '0.' + experiencetime0 }
+                    if (experiencetime0.includes('meses')) { experiencetime0 = experiencetime0.replace(' meses', ''); experiencetime0 = '0.' + experiencetime0 }
+
+                    experiencetime0 = parseFloat(experiencetime0)
 
                 }
 
-                // send data to xlsx
+                function convertExpTimeIntoNumber_1() {
+
+                    if (experiencetime1.includes('anos') && experiencetime1.includes('mês')) { experiencetime1 = experiencetime1.replace(' anos ', '.'); experiencetime1 = experiencetime1.replace('mês', '') }
+                    if (experiencetime1.includes('anos') && experiencetime1.includes('meses')) { experiencetime1 = experiencetime1.replace(' anos ', '.'); experiencetime1 = experiencetime1.replace('meses', '') }
+                    if (experiencetime1.includes('ano') && experiencetime1.includes('mês')) { experiencetime1 = experiencetime1.replace(' ano ', '.'); experiencetime1 = experiencetime1.replace(' mês', '') }
+                    if (experiencetime1.includes('ano') && experiencetime1.includes('meses')) { experiencetime1 = experiencetime1.replace(' ano ', '.'); experiencetime1 = experiencetime1.replace(' meses', '') }
+
+                    if (experiencetime1.includes('ano')) { experiencetime1 = experiencetime1.replace(/[^0-9.]/g, "") }
+                    if (experiencetime1.includes('mês')) { experiencetime1 = experiencetime1.replace(' mês', ''); experiencetime1 = '0.' + experiencetime1 }
+                    if (experiencetime1.includes('meses')) { experiencetime1 = experiencetime1.replace(' meses', ''); experiencetime1 = '0.' + experiencetime1 }
+
+                    experiencetime1 = parseFloat(experiencetime1)
+
+                }
+
+                function convertExpTimeIntoNumber_2() {
+
+                    if (experiencetime2.includes('anos') && experiencetime2.includes('mês')) { experiencetime2 = experiencetime2.replace(' anos ', '.'); experiencetime2 = experiencetime2.replace('mês', '') }
+                    if (experiencetime2.includes('anos') && experiencetime2.includes('meses')) { experiencetime2 = experiencetime2.replace(' anos ', '.'); experiencetime2 = experiencetime2.replace('meses', '') }
+                    if (experiencetime2.includes('ano') && experiencetime2.includes('mês')) { experiencetime2 = experiencetime2.replace(' ano ', '.'); experiencetime2 = experiencetime2.replace(' mês', '') }
+                    if (experiencetime2.includes('ano') && experiencetime2.includes('meses')) { experiencetime2 = experiencetime2.replace(' ano ', '.'); experiencetime2 = experiencetime2.replace(' meses', '') }
+
+                    if (experiencetime2.includes('ano')) { experiencetime2 = experiencetime2.replace(/[^0-9.]/g, "") }
+                    if (experiencetime2.includes('mês')) { experiencetime2 = experiencetime2.replace(' mês', ''); experiencetime2 = '0.' + experiencetime2 }
+                    if (experiencetime2.includes('meses')) { experiencetime2 = experiencetime2.replace(' meses', ''); experiencetime2 = '0.' + experiencetime2 }
+
+                    experiencetime2 = parseFloat(experiencetime2)
+
+                }
+
+                function convertExpTimeIntoNumber_3() {
+
+                    if (experiencetime3.includes('anos') && experiencetime3.includes('mês')) { experiencetime3 = experiencetime3.replace(' anos ', '.'); experiencetime3 = experiencetime3.replace('mês', '') }
+                    if (experiencetime3.includes('anos') && experiencetime3.includes('meses')) { experiencetime3 = experiencetime3.replace(' anos ', '.'); experiencetime3 = experiencetime3.replace('meses', '') }
+                    if (experiencetime3.includes('ano') && experiencetime3.includes('mês')) { experiencetime3 = experiencetime3.replace(' ano ', '.'); experiencetime3 = experiencetime3.replace(' mês', '') }
+                    if (experiencetime3.includes('ano') && experiencetime3.includes('meses')) { experiencetime3 = experiencetime3.replace(' ano ', '.'); experiencetime3 = experiencetime3.replace(' meses', '') }
+
+                    if (experiencetime3.includes('ano')) { experiencetime3 = experiencetime3.replace(/[^0-9.]/g, "") }
+                    if (experiencetime3.includes('mês')) { experiencetime3 = experiencetime3.replace(' mês', ''); experiencetime3 = '0.' + experiencetime3 }
+                    if (experiencetime3.includes('meses')) { experiencetime3 = experiencetime3.replace(' meses', ''); experiencetime3 = '0.' + experiencetime3 }
+
+                    experiencetime3 = parseFloat(experiencetime3)
+
+                }
+
+                function convertExpTimeIntoNumber_4() {
+
+                    if (experiencetime4.includes('anos') && experiencetime4.includes('mês')) { experiencetime4 = experiencetime4.replace(' anos ', '.'); experiencetime4 = experiencetime4.replace('mês', '') }
+                    if (experiencetime4.includes('anos') && experiencetime4.includes('meses')) { experiencetime4 = experiencetime4.replace(' anos ', '.'); experiencetime4 = experiencetime4.replace('meses', '') }
+                    if (experiencetime4.includes('ano') && experiencetime4.includes('mês')) { experiencetime4 = experiencetime4.replace(' ano ', '.'); experiencetime4 = experiencetime4.replace(' mês', '') }
+                    if (experiencetime4.includes('ano') && experiencetime4.includes('meses')) { experiencetime4 = experiencetime4.replace(' ano ', '.'); experiencetime4 = experiencetime4.replace(' meses', '') }
+
+                    if (experiencetime4.includes('ano')) { experiencetime4 = experiencetime4.replace(/[^0-9.]/g, "") }
+                    if (experiencetime4.includes('mês')) { experiencetime4 = experiencetime4.replace(' mês', ''); experiencetime4 = '0.' + experiencetime4 }
+                    if (experiencetime4.includes('meses')) { experiencetime4 = experiencetime4.replace(' meses', ''); experiencetime4 = '0.' + experiencetime4 }
+
+                    experiencetime4 = parseFloat(experiencetime4)
+
+                }
+
+                function convertExpTimeIntoNumber_5() {
+
+                    if (experiencetime5.includes('anos') && experiencetime5.includes('mês')) { experiencetime5 = experiencetime5.replace(' anos ', '.'); experiencetime5 = experiencetime5.replace('mês', '') }
+                    if (experiencetime5.includes('anos') && experiencetime5.includes('meses')) { experiencetime5 = experiencetime5.replace(' anos ', '.'); experiencetime5 = experiencetime5.replace('meses', '') }
+                    if (experiencetime5.includes('ano') && experiencetime5.includes('mês')) { experiencetime5 = experiencetime5.replace(' ano ', '.'); experiencetime5 = experiencetime5.replace(' mês', '') }
+                    if (experiencetime5.includes('ano') && experiencetime5.includes('meses')) { experiencetime5 = experiencetime5.replace(' ano ', '.'); experiencetime5 = experiencetime5.replace(' meses', '') }
+
+                    if (experiencetime5.includes('ano')) { experiencetime5 = experiencetime5.replace(/[^0-9.]/g, "") }
+                    if (experiencetime5.includes('mês')) { experiencetime5 = experiencetime5.replace(' mês', ''); experiencetime5 = '0.' + experiencetime5 }
+                    if (experiencetime5.includes('meses')) { experiencetime5 = experiencetime5.replace(' meses', ''); experiencetime5 = '0.' + experiencetime5 }
+
+                    experiencetime5 = parseFloat(experiencetime5)
+
+                }
+
+                function convertExpTimeIntoNumber_6() {
+
+                    if (experiencetime6.includes('anos') && experiencetime6.includes('mês')) { experiencetime6 = experiencetime6.replace(' anos ', '.'); experiencetime6 = experiencetime6.replace('mês', '') }
+                    if (experiencetime6.includes('anos') && experiencetime6.includes('meses')) { experiencetime6 = experiencetime6.replace(' anos ', '.'); experiencetime6 = experiencetime6.replace('meses', '') }
+                    if (experiencetime6.includes('ano') && experiencetime6.includes('mês')) { experiencetime6 = experiencetime6.replace(' ano ', '.'); experiencetime6 = experiencetime6.replace(' mês', '') }
+                    if (experiencetime6.includes('ano') && experiencetime6.includes('meses')) { experiencetime6 = experiencetime6.replace(' ano ', '.'); experiencetime6 = experiencetime6.replace(' meses', '') }
+
+                    if (experiencetime6.includes('ano')) { experiencetime6 = experiencetime6.replace(/[^0-9.]/g, "") }
+                    if (experiencetime6.includes('mês')) { experiencetime6 = experiencetime6.replace(' mês', ''); experiencetime6 = '0.' + experiencetime6 }
+                    if (experiencetime6.includes('meses')) { experiencetime6 = experiencetime6.replace(' meses', ''); experiencetime6 = '0.' + experiencetime6 }
+
+                    experiencetime6 = parseFloat(experiencetime6)
+
+                }
+
+                function convertExpTimeIntoNumber_7() {
+
+                    if (experiencetime7.includes('anos') && experiencetime7.includes('mês')) { experiencetime7 = experiencetime7.replace(' anos ', '.'); experiencetime7 = experiencetime7.replace('mês', '') }
+                    if (experiencetime7.includes('anos') && experiencetime7.includes('meses')) { experiencetime7 = experiencetime7.replace(' anos ', '.'); experiencetime7 = experiencetime7.replace('meses', '') }
+                    if (experiencetime7.includes('ano') && experiencetime7.includes('mês')) { experiencetime7 = experiencetime7.replace(' ano ', '.'); experiencetime7 = experiencetime7.replace(' mês', '') }
+                    if (experiencetime7.includes('ano') && experiencetime7.includes('meses')) { experiencetime7 = experiencetime7.replace(' ano ', '.'); experiencetime7 = experiencetime7.replace(' meses', '') }
+
+                    if (experiencetime7.includes('ano')) { experiencetime7 = experiencetime7.replace(/[^0-9.]/g, "") }
+                    if (experiencetime7.includes('mês')) { experiencetime7 = experiencetime7.replace(' mês', ''); experiencetime7 = '0.' + experiencetime7 }
+                    if (experiencetime7.includes('meses')) { experiencetime7 = experiencetime7.replace(' meses', ''); experiencetime7 = '0.' + experiencetime7 }
+
+                    experiencetime7 = parseFloat(experiencetime7)
+
+                }
+
+                function convertExpTimeIntoNumber_8() {
+
+                    if (experiencetime8.includes('anos') && experiencetime8.includes('mês')) { experiencetime8 = experiencetime8.replace(' anos ', '.'); experiencetime8 = experiencetime8.replace('mês', '') }
+                    if (experiencetime8.includes('anos') && experiencetime8.includes('meses')) { experiencetime8 = experiencetime8.replace(' anos ', '.'); experiencetime8 = experiencetime8.replace('meses', '') }
+                    if (experiencetime8.includes('ano') && experiencetime8.includes('mês')) { experiencetime8 = experiencetime8.replace(' ano ', '.'); experiencetime8 = experiencetime8.replace(' mês', '') }
+                    if (experiencetime8.includes('ano') && experiencetime8.includes('meses')) { experiencetime8 = experiencetime8.replace(' ano ', '.'); experiencetime8 = experiencetime8.replace(' meses', '') }
+
+                    if (experiencetime8.includes('ano')) { experiencetime8 = experiencetime8.replace(/[^0-9.]/g, "") }
+                    if (experiencetime8.includes('mês')) { experiencetime8 = experiencetime8.replace(' mês', ''); experiencetime8 = '0.' + experiencetime8 }
+                    if (experiencetime8.includes('meses')) { experiencetime8 = experiencetime8.replace(' meses', ''); experiencetime8 = '0.' + experiencetime8 }
+
+                    experiencetime8 = parseFloat(experiencetime8)
+
+                }
+
+                convertExpTimeIntoNumber_0()
+                convertExpTimeIntoNumber_1()
+                convertExpTimeIntoNumber_2()
+                convertExpTimeIntoNumber_3()
+                convertExpTimeIntoNumber_4()
+                convertExpTimeIntoNumber_5()
+                convertExpTimeIntoNumber_6()
+                convertExpTimeIntoNumber_7()
+                convertExpTimeIntoNumber_8()
+
+                if (isNaN(experiencetime0)) { experiencetime0 = 0 }
+                if (isNaN(experiencetime1)) { experiencetime1 = 0 }
+                if (isNaN(experiencetime2)) { experiencetime2 = 0 }
+                if (isNaN(experiencetime3)) { experiencetime3 = 0 }
+                if (isNaN(experiencetime4)) { experiencetime4 = 0 }
+                if (isNaN(experiencetime5)) { experiencetime5 = 0 }
+                if (isNaN(experiencetime6)) { experiencetime6 = 0 }
+                if (isNaN(experiencetime7)) { experiencetime7 = 0 }
+                if (isNaN(experiencetime8)) { experiencetime8 = 0 }
+
+                // pode ser que de falha se algum valor não existir, terei de usar TRY
+
+                totalworkingtime = experiencetime0 + experiencetime1 + experiencetime2 + experiencetime3 + experiencetime4 + experiencetime5 + experiencetime6 + experiencetime7 + experiencetime8
+
+                /////////// send data to xlsx   ///////////////
                 function updateSheet() {
                     worksheets.Sheet1.push({
                         // "First Name": `${i}`,
@@ -227,7 +391,9 @@ async function initialize() {
                         xNode: xnode,
                         xJava: xjava,
                         xPython: xpython,
+                        xFlask: xflask,
                         xdevops: xdevops,
+                        xAWS: xaws,
                         xdatascience: xdatascience,
                         xArtificialIntelligence: xartificialintelligence,
                         xMachineLearning: xmachinelearning,
@@ -249,42 +415,43 @@ async function initialize() {
                         xSelenium: xselenium,
                         englishLevel: englishLevel,
 
-                        
+
+                        totalWorkingTime: totalworkingtime,
                         firstExperienceTitle: expTitle0,
-                        firstExperienceTime: totalTime0,
-                        
-                        
+                        firstExperienceTime: experiencetime0,
+
+
                         secondExperienceTitle: expTitle1,
-                        secondExperienceTime: totalTime1,
-                        
-                        
+                        secondExperienceTime: experiencetime1,
+
+
                         thirdExperienceTitle: expTitle2,
-                        thirdExperienceTime: totalTime2,
-                        
-                        
+                        thirdExperienceTime: experiencetime2,
+
+
                         fourthExperienceTitle: expTitle3,
-                        fourthExperienceTime: totalTime3,
-                        
-                        
+                        fourthExperienceTime: experiencetime3,
+
+
                         fifthExperienceTitle: expTitle4,
-                        fifthExperienceTime: totalTime4,
-                        
-                        
+                        fifthExperienceTime: experiencetime4,
+
+
                         sixthExperienceTitle: expTitle5,
-                        sixthExperienceTime: totalTime5,
-                        
-                        
+                        sixthExperienceTime: experiencetime5,
+
+
                         seventhExperienceTitle: expTitle6,
-                        seventhExperienceTime: totalTime6,
-                        
-                        
+                        seventhExperienceTime: experiencetime6,
+
+
                         eigthExperienceTitle: expTitle7,
-                        eigthExperienceTime: totalTime7,
-                        
-                        
+                        eigthExperienceTime: experiencetime7,
+
+
                         ninethExperienceTitle: expTitle8,
-                        ninethExperienceTime: totalTime8,
-                        
+                        ninethExperienceTime: experiencetime8,
+
                     });
                 }
 
@@ -295,45 +462,12 @@ async function initialize() {
                 xlsx.utils.sheet_add_json(workbook.Sheets["Sheet1"], worksheets.Sheet1);
                 xlsx.writeFile(workbook, "db.xlsx");
 
-                
-                
-                // this is the code to change the folder's directory
-                async function moveTotechnicalFolder() {
-                    const currentPath = path.join(__dirname, folderToBeScrapped, currentProfile);
-                    const destinationPath = path.join(__dirname, technicalFolder, currentProfile);
-                    fs.rename(currentPath, destinationPath, function (err) {
-                        if (err) {
-                            // throw err;
-                            1 + 1;
-                        } else {
-                            // console.log("Successfully moved the file!"); // unit testing
-                        }
-                    });
-                }
+
+
+
             }
         });
     }
 }
 
 initialize();
-
-/*
-
-// BIO
-document.querySelector('[class="pv-profile-section__card-header"]').nextElementSibling
-
-// role title
-document.querySelectorAll('[class="pv-entity__secondary-title t-14 t-black t-normal"]')[0].previousElementSibling.previousElementSibling.innerText
-
-// experience time
-document.querySelectorAll('[class="pv-entity__bullet-item-v2"]')[0]
-
-// experiences bio
-document.querySelectorAll('[class="pv-entity__extra-details t-14 t-black--light ember-view"]')[0]
-
-// languages
-document.querySelector('[class="pv-accomplishments-block__list-container"]').children[0].children[0]
-
-// when i is the english element at unknown position
-document.querySelector('[class="pv-accomplishments-block__list-container"]').children[0].children[i].children[1].innerText
-*/
