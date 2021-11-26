@@ -5,12 +5,11 @@ const fs = require("fs");
 const path = require("path");
 const { first } = require("cheerio/lib/api/traversing");
 const { moveMessagePortToContext } = require("worker_threads");
-// const folderToBeScrapped = "./zprofiles/1english/";
-const folderToBeScrapped = "./selectedFolder/eval/";
+const folderToBeScrapped = "./zprofiles/1english/";
 profilesToBeScraped = [];
 
 // Read the file into memory
-const workbook = xlsx.readFile("db3.xlsx");
+const workbook = xlsx.readFile("db.xlsx");
 
 // Convert the xlsx to JSON
 let worksheets = {};
@@ -607,32 +606,57 @@ async function initialize() {
                 convertComposed_B_ExpTimeIntoNumber_3()
 
                 // INDIVIDUAL exps
-                if (isNaN(experiencetime0)) { experiencetime0 = '' }
-                if (isNaN(experiencetime1)) { experiencetime1 = '' }
-                if (isNaN(experiencetime2)) { experiencetime2 = '' }
-                if (isNaN(experiencetime3)) { experiencetime3 = '' }
-                if (isNaN(experiencetime4)) { experiencetime4 = '' }
-                if (isNaN(experiencetime5)) { experiencetime5 = '' }
-                if (isNaN(experiencetime6)) { experiencetime6 = '' }
-                if (isNaN(experiencetime7)) { experiencetime7 = '' }
-                if (isNaN(experiencetime8)) { experiencetime8 = '' }
+                if (isNaN(experiencetime0)) { experiencetime0 = 0 }
+                if (isNaN(experiencetime1)) { experiencetime1 = 0 }
+                if (isNaN(experiencetime2)) { experiencetime2 = 0 }
+                if (isNaN(experiencetime3)) { experiencetime3 = 0 }
+                if (isNaN(experiencetime4)) { experiencetime4 = 0 }
+                if (isNaN(experiencetime5)) { experiencetime5 = 0 }
+                if (isNaN(experiencetime6)) { experiencetime6 = 0 }
+                if (isNaN(experiencetime7)) { experiencetime7 = 0 }
+                if (isNaN(experiencetime8)) { experiencetime8 = 0 }
 
                 // COMPOSED EXP group A
-                if (isNaN(composedExpA_Time0)) { composedExpA_Time0 = '' }
-                if (isNaN(composedExpA_Time1)) { composedExpA_Time1 = '' }
-                if (isNaN(composedExpA_Time2)) { composedExpA_Time2 = '' }
-                if (isNaN(composedExpA_Time3)) { composedExpA_Time3 = '' }
-                if (isNaN(composedExpA_Time4)) { composedExpA_Time4 = '' }
-                if (isNaN(composedExpA_Time5)) { composedExpA_Time5 = '' }
-                if (isNaN(composedExpA_Time6)) { composedExpA_Time6 = '' }
+                if (isNaN(composedExpA_Time0)) { composedExpA_Time0 = 0 }
+                if (isNaN(composedExpA_Time1)) { composedExpA_Time1 = 0 }
+                if (isNaN(composedExpA_Time2)) { composedExpA_Time2 = 0 }
+                if (isNaN(composedExpA_Time3)) { composedExpA_Time3 = 0 }
+                if (isNaN(composedExpA_Time4)) { composedExpA_Time4 = 0 }
+                if (isNaN(composedExpA_Time5)) { composedExpA_Time5 = 0 }
+                if (isNaN(composedExpA_Time6)) { composedExpA_Time6 = 0 }
                 
                 // COMPOSED EXP group B
-                if (isNaN(composedExpB_Time0)) { composedExpB_Time0 = '' }
-                if (isNaN(composedExpB_Time1)) { composedExpB_Time1 = '' }
-                if (isNaN(composedExpB_Time2)) { composedExpB_Time2 = '' }
-                if (isNaN(composedExpB_Time3)) { composedExpB_Time3 = '' }
+                if (isNaN(composedExpB_Time0)) { composedExpB_Time0 = 0 }
+                if (isNaN(composedExpB_Time1)) { composedExpB_Time1 = 0 }
+                if (isNaN(composedExpB_Time2)) { composedExpB_Time2 = 0 }
+                if (isNaN(composedExpB_Time3)) { composedExpB_Time3 = 0 }
+
+                // IT EXP VALIDATION - don't count if exp is outside IT (i.e. photographer, salesperson)
+
+                // COMPOSED EXP - GROUP A
+                //
+                //
+                //
+                //
+                
+
+                // function validate_composedExpA_Title0() {
+                //     if (composedExpA_Title0.includes('architect' || 'arquiteto' || 'engineer' || 'engenheiro' || 'developer' || 'desenvolvedor' || 'sdet' || 'SDET' || 'tech' || 'técnico' || 'tecnico' || 'técnica' || 'desenvolvedora' || 'engenheira' || '' || 'Architect' || 'Arquiteto' || 'Engineer' || 'Engenheiro' || 'Developer' || 'Desenvolvedor' || 'Tech' || 'Técnico' || 'Tecnico' || 'Técnica' || 'Desenvolvedora' || 'Engenheira' || 'técnica' || 'Técnica' || 'BI' || 'CTO' || 'IT' || 'UX' || 'UI' || 'ux/ui' || 'Chief Operating Office' || 'desarrollador' || 'desarrolladora' || 'programador' || 'programadora' || 'programmer' || 'lead' || 'líder' || 'sistemas' || 'sistema' || 'system' || 'freelance' || 'data' || 'dados' || 'datos' || 'cloud' || 'business intelligence' || 'business inteligence' || 'test' || 'quality assurance' || 'QA' || 'qa' || 'machine learning' || 'consultor' || 'consultora' || 'consultant' || 'co-founder' || 'owner' || 'founder' || 'front' || 'front' || 'back' || 'fullstack' || 'head' || 'product' || 'Desarrollador' || 'Desarrolladora' || 'Programador' || 'Programadora' || 'Programmer' || 'Lead' || 'Líder' || 'Sistemas' || 'Sistema' || 'System' || 'Freelance' || 'Data' || 'Dados' || 'Datos' || 'Cloud' || 'Intelligence' || 'Inteligence' || 'Test' || 'Quality Assurance' || 'Qa' || 'Qa' || 'Machine Learning' || 'Consultor' || 'Consultora' || 'Consultant' || 'Co-Founder' || 'Owner' || 'Founder' || 'Front' || 'Front' || 'Back' || 'Fullstack' || 'Head' || 'Product' )) {1+1} else {composedExpA_Title0 = ''; composedExpA_Time0 = ''}
+                // }
+
+
+                // OR 
+
+                // if (
+                //     composedExpA_Title0.includes('architect') || composedExpA_Title0.includes('arquiteto') || composedExpA_Title0.includes('engineer') || composedExpA_Title0.includes('engenheiro') || composedExpA_Title0.includes('developer') || composedExpA_Title0.includes('desenvolvedor') || composedExpA_Title0.includes('sdet') || composedExpA_Title0.includes('SDET') || composedExpA_Title0.includes('tech') || composedExpA_Title0.includes('técnico') || composedExpA_Title0.includes('tecnico') || composedExpA_Title0.includes('técnica') || composedExpA_Title0.includes('desenvolvedora') || composedExpA_Title0.includes('engenheira') || composedExpA_Title0.includes('Architect') || composedExpA_Title0.includes('Arquiteto') || composedExpA_Title0.includes('Engineer') || composedExpA_Title0.includes('Engenheiro') || composedExpA_Title0.includes('Developer') || composedExpA_Title0.includes('Desenvolvedor') || composedExpA_Title0.includes('Tech') || composedExpA_Title0.includes('Técnico') || composedExpA_Title0.includes('Tecnico') || composedExpA_Title0.includes('Técnica') || composedExpA_Title0.includes('Desenvolvedora') || composedExpA_Title0.includes('Engenheira') || composedExpA_Title0.includes('técnica') || composedExpA_Title0.includes('Técnica') || composedExpA_Title0.includes('BI') || composedExpA_Title0.includes('CTO') || composedExpA_Title0.includes('IT') || composedExpA_Title0.includes('UX') || composedExpA_Title0.includes('UI') || composedExpA_Title0.includes('ux/ui') || composedExpA_Title0.includes('ChiefOperatingOffice') || composedExpA_Title0.includes('desarrollador') || composedExpA_Title0.includes('desarrolladora') || composedExpA_Title0.includes('programador') || composedExpA_Title0.includes('programadora') || composedExpA_Title0.includes('programmer') || composedExpA_Title0.includes('lead') || composedExpA_Title0.includes('líder') || composedExpA_Title0.includes('sistemas') || composedExpA_Title0.includes('sistema') || composedExpA_Title0.includes('system') || composedExpA_Title0.includes('freelance') || composedExpA_Title0.includes('data') || composedExpA_Title0.includes('dados') || composedExpA_Title0.includes('datos') || composedExpA_Title0.includes('cloud') || composedExpA_Title0.includes('businessintelligence') || composedExpA_Title0.includes('businessinteligence') || composedExpA_Title0.includes('test') || composedExpA_Title0.includes('qualityassurance') || composedExpA_Title0.includes('QA') || composedExpA_Title0.includes('qa') || composedExpA_Title0.includes('machinelearning') || composedExpA_Title0.includes('consultor') || composedExpA_Title0.includes('consultora') || composedExpA_Title0.includes('consultant') || composedExpA_Title0.includes('co-founder') || composedExpA_Title0.includes('owner') || composedExpA_Title0.includes('founder') || composedExpA_Title0.includes('front') || composedExpA_Title0.includes('front') || composedExpA_Title0.includes('back') || composedExpA_Title0.includes('fullstack') || composedExpA_Title0.includes('head') || composedExpA_Title0.includes('product') || composedExpA_Title0.includes('Desarrollador') || composedExpA_Title0.includes('Desarrolladora') || composedExpA_Title0.includes('Programador') || composedExpA_Title0.includes('Programadora') || composedExpA_Title0.includes('Programmer') || composedExpA_Title0.includes('Lead') || composedExpA_Title0.includes('Líder') || composedExpA_Title0.includes('Sistemas') || composedExpA_Title0.includes('Sistema') || composedExpA_Title0.includes('System') || composedExpA_Title0.includes('Freelance') || composedExpA_Title0.includes('Data') || composedExpA_Title0.includes('Dados') || composedExpA_Title0.includes('Datos') || composedExpA_Title0.includes('Cloud') || composedExpA_Title0.includes('Intelligence') || composedExpA_Title0.includes('Inteligence') || composedExpA_Title0.includes('Test') || composedExpA_Title0.includes('QualityAssurance') || composedExpA_Title0.includes('Qa') || composedExpA_Title0.includes('Qa') || composedExpA_Title0.includes('MachineLearning') || composedExpA_Title0.includes('Consultor') || composedExpA_Title0.includes('Consultora') || composedExpA_Title0.includes('Consultant') || composedExpA_Title0.includes('Co-Founder') || composedExpA_Title0.includes('Owner') || composedExpA_Title0.includes('Founder') || composedExpA_Title0.includes('Front') || composedExpA_Title0.includes('Front') || composedExpA_Title0.includes('Back') || composedExpA_Title0.includes('Fullstack') || composedExpA_Title0.includes('Head') || composedExpA_Title0.includes('Product')
+                // ) {1+1} else {composedExpA_Title0='';composedExpA_Time0=''}
+
+                
+            
 
                 totalworkingtime = experiencetime0 + experiencetime1 + experiencetime2 + experiencetime3 + experiencetime4 + experiencetime5 + experiencetime6 + experiencetime7 + experiencetime8 + composedExpA_Time0 + composedExpA_Time1 + composedExpA_Time2 + composedExpA_Time3 + composedExpA_Time4 + composedExpA_Time5 + composedExpA_Time6 + composedExpB_Time0 + composedExpB_Time0 + composedExpB_Time0 + composedExpB_Time0
+
+                
 
                 /////////// send data to xlsx   ///////////////
                 function updateSheet() {
@@ -761,7 +785,7 @@ async function initialize() {
                 // this updates the xlsx file
                 // it needs to stay below the push method. I tried to put above, but it only works here.
                 xlsx.utils.sheet_add_json(workbook.Sheets["Sheet1"], worksheets.Sheet1);
-                xlsx.writeFile(workbook, "db3.xlsx");
+                xlsx.writeFile(workbook, "db.xlsx");
                 
                 
                 
@@ -772,3 +796,4 @@ async function initialize() {
 }
 
 initialize();
+
