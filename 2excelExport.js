@@ -1,3 +1,27 @@
+/*
+NEXT STEPS
+1750
+pegou a primeira exp
+mas pegou PHOTO EDITOR tbm.
+
+por causa da extensão do chrome pra HIGHLIGHT, se a palavra bate no titulo, não valida na planilha.
+
+mas photo editor passou, e não tava highlighted.
+
+
+
+
+desenvolvimento
+engenharia
+qualidade
+software
+devops
+dba
+
+
+*/
+
+
 // scraper packages
 const cheerio = require("cheerio");
 const xlsx = require("xlsx");
@@ -6,6 +30,7 @@ const path = require("path");
 const { first } = require("cheerio/lib/api/traversing");
 const { moveMessagePortToContext } = require("worker_threads");
 const folderToBeScrapped = "./zprofiles/1english/";
+const selectedFolder = "./zprofiles/selectedFolder/zexported/";
 profilesToBeScraped = [];
 
 // Read the file into memory
@@ -18,6 +43,7 @@ for (const sheetName of workbook.SheetNames) {
 }
 
 async function initialize() {
+    
     await saveAllFilesToArray(); // this will read all the files in the folder and save it to the array, to be scraped afterwards.
 
     async function saveAllFilesToArray() {
@@ -28,7 +54,7 @@ async function initialize() {
             });
 
             // this will loop the list of profiles to be scraped
-            for (i = 0; i < profilesToBeScraped.length; i++) {
+            for (i = 0; i < 2000; i++) {
                 currentProfile = profilesToBeScraped[i];
 
                 // this will READ the looped file and extract the infos below
@@ -172,7 +198,6 @@ async function initialize() {
                     }
                 }
 
-                
 
                 let composedExpListA = $('li.pv-entity__position-group-role-item')
                 let composedExpListB = $('li.pv-entity__position-group-role-item-fading-timeline')
@@ -181,22 +206,22 @@ async function initialize() {
 
                 composedExpA_Title0 = composedExpListA.eq(0).children().children().children().children().children().children().children().children().eq(1).text()
                 composedExpA_Time0 = composedExpListA.eq(0).children().children().children().children().children().children().children().children().children().eq(3).text()
-                
+
                 composedExpA_Title1 = composedExpListA.eq(1).children().children().children().children().children().children().children().children().eq(1).text()
                 composedExpA_Time1 = composedExpListA.eq(1).children().children().children().children().children().children().children().children().children().eq(3).text()
-                
+
                 composedExpA_Title2 = composedExpListA.eq(2).children().children().children().children().children().children().children().children().eq(1).text()
                 composedExpA_Time2 = composedExpListA.eq(2).children().children().children().children().children().children().children().children().children().eq(3).text()
-                
+
                 composedExpA_Title3 = composedExpListA.eq(3).children().children().children().children().children().children().children().children().eq(1).text()
                 composedExpA_Time3 = composedExpListA.eq(3).children().children().children().children().children().children().children().children().children().eq(3).text()
-                
+
                 composedExpA_Title4 = composedExpListA.eq(4).children().children().children().children().children().children().children().children().eq(1).text()
                 composedExpA_Time4 = composedExpListA.eq(4).children().children().children().children().children().children().children().children().children().eq(3).text()
-                
+
                 composedExpA_Title5 = composedExpListA.eq(5).children().children().children().children().children().children().children().children().eq(1).text()
                 composedExpA_Time5 = composedExpListA.eq(5).children().children().children().children().children().children().children().children().children().eq(3).text()
-                
+
                 composedExpA_Title6 = composedExpListA.eq(6).children().children().children().children().children().children().children().children().eq(1).text()
                 composedExpA_Time6 = composedExpListA.eq(6).children().children().children().children().children().children().children().children().children().eq(3).text()
 
@@ -204,31 +229,31 @@ async function initialize() {
 
                 composedExpB_Title0 = composedExpListB.eq(0).children().children().children().children().children().children().children().eq(0).children().eq(1).text()
                 composedExpB_Time0 = composedExpListB.eq(0).children().children().children().children().children().children().children().children().eq(3).children().eq(1).text()
-                
+
                 composedExpB_Title1 = composedExpListB.eq(1).children().children().children().children().children().children().children().eq(0).children().eq(1).text()
                 composedExpB_Time1 = composedExpListB.eq(1).children().children().children().children().children().children().children().children().eq(3).children().eq(1).text()
-                
+
                 composedExpB_Title2 = composedExpListB.eq(2).children().children().children().children().children().children().children().eq(0).children().eq(1).text()
                 composedExpB_Time2 = composedExpListB.eq(2).children().children().children().children().children().children().children().children().eq(3).children().eq(1).text()
-                
+
                 composedExpB_Title3 = composedExpListB.eq(3).children().children().children().children().children().children().children().eq(0).children().eq(1).text()
                 composedExpB_Time3 = composedExpListB.eq(3).children().children().children().children().children().children().children().children().eq(3).children().eq(1).text()
-                
 
 
-                
-                
+
+                // ATTENTION HERE. maybe this is the bug.
+
                 // remove composed after getting them
                 for (let i = 0; i < 10; i++) {
-                    
+
                     try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[i].remove() } catch (error) { 1 + 1 }
-                    
+
                     try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[i].remove() } catch (error) { 1 + 1 }
-                    
+
                 }
-                
+
                 // or
-                
+
                 try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
                 try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
                 try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
@@ -416,7 +441,7 @@ async function initialize() {
                 // COMPOSED EXP group A
 
                 function convertComposed_A_ExpTimeIntoNumber_0() {
-                    
+
                     if (composedExpA_Time0.includes('anos') && composedExpA_Time0.includes('mês')) { composedExpA_Time0 = composedExpA_Time0.replace(' anos ', '.'); composedExpA_Time0 = composedExpA_Time0.replace('mês', '') }
                     if (composedExpA_Time0.includes('anos') && composedExpA_Time0.includes('meses')) { composedExpA_Time0 = composedExpA_Time0.replace(' anos ', '.'); composedExpA_Time0 = composedExpA_Time0.replace('meses', '') }
                     if (composedExpA_Time0.includes('ano') && composedExpA_Time0.includes('mês')) { composedExpA_Time0 = composedExpA_Time0.replace(' ano ', '.'); composedExpA_Time0 = composedExpA_Time0.replace(' mês', '') }
@@ -431,7 +456,7 @@ async function initialize() {
                 }
 
                 function convertComposed_A_ExpTimeIntoNumber_1() {
-                    
+
                     if (composedExpA_Time1.includes('anos') && composedExpA_Time1.includes('mês')) { composedExpA_Time1 = composedExpA_Time1.replace(' anos ', '.'); composedExpA_Time1 = composedExpA_Time1.replace('mês', '') }
                     if (composedExpA_Time1.includes('anos') && composedExpA_Time1.includes('meses')) { composedExpA_Time1 = composedExpA_Time1.replace(' anos ', '.'); composedExpA_Time1 = composedExpA_Time1.replace('meses', '') }
                     if (composedExpA_Time1.includes('ano') && composedExpA_Time1.includes('mês')) { composedExpA_Time1 = composedExpA_Time1.replace(' ano ', '.'); composedExpA_Time1 = composedExpA_Time1.replace(' mês', '') }
@@ -446,7 +471,7 @@ async function initialize() {
                 }
 
                 function convertComposed_A_ExpTimeIntoNumber_2() {
-                    
+
                     if (composedExpA_Time2.includes('anos') && composedExpA_Time2.includes('mês')) { composedExpA_Time2 = composedExpA_Time2.replace(' anos ', '.'); composedExpA_Time2 = composedExpA_Time2.replace('mês', '') }
                     if (composedExpA_Time2.includes('anos') && composedExpA_Time2.includes('meses')) { composedExpA_Time2 = composedExpA_Time2.replace(' anos ', '.'); composedExpA_Time2 = composedExpA_Time2.replace('meses', '') }
                     if (composedExpA_Time2.includes('ano') && composedExpA_Time2.includes('mês')) { composedExpA_Time2 = composedExpA_Time2.replace(' ano ', '.'); composedExpA_Time2 = composedExpA_Time2.replace(' mês', '') }
@@ -461,7 +486,7 @@ async function initialize() {
                 }
 
                 function convertComposed_A_ExpTimeIntoNumber_3() {
-                    
+
                     if (composedExpA_Time3.includes('anos') && composedExpA_Time3.includes('mês')) { composedExpA_Time3 = composedExpA_Time3.replace(' anos ', '.'); composedExpA_Time3 = composedExpA_Time3.replace('mês', '') }
                     if (composedExpA_Time3.includes('anos') && composedExpA_Time3.includes('meses')) { composedExpA_Time3 = composedExpA_Time3.replace(' anos ', '.'); composedExpA_Time3 = composedExpA_Time3.replace('meses', '') }
                     if (composedExpA_Time3.includes('ano') && composedExpA_Time3.includes('mês')) { composedExpA_Time3 = composedExpA_Time3.replace(' ano ', '.'); composedExpA_Time3 = composedExpA_Time3.replace(' mês', '') }
@@ -476,7 +501,7 @@ async function initialize() {
                 }
 
                 function convertComposed_A_ExpTimeIntoNumber_4() {
-                    
+
                     if (composedExpA_Time4.includes('anos') && composedExpA_Time4.includes('mês')) { composedExpA_Time4 = composedExpA_Time4.replace(' anos ', '.'); composedExpA_Time4 = composedExpA_Time4.replace('mês', '') }
                     if (composedExpA_Time4.includes('anos') && composedExpA_Time4.includes('meses')) { composedExpA_Time4 = composedExpA_Time4.replace(' anos ', '.'); composedExpA_Time4 = composedExpA_Time4.replace('meses', '') }
                     if (composedExpA_Time4.includes('ano') && composedExpA_Time4.includes('mês')) { composedExpA_Time4 = composedExpA_Time4.replace(' ano ', '.'); composedExpA_Time4 = composedExpA_Time4.replace(' mês', '') }
@@ -491,7 +516,7 @@ async function initialize() {
                 }
 
                 function convertComposed_A_ExpTimeIntoNumber_5() {
-                    
+
                     if (composedExpA_Time5.includes('anos') && composedExpA_Time5.includes('mês')) { composedExpA_Time5 = composedExpA_Time5.replace(' anos ', '.'); composedExpA_Time5 = composedExpA_Time5.replace('mês', '') }
                     if (composedExpA_Time5.includes('anos') && composedExpA_Time5.includes('meses')) { composedExpA_Time5 = composedExpA_Time5.replace(' anos ', '.'); composedExpA_Time5 = composedExpA_Time5.replace('meses', '') }
                     if (composedExpA_Time5.includes('ano') && composedExpA_Time5.includes('mês')) { composedExpA_Time5 = composedExpA_Time5.replace(' ano ', '.'); composedExpA_Time5 = composedExpA_Time5.replace(' mês', '') }
@@ -506,7 +531,7 @@ async function initialize() {
                 }
 
                 function convertComposed_A_ExpTimeIntoNumber_6() {
-                    
+
                     if (composedExpA_Time6.includes('anos') && composedExpA_Time6.includes('mês')) { composedExpA_Time6 = composedExpA_Time6.replace(' anos ', '.'); composedExpA_Time6 = composedExpA_Time6.replace('mês', '') }
                     if (composedExpA_Time6.includes('anos') && composedExpA_Time6.includes('meses')) { composedExpA_Time6 = composedExpA_Time6.replace(' anos ', '.'); composedExpA_Time6 = composedExpA_Time6.replace('meses', '') }
                     if (composedExpA_Time6.includes('ano') && composedExpA_Time6.includes('mês')) { composedExpA_Time6 = composedExpA_Time6.replace(' ano ', '.'); composedExpA_Time6 = composedExpA_Time6.replace(' mês', '') }
@@ -523,7 +548,7 @@ async function initialize() {
                 // COMPOSED EXP group B
 
                 function convertComposed_B_ExpTimeIntoNumber_0() {
-                    
+
                     if (composedExpB_Time0.includes('anos') && composedExpB_Time0.includes('mês')) { composedExpB_Time0 = composedExpB_Time0.replace(' anos ', '.'); composedExpB_Time0 = composedExpB_Time0.replace('mês', '') }
                     if (composedExpB_Time0.includes('anos') && composedExpB_Time0.includes('meses')) { composedExpB_Time0 = composedExpB_Time0.replace(' anos ', '.'); composedExpB_Time0 = composedExpB_Time0.replace('meses', '') }
                     if (composedExpB_Time0.includes('ano') && composedExpB_Time0.includes('mês')) { composedExpB_Time0 = composedExpB_Time0.replace(' ano ', '.'); composedExpB_Time0 = composedExpB_Time0.replace(' mês', '') }
@@ -538,7 +563,7 @@ async function initialize() {
                 }
 
                 function convertComposed_B_ExpTimeIntoNumber_1() {
-                    
+
                     if (composedExpB_Time1.includes('anos') && composedExpB_Time1.includes('mês')) { composedExpB_Time1 = composedExpB_Time1.replace(' anos ', '.'); composedExpB_Time1 = composedExpB_Time1.replace('mês', '') }
                     if (composedExpB_Time1.includes('anos') && composedExpB_Time1.includes('meses')) { composedExpB_Time1 = composedExpB_Time1.replace(' anos ', '.'); composedExpB_Time1 = composedExpB_Time1.replace('meses', '') }
                     if (composedExpB_Time1.includes('ano') && composedExpB_Time1.includes('mês')) { composedExpB_Time1 = composedExpB_Time1.replace(' ano ', '.'); composedExpB_Time1 = composedExpB_Time1.replace(' mês', '') }
@@ -553,7 +578,7 @@ async function initialize() {
                 }
 
                 function convertComposed_B_ExpTimeIntoNumber_2() {
-                    
+
                     if (composedExpB_Time2.includes('anos') && composedExpB_Time2.includes('mês')) { composedExpB_Time2 = composedExpB_Time2.replace(' anos ', '.'); composedExpB_Time2 = composedExpB_Time2.replace('mês', '') }
                     if (composedExpB_Time2.includes('anos') && composedExpB_Time2.includes('meses')) { composedExpB_Time2 = composedExpB_Time2.replace(' anos ', '.'); composedExpB_Time2 = composedExpB_Time2.replace('meses', '') }
                     if (composedExpB_Time2.includes('ano') && composedExpB_Time2.includes('mês')) { composedExpB_Time2 = composedExpB_Time2.replace(' ano ', '.'); composedExpB_Time2 = composedExpB_Time2.replace(' mês', '') }
@@ -568,7 +593,7 @@ async function initialize() {
                 }
 
                 function convertComposed_B_ExpTimeIntoNumber_3() {
-                    
+
                     if (composedExpB_Time3.includes('anos') && composedExpB_Time3.includes('mês')) { composedExpB_Time3 = composedExpB_Time3.replace(' anos ', '.'); composedExpB_Time3 = composedExpB_Time3.replace('mês', '') }
                     if (composedExpB_Time3.includes('anos') && composedExpB_Time3.includes('meses')) { composedExpB_Time3 = composedExpB_Time3.replace(' anos ', '.'); composedExpB_Time3 = composedExpB_Time3.replace('meses', '') }
                     if (composedExpB_Time3.includes('ano') && composedExpB_Time3.includes('mês')) { composedExpB_Time3 = composedExpB_Time3.replace(' ano ', '.'); composedExpB_Time3 = composedExpB_Time3.replace(' mês', '') }
@@ -581,8 +606,8 @@ async function initialize() {
                     composedExpB_Time3 = parseFloat(composedExpB_Time3)
 
                 }
-                
-                
+
+
                 convertExpTimeIntoNumber_0()
                 convertExpTimeIntoNumber_1()
                 convertExpTimeIntoNumber_2()
@@ -624,39 +649,132 @@ async function initialize() {
                 if (isNaN(composedExpA_Time4)) { composedExpA_Time4 = 0 }
                 if (isNaN(composedExpA_Time5)) { composedExpA_Time5 = 0 }
                 if (isNaN(composedExpA_Time6)) { composedExpA_Time6 = 0 }
-                
+
                 // COMPOSED EXP group B
                 if (isNaN(composedExpB_Time0)) { composedExpB_Time0 = 0 }
                 if (isNaN(composedExpB_Time1)) { composedExpB_Time1 = 0 }
                 if (isNaN(composedExpB_Time2)) { composedExpB_Time2 = 0 }
                 if (isNaN(composedExpB_Time3)) { composedExpB_Time3 = 0 }
 
-                // IT EXP VALIDATION - don't count if exp is outside IT (i.e. photographer, salesperson)
+                function validateEXP(expTitle, expTime) {
+                    let counter = 0
+                    lwrCaseExpTitle = expTitle.toLowerCase()
+                    
+                    // portuguese
+                    if (lwrCaseExpTitle.includes('arquiteto')) { counter++ }
+                    if (lwrCaseExpTitle.includes('engenheiro')) { counter++ }
+                    if (lwrCaseExpTitle.includes('desenvolvedor')) { counter++ }
+                    if (lwrCaseExpTitle.includes('técnico')) { counter++ }
+                    if (lwrCaseExpTitle.includes('tecnico')) { counter++ }
+                    if (lwrCaseExpTitle.includes('técnica')) { counter++ }
+                    if (lwrCaseExpTitle.includes('desenvolvedora')) { counter++ }
+                    if (lwrCaseExpTitle.includes('engenheira')) { counter++ }
+                    if (lwrCaseExpTitle.includes('técnica')) { counter++ }
+                    if (lwrCaseExpTitle.includes('programador')) { counter++ }
+                    if (lwrCaseExpTitle.includes('programadora')) { counter++ }
+                    if (lwrCaseExpTitle.includes('programmer')) { counter++ }
+                    if (lwrCaseExpTitle.includes('líder')) { counter++ }
+                    if (lwrCaseExpTitle.includes('sistemas')) { counter++ }
+                    if (lwrCaseExpTitle.includes('sistema')) { counter++ }
+                    if (lwrCaseExpTitle.includes('dados')) { counter++ }
+                    if (lwrCaseExpTitle.includes('consultor')) { counter++ }
+                    if (lwrCaseExpTitle.includes('consultora')) { counter++ }
+        
+                    // english
+                    if (lwrCaseExpTitle.includes('architect')) { counter++ }
+                    if (lwrCaseExpTitle.includes('engineer')) { counter++ }
+                    if (lwrCaseExpTitle.includes('developer')) { counter++ }
+                    if (lwrCaseExpTitle.includes('sdet')) { counter++ }
+                    if (lwrCaseExpTitle.includes('tech')) { counter++ }
+                    if (lwrCaseExpTitle.includes(' bi')) { counter++ }
+                    if (lwrCaseExpTitle.includes('cto')) { counter++ }
+                    if (lwrCaseExpTitle.includes('it')) { counter++ }
+                    if (lwrCaseExpTitle.includes('ux')) { counter++ }
+                    if (lwrCaseExpTitle.includes('ui')) { counter++ }
+                    if (lwrCaseExpTitle.includes('ux/ui')) { counter++ }
+                    if (lwrCaseExpTitle.includes('chief operating office')) { counter++ }
+                    if (lwrCaseExpTitle.includes('lead')) { counter++ }
+                    if (lwrCaseExpTitle.includes('system')) { counter++ }
+                    if (lwrCaseExpTitle.includes('freelance')) { counter++ }
+                    if (lwrCaseExpTitle.includes('data')) { counter++ }
+                    if (lwrCaseExpTitle.includes('cloud')) { counter++ }
+                    if (lwrCaseExpTitle.includes('business intelligence')) { counter++ }
+                    if (lwrCaseExpTitle.includes('business inteligence')) { counter++ }
+                    if (lwrCaseExpTitle.includes('test')) { counter++ }
+                    if (lwrCaseExpTitle.includes('quality assurance')) { counter++ }
+                    if (lwrCaseExpTitle.includes('qa')) { counter++ }
+                    if (lwrCaseExpTitle.includes('machine learning')) { counter++ }
+                    if (lwrCaseExpTitle.includes('consultant')) { counter++ }
+                    if (lwrCaseExpTitle.includes('co-founder')) { counter++ }
+                    if (lwrCaseExpTitle.includes('owner')) { counter++ }
+                    if (lwrCaseExpTitle.includes('founder')) { counter++ }
+                    if (lwrCaseExpTitle.includes('front')) { counter++ }
+                    if (lwrCaseExpTitle.includes('back')) { counter++ }
+                    if (lwrCaseExpTitle.includes('fullstack')) { counter++ }
+                    if (lwrCaseExpTitle.includes('full stack')) { counter++ }
+                    if (lwrCaseExpTitle.includes('head')) { counter++ }
+                    if (lwrCaseExpTitle.includes('product')) { counter++ }
+        
+                    // spanish
+                    if (lwrCaseExpTitle.includes('desarrollador')) { counter++ }
+                    if (lwrCaseExpTitle.includes('desarrolladora')) { counter++ }
+                    if (lwrCaseExpTitle.includes('datos')) { counter++ }
+        
+                    // end of function
+                    if (counter > 0) { 1 + 1 } else { expTime = 0 } // i could invalidate the title as well, but i want to know what other titles could i be wrongly ignoring
+                    return expTime
+        
+                }
 
-                // COMPOSED EXP - GROUP A
-                //
-                //
-                //
-                //
+                // individual experiences
                 
-
-                // function validate_composedExpA_Title0() {
-                //     if (composedExpA_Title0.includes('architect' || 'arquiteto' || 'engineer' || 'engenheiro' || 'developer' || 'desenvolvedor' || 'sdet' || 'SDET' || 'tech' || 'técnico' || 'tecnico' || 'técnica' || 'desenvolvedora' || 'engenheira' || '' || 'Architect' || 'Arquiteto' || 'Engineer' || 'Engenheiro' || 'Developer' || 'Desenvolvedor' || 'Tech' || 'Técnico' || 'Tecnico' || 'Técnica' || 'Desenvolvedora' || 'Engenheira' || 'técnica' || 'Técnica' || 'BI' || 'CTO' || 'IT' || 'UX' || 'UI' || 'ux/ui' || 'Chief Operating Office' || 'desarrollador' || 'desarrolladora' || 'programador' || 'programadora' || 'programmer' || 'lead' || 'líder' || 'sistemas' || 'sistema' || 'system' || 'freelance' || 'data' || 'dados' || 'datos' || 'cloud' || 'business intelligence' || 'business inteligence' || 'test' || 'quality assurance' || 'QA' || 'qa' || 'machine learning' || 'consultor' || 'consultora' || 'consultant' || 'co-founder' || 'owner' || 'founder' || 'front' || 'front' || 'back' || 'fullstack' || 'head' || 'product' || 'Desarrollador' || 'Desarrolladora' || 'Programador' || 'Programadora' || 'Programmer' || 'Lead' || 'Líder' || 'Sistemas' || 'Sistema' || 'System' || 'Freelance' || 'Data' || 'Dados' || 'Datos' || 'Cloud' || 'Intelligence' || 'Inteligence' || 'Test' || 'Quality Assurance' || 'Qa' || 'Qa' || 'Machine Learning' || 'Consultor' || 'Consultora' || 'Consultant' || 'Co-Founder' || 'Owner' || 'Founder' || 'Front' || 'Front' || 'Back' || 'Fullstack' || 'Head' || 'Product' )) {1+1} else {composedExpA_Title0 = ''; composedExpA_Time0 = ''}
-                // }
-
-
-                // OR 
-
-                // if (
-                //     composedExpA_Title0.includes('architect') || composedExpA_Title0.includes('arquiteto') || composedExpA_Title0.includes('engineer') || composedExpA_Title0.includes('engenheiro') || composedExpA_Title0.includes('developer') || composedExpA_Title0.includes('desenvolvedor') || composedExpA_Title0.includes('sdet') || composedExpA_Title0.includes('SDET') || composedExpA_Title0.includes('tech') || composedExpA_Title0.includes('técnico') || composedExpA_Title0.includes('tecnico') || composedExpA_Title0.includes('técnica') || composedExpA_Title0.includes('desenvolvedora') || composedExpA_Title0.includes('engenheira') || composedExpA_Title0.includes('Architect') || composedExpA_Title0.includes('Arquiteto') || composedExpA_Title0.includes('Engineer') || composedExpA_Title0.includes('Engenheiro') || composedExpA_Title0.includes('Developer') || composedExpA_Title0.includes('Desenvolvedor') || composedExpA_Title0.includes('Tech') || composedExpA_Title0.includes('Técnico') || composedExpA_Title0.includes('Tecnico') || composedExpA_Title0.includes('Técnica') || composedExpA_Title0.includes('Desenvolvedora') || composedExpA_Title0.includes('Engenheira') || composedExpA_Title0.includes('técnica') || composedExpA_Title0.includes('Técnica') || composedExpA_Title0.includes('BI') || composedExpA_Title0.includes('CTO') || composedExpA_Title0.includes('IT') || composedExpA_Title0.includes('UX') || composedExpA_Title0.includes('UI') || composedExpA_Title0.includes('ux/ui') || composedExpA_Title0.includes('ChiefOperatingOffice') || composedExpA_Title0.includes('desarrollador') || composedExpA_Title0.includes('desarrolladora') || composedExpA_Title0.includes('programador') || composedExpA_Title0.includes('programadora') || composedExpA_Title0.includes('programmer') || composedExpA_Title0.includes('lead') || composedExpA_Title0.includes('líder') || composedExpA_Title0.includes('sistemas') || composedExpA_Title0.includes('sistema') || composedExpA_Title0.includes('system') || composedExpA_Title0.includes('freelance') || composedExpA_Title0.includes('data') || composedExpA_Title0.includes('dados') || composedExpA_Title0.includes('datos') || composedExpA_Title0.includes('cloud') || composedExpA_Title0.includes('businessintelligence') || composedExpA_Title0.includes('businessinteligence') || composedExpA_Title0.includes('test') || composedExpA_Title0.includes('qualityassurance') || composedExpA_Title0.includes('QA') || composedExpA_Title0.includes('qa') || composedExpA_Title0.includes('machinelearning') || composedExpA_Title0.includes('consultor') || composedExpA_Title0.includes('consultora') || composedExpA_Title0.includes('consultant') || composedExpA_Title0.includes('co-founder') || composedExpA_Title0.includes('owner') || composedExpA_Title0.includes('founder') || composedExpA_Title0.includes('front') || composedExpA_Title0.includes('front') || composedExpA_Title0.includes('back') || composedExpA_Title0.includes('fullstack') || composedExpA_Title0.includes('head') || composedExpA_Title0.includes('product') || composedExpA_Title0.includes('Desarrollador') || composedExpA_Title0.includes('Desarrolladora') || composedExpA_Title0.includes('Programador') || composedExpA_Title0.includes('Programadora') || composedExpA_Title0.includes('Programmer') || composedExpA_Title0.includes('Lead') || composedExpA_Title0.includes('Líder') || composedExpA_Title0.includes('Sistemas') || composedExpA_Title0.includes('Sistema') || composedExpA_Title0.includes('System') || composedExpA_Title0.includes('Freelance') || composedExpA_Title0.includes('Data') || composedExpA_Title0.includes('Dados') || composedExpA_Title0.includes('Datos') || composedExpA_Title0.includes('Cloud') || composedExpA_Title0.includes('Intelligence') || composedExpA_Title0.includes('Inteligence') || composedExpA_Title0.includes('Test') || composedExpA_Title0.includes('QualityAssurance') || composedExpA_Title0.includes('Qa') || composedExpA_Title0.includes('Qa') || composedExpA_Title0.includes('MachineLearning') || composedExpA_Title0.includes('Consultor') || composedExpA_Title0.includes('Consultora') || composedExpA_Title0.includes('Consultant') || composedExpA_Title0.includes('Co-Founder') || composedExpA_Title0.includes('Owner') || composedExpA_Title0.includes('Founder') || composedExpA_Title0.includes('Front') || composedExpA_Title0.includes('Front') || composedExpA_Title0.includes('Back') || composedExpA_Title0.includes('Fullstack') || composedExpA_Title0.includes('Head') || composedExpA_Title0.includes('Product')
-                // ) {1+1} else {composedExpA_Title0='';composedExpA_Time0=''}
-
+                let individualValidatedExp0 = validateEXP(expTitle0, experiencetime0)
+                let individualValidatedExp1 = validateEXP(expTitle1, experiencetime1)
+                let individualValidatedExp2 = validateEXP(expTitle2, experiencetime2)
+                let individualValidatedExp3 = validateEXP(expTitle3, experiencetime3)
+                let individualValidatedExp4 = validateEXP(expTitle4, experiencetime4)
+                let individualValidatedExp5 = validateEXP(expTitle5, experiencetime5)
+                let individualValidatedExp6 = validateEXP(expTitle6, experiencetime6)
+                let individualValidatedExp7 = validateEXP(expTitle7, experiencetime7)
+                let individualValidatedExp8 = validateEXP(expTitle8, experiencetime8)
                 
-            
-
-                totalworkingtime = experiencetime0 + experiencetime1 + experiencetime2 + experiencetime3 + experiencetime4 + experiencetime5 + experiencetime6 + experiencetime7 + experiencetime8 + composedExpA_Time0 + composedExpA_Time1 + composedExpA_Time2 + composedExpA_Time3 + composedExpA_Time4 + composedExpA_Time5 + composedExpA_Time6 + composedExpB_Time0 + composedExpB_Time0 + composedExpB_Time0 + composedExpB_Time0
-
                 
+                // composed experiences GROUP A
+                let composedA_ValidatedExp0 = validateEXP(composedExpA_Title0, composedExpA_Time0)
+                let composedA_ValidatedExp1 = validateEXP(composedExpA_Title1, composedExpA_Time1)
+                let composedA_ValidatedExp2 = validateEXP(composedExpA_Title2, composedExpA_Time2)
+                let composedA_ValidatedExp3 = validateEXP(composedExpA_Title3, composedExpA_Time3)
+                let composedA_ValidatedExp4 = validateEXP(composedExpA_Title4, composedExpA_Time4)
+                let composedA_ValidatedExp5 = validateEXP(composedExpA_Title5, composedExpA_Time5)
+                let composedA_ValidatedExp6 = validateEXP(composedExpA_Title6, composedExpA_Time6)
+
+                // composed experiences GROUP B
+                let composedB_ValidatedExp0 = validateEXP(composedExpB_Title0, composedExpB_Time0)
+                let composedB_ValidatedExp1 = validateEXP(composedExpB_Title1, composedExpB_Time1)
+                let composedB_ValidatedExp2 = validateEXP(composedExpB_Title2, composedExpB_Time2)
+                let composedB_ValidatedExp3 = validateEXP(composedExpB_Title3, composedExpB_Time3)
+        
+
+                totalworkingtime = individualValidatedExp0 + individualValidatedExp1 + individualValidatedExp2 + individualValidatedExp3 + individualValidatedExp4 + individualValidatedExp5 + individualValidatedExp6 + individualValidatedExp7 + individualValidatedExp8 + composedA_ValidatedExp0 + composedA_ValidatedExp1 + composedA_ValidatedExp2 + composedA_ValidatedExp3 + composedA_ValidatedExp4 + composedA_ValidatedExp5 + composedA_ValidatedExp6 + composedB_ValidatedExp0 + composedB_ValidatedExp1 + composedB_ValidatedExp2 + composedB_ValidatedExp3
+
+                moveToSelectedFolder()
+
+                // this is the code to change the folder's directory
+                async function moveToSelectedFolder() {
+                    const currentPath = path.join(__dirname, folderToBeScrapped, currentProfile);
+                    const destinationPath = path.join(__dirname, selectedFolder, currentProfile);
+                    fs.rename(currentPath, destinationPath, function (err) {
+                        1 + 1
+                        if (err) {
+                            1 + 1;
+                            // throw err;
+                        } else {
+                            // console.log("Successfully moved the file!"); // unit testing
+                        }
+                    });
+                }
+
+
 
                 /////////// send data to xlsx   ///////////////
                 function updateSheet() {
@@ -703,39 +821,39 @@ async function initialize() {
 
 
                         firstExperienceTitle: expTitle0,
-                        firstExperienceTime: experiencetime0,
-                        
+                        firstExperienceTime: individualValidatedExp0,
+
 
                         secondExperienceTitle: expTitle1,
-                        secondExperienceTime: experiencetime1,
-                        
-                        
+                        secondExperienceTime: individualValidatedExp1,
+
+
                         thirdExperienceTitle: expTitle2,
-                        thirdExperienceTime: experiencetime2,
-                        
-                        
+                        thirdExperienceTime: individualValidatedExp2,
+
+
                         fourthExperienceTitle: expTitle3,
-                        fourthExperienceTime: experiencetime3,
-                        
+                        fourthExperienceTime: individualValidatedExp3,
+
 
                         fifthExperienceTitle: expTitle4,
-                        fifthExperienceTime: experiencetime4,
+                        fifthExperienceTime: individualValidatedExp4,
 
 
                         sixthExperienceTitle: expTitle5,
-                        sixthExperienceTime: experiencetime5,
-                        
-                        
-                        seventhExperienceTitle: expTitle6,
-                        seventhExperienceTime: experiencetime6,
+                        sixthExperienceTime: individualValidatedExp5,
 
-                        
+
+                        seventhExperienceTitle: expTitle6,
+                        seventhExperienceTime: individualValidatedExp6,
+
+
                         eigthExperienceTitle: expTitle7,
-                        eigthExperienceTime: experiencetime7,
-                        
-                        
+                        eigthExperienceTime: individualValidatedExp7,
+
+
                         ninethExperienceTitle: expTitle8,
-                        ninethExperienceTime: experiencetime8,
+                        ninethExperienceTime: individualValidatedExp8,
 
                         // COMPOSED EXP
                         // group A
@@ -781,19 +899,20 @@ async function initialize() {
                 }
 
                 updateSheet();
-                
+
                 // this updates the xlsx file
                 // it needs to stay below the push method. I tried to put above, but it only works here.
                 xlsx.utils.sheet_add_json(workbook.Sheets["Sheet1"], worksheets.Sheet1);
                 xlsx.writeFile(workbook, "db.xlsx");
-                
-                
-                
-                
+
+
+
+
             }
         });
     }
 }
 
 initialize();
+
 
