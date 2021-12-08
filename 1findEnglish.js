@@ -65,6 +65,13 @@ async function everything() {
                 .children()
                 .next()
                 .text();
+
+            } else if (loopedLanguage.match(/inglés/gim)) {
+              englishLevel = $("li.pv-accomplishment-entity")
+                .eq(i)
+                .children()
+                .next()
+                .text();
             }
 
             // console.log(englishLevel); // unit testing
