@@ -29,8 +29,8 @@ const fs = require("fs");
 const path = require("path");
 const { first } = require("cheerio/lib/api/traversing");
 const { moveMessagePortToContext } = require("worker_threads");
-const folderToBeScrapped = "./zprofiles/1english/";
-const selectedFolder = "./zprofiles/selectedFolder/zexported/";
+const folderToBeScrapped = "./zprofiles/selectedFolder/eval/temp/";
+const selectedFolder = "./zprofiles/selectedFolder/eval/temp/";
 profilesToBeScraped = [];
 
 // Read the file into memory
@@ -43,7 +43,7 @@ for (const sheetName of workbook.SheetNames) {
 }
 
 async function initialize() {
-    
+
     await saveAllFilesToArray(); // this will read all the files in the folder and save it to the array, to be scraped afterwards.
 
     async function saveAllFilesToArray() {
@@ -62,573 +62,296 @@ async function initialize() {
                 let $ = cheerio.load(html);
                 wholeHTML = $("body").text();
 
-                // close chat-popups to not affect word counting
-                for (let i = 0; i < 7; i++) {
-                    try { document.querySelector('div[class="display-flex flex-column justify-center overflow-hidden"]').parentElement.parentElement.parentElement.remove() } catch (error) { 1 + 1 }
+                function closeChatPoPups() {
 
-                }
-
-
-                // obtain URL
-                let rawURL = $(".ember-view.link-without-visited-state.cursor-pointer.text-heading-small.inline-block.break-words").attr("href");
-                url = rawURL.split("detail")[0];
-
-                // obtain file name
-                fileName = currentProfile
-
-
-                // get current date
-                var today = new Date();
-                var dd = String(today.getDate()).padStart(2, "0");
-                var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-                var yyyy = today.getFullYear();
-                dateOfEntry = dd + "/" + mm + "/" + yyyy;
-
-                // get candidate name
-                candidateName = $(".text-heading-xlarge.inline.t-24.v-align-middle.break-words").text();
-
-                // get location
-                rawLocation = $(".text-body-small.inline.t-black--light.break-words").text();
-                location = rawLocation.trim();
-
-                // profile title
-                rawProfileTitle = $(".text-body-medium.break-words").text();
-                profileTitle = rawProfileTitle.trim();
-
-                // connectionState
-                connectionStateButton = $(".pvs-profile-actions ").children().eq(1).text();
-
-                if (connectionStateButton.match(/Conectar/gim)) {
-                    connectionState = "não conectado";
-                } else if (connectionStateButton.match(/Seguir/gim)) {
-                    connectionState = "inconectável";
-                } else if (connectionStateButton.match(/enviar/gim)) {
-                    connectionState = "conectado";
-                }
-
-                // currentCompany
-                rawCurrentCompany = $("h3.t-16.t-black.t-bold").eq(0).children().text();
-                currentCompany = rawCurrentCompany.replace(/Nome da empresa/gim, "");
-
-                // xSenior
-                xsenior = (wholeHTML.match(/ senior/gim) || []).length;
-
-                // xnode
-                xnode = (wholeHTML.match(/ node/gim) || []).length;
-
-                // xjava
-                xjava = (wholeHTML.match(/java /gim) || []).length + (wholeHTML.match(/ java,/gim) || []).length + (wholeHTML.match(/ java./gim) || []).length;
-
-                // xpython
-                xpython = (wholeHTML.match(/python/gim) || []).length
-
-                // xflask
-                xflask = (wholeHTML.match(/flask/gim) || []).length
-
-                // devops
-                xdevops = (wholeHTML.match(/devops/gim) || []).length;
-
-                // aws
-                xaws = (wholeHTML.match(/aws/gim) || []).length;
-
-                // data science
-                xdatascience = ((wholeHTML.match(/data science/gim) || []).length) + ((wholeHTML.match(/ciência de dados/gim) || []).length) + ((wholeHTML.match(/ciencia de dados/gim) || []).length)
-
-                // Artificial Intelligence
-                xartificialintelligence = ((wholeHTML.match(/artificial intelligence/gim) || []).length) + ((wholeHTML.match(/Inteligência artificial/gim) || []).length) + ((wholeHTML.match(/Inteligencia artificial/gim) || []).length) + ((wholeHTML.match(/ IA /gim) || []).length) + ((wholeHTML.match(/ AI /gim) || []).length) + ((wholeHTML.match(/ IA,/gim) || []).length) + ((wholeHTML.match(/ AI,/gim) || []).length)
-
-
-                // machine learning
-                xmachinelearning = ((wholeHTML.match(/machine learning/gim) || []).length) + ((wholeHTML.match(/machine-learning/gim) || []).length)
-
-
-                // data architect
-                xdataarchitect = ((wholeHTML.match(/data architect/gim) || []).length) + ((wholeHTML.match(/arquiteto de dados/gim) || []).length)
-
-                // architect
-                xarchitect = ((wholeHTML.match(/architect/gim) || []).length) + ((wholeHTML.match(/arquiteto/gim) || []).length) + ((wholeHTML.match(/arquitetura/gim) || []).length) + ((wholeHTML.match(/arquitetação/gim) || []).length)
-
-
-
-                // x.net
-                xnet = (wholeHTML.match(/C#/gim) || []).length;
-
-                // golang
-                xgolang = ((wholeHTML.match(/golang/gim) || []).length) + ((wholeHTML.match(/ go /gim) || []).length)
-
-                // xReact: xreact,
-                xreact = (wholeHTML.match(/ react/gim) || []).length;
-
-                // xAngular: xangular,
-                xangular = (wholeHTML.match(/ angular/gim) || []).length;
-
-                // xReactNative: xreactNative,
-                xreactNative = (wholeHTML.match(/ react native/gim) || []).length;
-
-                // xFullstack: xfullstack,
-                xfullstack = (wholeHTML.match(/ fullstack/gim) || []).length + (wholeHTML.match(/ full stack/gim) || []).length;
-
-                // xTest: xtest,
-                xtest = (wholeHTML.match(/ test/gim) || []).length;
-
-                // xQuality: xquality,
-                xquality = (wholeHTML.match(/ quality/gim) || []).length + (wholeHTML.match(/ qualidade/gim) || []).length + (wholeHTML.match(/ qa/gim) || []).length;
-
-                // xAutomation: xautomation,
-                xautomation = (wholeHTML.match(/ automa/gim) || []).length;
-
-                // xCypress: xcypress,
-                xcypress = (wholeHTML.match(/ cypress/gim) || []).length;
-
-                // xSelenium: xselenium,
-                xselenium = (wholeHTML.match(/ selenium/gim) || []).length;
-
-                // english level
-                let languagesLIs = $("li.pv-accomplishment-entity");
-                for (let i = 0; i < languagesLIs.length; i++) {
-                    let loopedLanguage = $("li.pv-accomplishment-entity").eq(i).text();
-                    englishLevel = "";
-
-                    if (loopedLanguage.match(/english/gim)) {
-                        englishLevel = $("li.pv-accomplishment-entity").eq(i).children().next().text();
-                    } else if (loopedLanguage.match(/inglês/gim)) {
-                        englishLevel = $("li.pv-accomplishment-entity").eq(i).children().next().text();
-                    } else if (loopedLanguage.match(/ingles/gim)) {
-                        englishLevel = $("li.pv-accomplishment-entity").eq(i).children().next().text();
+                    for (let i = 0; i < 7; i++) {
+                        try { document.querySelector('div[class="display-flex flex-column justify-center overflow-hidden"]').parentElement.parentElement.parentElement.remove() } catch (error) { 1 + 1 }
+    
                     }
                 }
 
+                function getFirstInfos() {
 
-                let composedExpListA = $('li.pv-entity__position-group-role-item')
-                let composedExpListB = $('li.pv-entity__position-group-role-item-fading-timeline')
+                    // obtain URL
+                    let rawURL = $(".ember-view.link-without-visited-state.cursor-pointer.text-heading-small.inline-block.break-words").attr("href");
+                    url = rawURL.split("detail")[0];
 
-                // GROUP A composed experience
-
-                composedExpA_Title0 = composedExpListA.eq(0).children().children().children().children().children().children().children().children().eq(1).text()
-                composedExpA_Time0 = composedExpListA.eq(0).children().children().children().children().children().children().children().children().children().eq(3).text()
-
-                composedExpA_Title1 = composedExpListA.eq(1).children().children().children().children().children().children().children().children().eq(1).text()
-                composedExpA_Time1 = composedExpListA.eq(1).children().children().children().children().children().children().children().children().children().eq(3).text()
-
-                composedExpA_Title2 = composedExpListA.eq(2).children().children().children().children().children().children().children().children().eq(1).text()
-                composedExpA_Time2 = composedExpListA.eq(2).children().children().children().children().children().children().children().children().children().eq(3).text()
-
-                composedExpA_Title3 = composedExpListA.eq(3).children().children().children().children().children().children().children().children().eq(1).text()
-                composedExpA_Time3 = composedExpListA.eq(3).children().children().children().children().children().children().children().children().children().eq(3).text()
-
-                composedExpA_Title4 = composedExpListA.eq(4).children().children().children().children().children().children().children().children().eq(1).text()
-                composedExpA_Time4 = composedExpListA.eq(4).children().children().children().children().children().children().children().children().children().eq(3).text()
-
-                composedExpA_Title5 = composedExpListA.eq(5).children().children().children().children().children().children().children().children().eq(1).text()
-                composedExpA_Time5 = composedExpListA.eq(5).children().children().children().children().children().children().children().children().children().eq(3).text()
-
-                composedExpA_Title6 = composedExpListA.eq(6).children().children().children().children().children().children().children().children().eq(1).text()
-                composedExpA_Time6 = composedExpListA.eq(6).children().children().children().children().children().children().children().children().children().eq(3).text()
-
-                // GROUP B composed exps
-
-                composedExpB_Title0 = composedExpListB.eq(0).children().children().children().children().children().children().children().eq(0).children().eq(1).text()
-                composedExpB_Time0 = composedExpListB.eq(0).children().children().children().children().children().children().children().children().eq(3).children().eq(1).text()
-
-                composedExpB_Title1 = composedExpListB.eq(1).children().children().children().children().children().children().children().eq(0).children().eq(1).text()
-                composedExpB_Time1 = composedExpListB.eq(1).children().children().children().children().children().children().children().children().eq(3).children().eq(1).text()
-
-                composedExpB_Title2 = composedExpListB.eq(2).children().children().children().children().children().children().children().eq(0).children().eq(1).text()
-                composedExpB_Time2 = composedExpListB.eq(2).children().children().children().children().children().children().children().children().eq(3).children().eq(1).text()
-
-                composedExpB_Title3 = composedExpListB.eq(3).children().children().children().children().children().children().children().eq(0).children().eq(1).text()
-                composedExpB_Time3 = composedExpListB.eq(3).children().children().children().children().children().children().children().children().eq(3).children().eq(1).text()
+                    // obtain file name
+                    fileName = currentProfile
 
 
+                    // get current date
+                    var today = new Date();
+                    var dd = String(today.getDate()).padStart(2, "0");
+                    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+                    var yyyy = today.getFullYear();
+                    dateOfEntry = dd + "/" + mm + "/" + yyyy;
 
-                // ATTENTION HERE. maybe this is the bug.
+                    // get candidate name
+                    candidateName = $(".text-heading-xlarge.inline.t-24.v-align-middle.break-words").text();
 
-                // remove composed after getting them
-                for (let i = 0; i < 10; i++) {
+                    // get location
+                    rawLocation = $(".text-body-small.inline.t-black--light.break-words").text();
+                    location = rawLocation.trim();
 
-                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[i].remove() } catch (error) { 1 + 1 }
+                    // profile title
+                    rawProfileTitle = $(".text-body-medium.break-words").text();
+                    profileTitle = rawProfileTitle.trim();
 
-                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[i].remove() } catch (error) { 1 + 1 }
+                    // connectionState
+                    connectionStateButton = $(".pvs-profile-actions ").children().eq(1).text();
+
+                    if (connectionStateButton.match(/Conectar/gim)) {
+                        connectionState = "não conectado";
+                    } else if (connectionStateButton.match(/Seguir/gim)) {
+                        connectionState = "inconectável";
+                    } else if (connectionStateButton.match(/enviar/gim)) {
+                        connectionState = "conectado";
+                    }
+
+                    // currentCompany
+                    rawCurrentCompany = $("h3.t-16.t-black.t-bold").eq(0).children().text();
+                    currentCompany = rawCurrentCompany.replace(/Nome da empresa/gim, "");
 
                 }
 
-                // or
+                function runWordCounters() {
 
-                try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
-                try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
-                try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
-                try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
-                try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
-                try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
-                try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[0].remove() } catch (error) { 1 + 1 }
-                try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[0].remove() } catch (error) { 1 + 1 }
-                try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[0].remove() } catch (error) { 1 + 1 }
-                try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[0].remove() } catch (error) { 1 + 1 }
-                try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[0].remove() } catch (error) { 1 + 1 }
+                    // xSenior
+                    xsenior = (wholeHTML.match(/ senior/gim) || []).length;
 
+                    // xnode
+                    xnode = (wholeHTML.match(/ node/gim) || []).length;
 
+                    // xjava
+                    xjava = (wholeHTML.match(/java /gim) || []).length + (wholeHTML.match(/ java,/gim) || []).length + (wholeHTML.match(/ java./gim) || []).length;
 
+                    // xpython
+                    xpython = (wholeHTML.match(/python/gim) || []).length
 
+                    // xflask
+                    xflask = (wholeHTML.match(/flask/gim) || []).length
 
+                    // devops
+                    xdevops = (wholeHTML.match(/devops/gim) || []).length;
 
-                // INDIVIDUAL experience titles and time
-                let experiencesList = $('li.pv-entity__position-group-pager.pv-profile-section__list-item.ember-view')
+                    // aws
+                    xaws = (wholeHTML.match(/aws/gim) || []).length;
 
-                // individual experiences
-                expTitle0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().eq(0).text()
-                experiencetime0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                    // data science
+                    xdatascience = ((wholeHTML.match(/data science/gim) || []).length) + ((wholeHTML.match(/ciência de dados/gim) || []).length) + ((wholeHTML.match(/ciencia de dados/gim) || []).length)
 
-                expTitle1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().eq(0).text()
-                experiencetime1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
-
-                expTitle2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().eq(0).text()
-                experiencetime2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
-
-                expTitle3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().eq(0).text()
-                experiencetime3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
-
-                expTitle4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().eq(0).text()
-                experiencetime4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
-
-                expTitle5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().eq(0).text()
-                experiencetime5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
-
-                expTitle6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().eq(0).text()
-                experiencetime6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
-
-                expTitle7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().eq(0).text()
-                experiencetime7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
-
-                expTitle8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().eq(0).text()
-                experiencetime8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                    // Artificial Intelligence
+                    xartificialintelligence = ((wholeHTML.match(/artificial intelligence/gim) || []).length) + ((wholeHTML.match(/Inteligência artificial/gim) || []).length) + ((wholeHTML.match(/Inteligencia artificial/gim) || []).length) + ((wholeHTML.match(/ IA /gim) || []).length) + ((wholeHTML.match(/ AI /gim) || []).length) + ((wholeHTML.match(/ IA,/gim) || []).length) + ((wholeHTML.match(/ AI,/gim) || []).length)
 
 
-                function convertExpTimeIntoNumber_0() {
+                    // machine learning
+                    xmachinelearning = ((wholeHTML.match(/machine learning/gim) || []).length) + ((wholeHTML.match(/machine-learning/gim) || []).length)
 
-                    if (experiencetime0.includes('anos') && experiencetime0.includes('mês')) { experiencetime0 = experiencetime0.replace(' anos ', '.'); experiencetime0 = experiencetime0.replace('mês', '') }
-                    if (experiencetime0.includes('anos') && experiencetime0.includes('meses')) { experiencetime0 = experiencetime0.replace(' anos ', '.'); experiencetime0 = experiencetime0.replace('meses', '') }
-                    if (experiencetime0.includes('ano') && experiencetime0.includes('mês')) { experiencetime0 = experiencetime0.replace(' ano ', '.'); experiencetime0 = experiencetime0.replace(' mês', '') }
-                    if (experiencetime0.includes('ano') && experiencetime0.includes('meses')) { experiencetime0 = experiencetime0.replace(' ano ', '.'); experiencetime0 = experiencetime0.replace(' meses', '') }
 
-                    if (experiencetime0.includes('ano')) { experiencetime0 = experiencetime0.replace(/[^0-9.]/g, "") }
-                    if (experiencetime0.includes('mês')) { experiencetime0 = experiencetime0.replace(' mês', ''); experiencetime0 = '0.' + experiencetime0 }
-                    if (experiencetime0.includes('meses')) { experiencetime0 = experiencetime0.replace(' meses', ''); experiencetime0 = '0.' + experiencetime0 }
+                    // data architect
+                    xdataarchitect = ((wholeHTML.match(/data architect/gim) || []).length) + ((wholeHTML.match(/arquiteto de dados/gim) || []).length)
 
-                    experiencetime0 = parseFloat(experiencetime0)
+                    // architect
+                    xarchitect = ((wholeHTML.match(/architect/gim) || []).length) + ((wholeHTML.match(/arquiteto/gim) || []).length) + ((wholeHTML.match(/arquitetura/gim) || []).length) + ((wholeHTML.match(/arquitetação/gim) || []).length)
+
+
+
+                    // x.net
+                    xnet = (wholeHTML.match(/C#/gim) || []).length;
+
+                    // golang
+                    xgolang = ((wholeHTML.match(/golang/gim) || []).length) + ((wholeHTML.match(/ go /gim) || []).length)
+
+                    // xReact: xreact,
+                    xreact = (wholeHTML.match(/ react/gim) || []).length;
+
+                    // xAngular: xangular,
+                    xangular = (wholeHTML.match(/ angular/gim) || []).length;
+
+                    // xReactNative: xreactNative,
+                    xreactNative = (wholeHTML.match(/ react native/gim) || []).length;
+
+                    // xFullstack: xfullstack,
+                    xfullstack = (wholeHTML.match(/ fullstack/gim) || []).length + (wholeHTML.match(/ full stack/gim) || []).length;
+
+                    // xTest: xtest,
+                    xtest = (wholeHTML.match(/ test/gim) || []).length;
+
+                    // xQuality: xquality,
+                    xquality = (wholeHTML.match(/ quality/gim) || []).length + (wholeHTML.match(/ qualidade/gim) || []).length + (wholeHTML.match(/ qa/gim) || []).length;
+
+                    // xAutomation: xautomation,
+                    xautomation = (wholeHTML.match(/ automa/gim) || []).length;
+
+                    // xCypress: xcypress,
+                    xcypress = (wholeHTML.match(/ cypress/gim) || []).length;
+
+                    // xSelenium: xselenium,
+                    xselenium = (wholeHTML.match(/ selenium/gim) || []).length;
+                }
+
+                function getComposedEXPS_A() {
+
+                    let composedExpListA = $('li.pv-entity__position-group-role-item')
+
+                    composedExpA_Title0 = composedExpListA.eq(0).children().children().children().children().children().children().children().children().eq(1).text()
+                    composedExpA_TimeString0 = composedExpListA.eq(0).children().children().children().children().children().children().children().children().children().eq(3).text()
+
+                    composedExpA_Title1 = composedExpListA.eq(1).children().children().children().children().children().children().children().children().eq(1).text()
+                    composedExpA_TimeString1 = composedExpListA.eq(1).children().children().children().children().children().children().children().children().children().eq(3).text()
+
+                    composedExpA_Title2 = composedExpListA.eq(2).children().children().children().children().children().children().children().children().eq(1).text()
+                    composedExpA_TimeString2 = composedExpListA.eq(2).children().children().children().children().children().children().children().children().children().eq(3).text()
+
+                    composedExpA_Title3 = composedExpListA.eq(3).children().children().children().children().children().children().children().children().eq(1).text()
+                    composedExpA_TimeString3 = composedExpListA.eq(3).children().children().children().children().children().children().children().children().children().eq(3).text()
+
+                    composedExpA_Title4 = composedExpListA.eq(4).children().children().children().children().children().children().children().children().eq(1).text()
+                    composedExpA_TimeString4 = composedExpListA.eq(4).children().children().children().children().children().children().children().children().children().eq(3).text()
+
+                    composedExpA_Title5 = composedExpListA.eq(5).children().children().children().children().children().children().children().children().eq(1).text()
+                    composedExpA_TimeString5 = composedExpListA.eq(5).children().children().children().children().children().children().children().children().children().eq(3).text()
+
+                    composedExpA_Title6 = composedExpListA.eq(6).children().children().children().children().children().children().children().children().eq(1).text()
+                    composedExpA_TimeString6 = composedExpListA.eq(6).children().children().children().children().children().children().children().children().children().eq(3).text()
+
 
                 }
 
-                function convertExpTimeIntoNumber_1() {
+                function getComposedEXPS_B() {
 
-                    if (experiencetime1.includes('anos') && experiencetime1.includes('mês')) { experiencetime1 = experiencetime1.replace(' anos ', '.'); experiencetime1 = experiencetime1.replace('mês', '') }
-                    if (experiencetime1.includes('anos') && experiencetime1.includes('meses')) { experiencetime1 = experiencetime1.replace(' anos ', '.'); experiencetime1 = experiencetime1.replace('meses', '') }
-                    if (experiencetime1.includes('ano') && experiencetime1.includes('mês')) { experiencetime1 = experiencetime1.replace(' ano ', '.'); experiencetime1 = experiencetime1.replace(' mês', '') }
-                    if (experiencetime1.includes('ano') && experiencetime1.includes('meses')) { experiencetime1 = experiencetime1.replace(' ano ', '.'); experiencetime1 = experiencetime1.replace(' meses', '') }
+                    let composedExpListB = $('li.pv-entity__position-group-role-item-fading-timeline')
 
-                    if (experiencetime1.includes('ano')) { experiencetime1 = experiencetime1.replace(/[^0-9.]/g, "") }
-                    if (experiencetime1.includes('mês')) { experiencetime1 = experiencetime1.replace(' mês', ''); experiencetime1 = '0.' + experiencetime1 }
-                    if (experiencetime1.includes('meses')) { experiencetime1 = experiencetime1.replace(' meses', ''); experiencetime1 = '0.' + experiencetime1 }
+                    composedExpB_Title0 = composedExpListB.eq(0).children().children().children().children().children().children().children().eq(0).children().eq(1).text()
+                    composedExpB_TimeString0 = composedExpListB.eq(0).children().children().children().children().children().children().children().children().eq(3).children().eq(1).text()
 
-                    experiencetime1 = parseFloat(experiencetime1)
+                    composedExpB_Title1 = composedExpListB.eq(1).children().children().children().children().children().children().children().eq(0).children().eq(1).text()
+                    composedExpB_TimeString1 = composedExpListB.eq(1).children().children().children().children().children().children().children().children().eq(3).children().eq(1).text()
 
-                }
+                    composedExpB_Title2 = composedExpListB.eq(2).children().children().children().children().children().children().children().eq(0).children().eq(1).text()
+                    composedExpB_TimeString2 = composedExpListB.eq(2).children().children().children().children().children().children().children().children().eq(3).children().eq(1).text()
 
-                function convertExpTimeIntoNumber_2() {
+                    composedExpB_Title3 = composedExpListB.eq(3).children().children().children().children().children().children().children().eq(0).children().eq(1).text()
+                    composedExpB_TimeString3 = composedExpListB.eq(3).children().children().children().children().children().children().children().children().eq(3).children().eq(1).text()
 
-                    if (experiencetime2.includes('anos') && experiencetime2.includes('mês')) { experiencetime2 = experiencetime2.replace(' anos ', '.'); experiencetime2 = experiencetime2.replace('mês', '') }
-                    if (experiencetime2.includes('anos') && experiencetime2.includes('meses')) { experiencetime2 = experiencetime2.replace(' anos ', '.'); experiencetime2 = experiencetime2.replace('meses', '') }
-                    if (experiencetime2.includes('ano') && experiencetime2.includes('mês')) { experiencetime2 = experiencetime2.replace(' ano ', '.'); experiencetime2 = experiencetime2.replace(' mês', '') }
-                    if (experiencetime2.includes('ano') && experiencetime2.includes('meses')) { experiencetime2 = experiencetime2.replace(' ano ', '.'); experiencetime2 = experiencetime2.replace(' meses', '') }
-
-                    if (experiencetime2.includes('ano')) { experiencetime2 = experiencetime2.replace(/[^0-9.]/g, "") }
-                    if (experiencetime2.includes('mês')) { experiencetime2 = experiencetime2.replace(' mês', ''); experiencetime2 = '0.' + experiencetime2 }
-                    if (experiencetime2.includes('meses')) { experiencetime2 = experiencetime2.replace(' meses', ''); experiencetime2 = '0.' + experiencetime2 }
-
-                    experiencetime2 = parseFloat(experiencetime2)
 
                 }
 
-                function convertExpTimeIntoNumber_3() {
+                function removeComposedEXPs() {
 
-                    if (experiencetime3.includes('anos') && experiencetime3.includes('mês')) { experiencetime3 = experiencetime3.replace(' anos ', '.'); experiencetime3 = experiencetime3.replace('mês', '') }
-                    if (experiencetime3.includes('anos') && experiencetime3.includes('meses')) { experiencetime3 = experiencetime3.replace(' anos ', '.'); experiencetime3 = experiencetime3.replace('meses', '') }
-                    if (experiencetime3.includes('ano') && experiencetime3.includes('mês')) { experiencetime3 = experiencetime3.replace(' ano ', '.'); experiencetime3 = experiencetime3.replace(' mês', '') }
-                    if (experiencetime3.includes('ano') && experiencetime3.includes('meses')) { experiencetime3 = experiencetime3.replace(' ano ', '.'); experiencetime3 = experiencetime3.replace(' meses', '') }
+                    for (let i = 0; i < 10; i++) {
 
-                    if (experiencetime3.includes('ano')) { experiencetime3 = experiencetime3.replace(/[^0-9.]/g, "") }
-                    if (experiencetime3.includes('mês')) { experiencetime3 = experiencetime3.replace(' mês', ''); experiencetime3 = '0.' + experiencetime3 }
-                    if (experiencetime3.includes('meses')) { experiencetime3 = experiencetime3.replace(' meses', ''); experiencetime3 = '0.' + experiencetime3 }
+                        try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[i].remove() } catch (error) { 1 + 1 }
 
-                    experiencetime3 = parseFloat(experiencetime3)
+                        try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[i].remove() } catch (error) { 1 + 1 }
 
-                }
+                    }
 
-                function convertExpTimeIntoNumber_4() {
 
-                    if (experiencetime4.includes('anos') && experiencetime4.includes('mês')) { experiencetime4 = experiencetime4.replace(' anos ', '.'); experiencetime4 = experiencetime4.replace('mês', '') }
-                    if (experiencetime4.includes('anos') && experiencetime4.includes('meses')) { experiencetime4 = experiencetime4.replace(' anos ', '.'); experiencetime4 = experiencetime4.replace('meses', '') }
-                    if (experiencetime4.includes('ano') && experiencetime4.includes('mês')) { experiencetime4 = experiencetime4.replace(' ano ', '.'); experiencetime4 = experiencetime4.replace(' mês', '') }
-                    if (experiencetime4.includes('ano') && experiencetime4.includes('meses')) { experiencetime4 = experiencetime4.replace(' ano ', '.'); experiencetime4 = experiencetime4.replace(' meses', '') }
+                    // or
 
-                    if (experiencetime4.includes('ano')) { experiencetime4 = experiencetime4.replace(/[^0-9.]/g, "") }
-                    if (experiencetime4.includes('mês')) { experiencetime4 = experiencetime4.replace(' mês', ''); experiencetime4 = '0.' + experiencetime4 }
-                    if (experiencetime4.includes('meses')) { experiencetime4 = experiencetime4.replace(' meses', ''); experiencetime4 = '0.' + experiencetime4 }
-
-                    experiencetime4 = parseFloat(experiencetime4)
+                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
+                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
+                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
+                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
+                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
+                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item"]')[0].remove() } catch (error) { 1 + 1 }
+                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[0].remove() } catch (error) { 1 + 1 }
+                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[0].remove() } catch (error) { 1 + 1 }
+                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[0].remove() } catch (error) { 1 + 1 }
+                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[0].remove() } catch (error) { 1 + 1 }
+                    try { document.querySelectorAll('[class="pv-entity__position-group-role-item-fading-timeline"]')[0].remove() } catch (error) { 1 + 1 }
 
                 }
 
-                function convertExpTimeIntoNumber_5() {
+                function getIndividualExperiences() {
 
-                    if (experiencetime5.includes('anos') && experiencetime5.includes('mês')) { experiencetime5 = experiencetime5.replace(' anos ', '.'); experiencetime5 = experiencetime5.replace('mês', '') }
-                    if (experiencetime5.includes('anos') && experiencetime5.includes('meses')) { experiencetime5 = experiencetime5.replace(' anos ', '.'); experiencetime5 = experiencetime5.replace('meses', '') }
-                    if (experiencetime5.includes('ano') && experiencetime5.includes('mês')) { experiencetime5 = experiencetime5.replace(' ano ', '.'); experiencetime5 = experiencetime5.replace(' mês', '') }
-                    if (experiencetime5.includes('ano') && experiencetime5.includes('meses')) { experiencetime5 = experiencetime5.replace(' ano ', '.'); experiencetime5 = experiencetime5.replace(' meses', '') }
+                    let experiencesList = $('li.pv-entity__position-group-pager.pv-profile-section__list-item.ember-view')
 
-                    if (experiencetime5.includes('ano')) { experiencetime5 = experiencetime5.replace(/[^0-9.]/g, "") }
-                    if (experiencetime5.includes('mês')) { experiencetime5 = experiencetime5.replace(' mês', ''); experiencetime5 = '0.' + experiencetime5 }
-                    if (experiencetime5.includes('meses')) { experiencetime5 = experiencetime5.replace(' meses', ''); experiencetime5 = '0.' + experiencetime5 }
+                    expTitle0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().eq(0).text()
+                    experienceTime_as_String0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
-                    experiencetime5 = parseFloat(experiencetime5)
+                    expTitle1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().eq(0).text()
+                    experienceTime_as_String1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
+                    expTitle2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().eq(0).text()
+                    experienceTime_as_String2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+
+                    expTitle3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().eq(0).text()
+                    experienceTime_as_String3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+
+                    expTitle4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().eq(0).text()
+                    experienceTime_as_String4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+
+                    expTitle5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().eq(0).text()
+                    experienceTime_as_String5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+
+                    expTitle6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().eq(0).text()
+                    experienceTime_as_String6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+
+                    expTitle7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().eq(0).text()
+                    experienceTime_as_String7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+
+                    expTitle8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().eq(0).text()
+                    experienceTime_as_String8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
                 }
 
-                function convertExpTimeIntoNumber_6() {
+                function convert_experience_time_strings_into_number() {
 
-                    if (experiencetime6.includes('anos') && experiencetime6.includes('mês')) { experiencetime6 = experiencetime6.replace(' anos ', '.'); experiencetime6 = experiencetime6.replace('mês', '') }
-                    if (experiencetime6.includes('anos') && experiencetime6.includes('meses')) { experiencetime6 = experiencetime6.replace(' anos ', '.'); experiencetime6 = experiencetime6.replace('meses', '') }
-                    if (experiencetime6.includes('ano') && experiencetime6.includes('mês')) { experiencetime6 = experiencetime6.replace(' ano ', '.'); experiencetime6 = experiencetime6.replace(' mês', '') }
-                    if (experiencetime6.includes('ano') && experiencetime6.includes('meses')) { experiencetime6 = experiencetime6.replace(' ano ', '.'); experiencetime6 = experiencetime6.replace(' meses', '') }
+                    function convert_Exp_Time_String_Into_Number (expTimeString) {
 
-                    if (experiencetime6.includes('ano')) { experiencetime6 = experiencetime6.replace(/[^0-9.]/g, "") }
-                    if (experiencetime6.includes('mês')) { experiencetime6 = experiencetime6.replace(' mês', ''); experiencetime6 = '0.' + experiencetime6 }
-                    if (experiencetime6.includes('meses')) { experiencetime6 = experiencetime6.replace(' meses', ''); experiencetime6 = '0.' + experiencetime6 }
+                        if (expTimeString.includes('anos') && expTimeString.includes('mês')) { expTimeString = expTimeString.replace(' anos ', '.'); expTimeString = expTimeString.replace('mês', '') }
+                        if (expTimeString.includes('anos') && expTimeString.includes('meses')) { expTimeString = expTimeString.replace(' anos ', '.'); expTimeString = expTimeString.replace('meses', '') }
+                        if (expTimeString.includes('ano') && expTimeString.includes('mês')) { expTimeString = expTimeString.replace(' ano ', '.'); expTimeString = expTimeString.replace(' mês', '') }
+                        if (expTimeString.includes('ano') && expTimeString.includes('meses')) { expTimeString = expTimeString.replace(' ano ', '.'); expTimeString = expTimeString.replace(' meses', '') }
+    
+                        if (expTimeString.includes('ano')) { expTimeString = expTimeString.replace(/[^0-9.]/g, "") }
+                        if (expTimeString.includes('mês')) { expTimeString = expTimeString.replace(' mês', ''); expTimeString = '0.' + expTimeString }
+                        if (expTimeString.includes('meses')) { expTimeString = expTimeString.replace(' meses', ''); expTimeString = '0.' + expTimeString }
+    
+                        expTimeString = parseFloat(expTimeString)
+                        return expTimeString
+    
+    
+                    }
 
-                    experiencetime6 = parseFloat(experiencetime6)
+                    // individual
+                    experiencetime0 = convert_Exp_Time_String_Into_Number(experienceTime_as_String0)
+                    experiencetime1 = convert_Exp_Time_String_Into_Number(experienceTime_as_String1)
+                    experiencetime2 = convert_Exp_Time_String_Into_Number(experienceTime_as_String2)
+                    experiencetime3 = convert_Exp_Time_String_Into_Number(experienceTime_as_String3)
+                    experiencetime4 = convert_Exp_Time_String_Into_Number(experienceTime_as_String4)
+                    experiencetime5 = convert_Exp_Time_String_Into_Number(experienceTime_as_String5)
+                    experiencetime6 = convert_Exp_Time_String_Into_Number(experienceTime_as_String6)
+                    experiencetime7 = convert_Exp_Time_String_Into_Number(experienceTime_as_String7)
+                    experiencetime8 = convert_Exp_Time_String_Into_Number(experienceTime_as_String8)
 
+
+                    // composed Exp group A
+                    composedExpA_Time0 = convert_Exp_Time_String_Into_Number(composedExpA_TimeString0)
+                    composedExpA_Time1 = convert_Exp_Time_String_Into_Number(composedExpA_TimeString1)
+                    composedExpA_Time2 = convert_Exp_Time_String_Into_Number(composedExpA_TimeString2)
+                    composedExpA_Time3 = convert_Exp_Time_String_Into_Number(composedExpA_TimeString3)
+                    composedExpA_Time4 = convert_Exp_Time_String_Into_Number(composedExpA_TimeString4)
+                    composedExpA_Time5 = convert_Exp_Time_String_Into_Number(composedExpA_TimeString5)
+                    composedExpA_Time6 = convert_Exp_Time_String_Into_Number(composedExpA_TimeString6)
+                    
+                    // composed Exp group B
+                    composedExpB_Time0 = convert_Exp_Time_String_Into_Number(composedExpB_TimeString0)
+                    composedExpB_Time1 = convert_Exp_Time_String_Into_Number(composedExpB_TimeString1)
+                    composedExpB_Time2 = convert_Exp_Time_String_Into_Number(composedExpB_TimeString2)
+                    composedExpB_Time3 = convert_Exp_Time_String_Into_Number(composedExpB_TimeString3)
                 }
 
-                function convertExpTimeIntoNumber_7() {
-
-                    if (experiencetime7.includes('anos') && experiencetime7.includes('mês')) { experiencetime7 = experiencetime7.replace(' anos ', '.'); experiencetime7 = experiencetime7.replace('mês', '') }
-                    if (experiencetime7.includes('anos') && experiencetime7.includes('meses')) { experiencetime7 = experiencetime7.replace(' anos ', '.'); experiencetime7 = experiencetime7.replace('meses', '') }
-                    if (experiencetime7.includes('ano') && experiencetime7.includes('mês')) { experiencetime7 = experiencetime7.replace(' ano ', '.'); experiencetime7 = experiencetime7.replace(' mês', '') }
-                    if (experiencetime7.includes('ano') && experiencetime7.includes('meses')) { experiencetime7 = experiencetime7.replace(' ano ', '.'); experiencetime7 = experiencetime7.replace(' meses', '') }
-
-                    if (experiencetime7.includes('ano')) { experiencetime7 = experiencetime7.replace(/[^0-9.]/g, "") }
-                    if (experiencetime7.includes('mês')) { experiencetime7 = experiencetime7.replace(' mês', ''); experiencetime7 = '0.' + experiencetime7 }
-                    if (experiencetime7.includes('meses')) { experiencetime7 = experiencetime7.replace(' meses', ''); experiencetime7 = '0.' + experiencetime7 }
-
-                    experiencetime7 = parseFloat(experiencetime7)
-
-                }
-
-                function convertExpTimeIntoNumber_8() {
-
-                    if (experiencetime8.includes('anos') && experiencetime8.includes('mês')) { experiencetime8 = experiencetime8.replace(' anos ', '.'); experiencetime8 = experiencetime8.replace('mês', '') }
-                    if (experiencetime8.includes('anos') && experiencetime8.includes('meses')) { experiencetime8 = experiencetime8.replace(' anos ', '.'); experiencetime8 = experiencetime8.replace('meses', '') }
-                    if (experiencetime8.includes('ano') && experiencetime8.includes('mês')) { experiencetime8 = experiencetime8.replace(' ano ', '.'); experiencetime8 = experiencetime8.replace(' mês', '') }
-                    if (experiencetime8.includes('ano') && experiencetime8.includes('meses')) { experiencetime8 = experiencetime8.replace(' ano ', '.'); experiencetime8 = experiencetime8.replace(' meses', '') }
-
-                    if (experiencetime8.includes('ano')) { experiencetime8 = experiencetime8.replace(/[^0-9.]/g, "") }
-                    if (experiencetime8.includes('mês')) { experiencetime8 = experiencetime8.replace(' mês', ''); experiencetime8 = '0.' + experiencetime8 }
-                    if (experiencetime8.includes('meses')) { experiencetime8 = experiencetime8.replace(' meses', ''); experiencetime8 = '0.' + experiencetime8 }
-
-                    experiencetime8 = parseFloat(experiencetime8)
-
-                }
-
-                // COMPOSED EXP group A
-
-                function convertComposed_A_ExpTimeIntoNumber_0() {
-
-                    if (composedExpA_Time0.includes('anos') && composedExpA_Time0.includes('mês')) { composedExpA_Time0 = composedExpA_Time0.replace(' anos ', '.'); composedExpA_Time0 = composedExpA_Time0.replace('mês', '') }
-                    if (composedExpA_Time0.includes('anos') && composedExpA_Time0.includes('meses')) { composedExpA_Time0 = composedExpA_Time0.replace(' anos ', '.'); composedExpA_Time0 = composedExpA_Time0.replace('meses', '') }
-                    if (composedExpA_Time0.includes('ano') && composedExpA_Time0.includes('mês')) { composedExpA_Time0 = composedExpA_Time0.replace(' ano ', '.'); composedExpA_Time0 = composedExpA_Time0.replace(' mês', '') }
-                    if (composedExpA_Time0.includes('ano') && composedExpA_Time0.includes('meses')) { composedExpA_Time0 = composedExpA_Time0.replace(' ano ', '.'); composedExpA_Time0 = composedExpA_Time0.replace(' meses', '') }
-
-                    if (composedExpA_Time0.includes('ano')) { composedExpA_Time0 = composedExpA_Time0.replace(/[^0-9.]/g, "") }
-                    if (composedExpA_Time0.includes('mês')) { composedExpA_Time0 = composedExpA_Time0.replace(' mês', ''); composedExpA_Time0 = '0.' + composedExpA_Time0 }
-                    if (composedExpA_Time0.includes('meses')) { composedExpA_Time0 = composedExpA_Time0.replace(' meses', ''); composedExpA_Time0 = '0.' + composedExpA_Time0 }
-
-                    composedExpA_Time0 = parseFloat(composedExpA_Time0)
-
-                }
-
-                function convertComposed_A_ExpTimeIntoNumber_1() {
-
-                    if (composedExpA_Time1.includes('anos') && composedExpA_Time1.includes('mês')) { composedExpA_Time1 = composedExpA_Time1.replace(' anos ', '.'); composedExpA_Time1 = composedExpA_Time1.replace('mês', '') }
-                    if (composedExpA_Time1.includes('anos') && composedExpA_Time1.includes('meses')) { composedExpA_Time1 = composedExpA_Time1.replace(' anos ', '.'); composedExpA_Time1 = composedExpA_Time1.replace('meses', '') }
-                    if (composedExpA_Time1.includes('ano') && composedExpA_Time1.includes('mês')) { composedExpA_Time1 = composedExpA_Time1.replace(' ano ', '.'); composedExpA_Time1 = composedExpA_Time1.replace(' mês', '') }
-                    if (composedExpA_Time1.includes('ano') && composedExpA_Time1.includes('meses')) { composedExpA_Time1 = composedExpA_Time1.replace(' ano ', '.'); composedExpA_Time1 = composedExpA_Time1.replace(' meses', '') }
-
-                    if (composedExpA_Time1.includes('ano')) { composedExpA_Time1 = composedExpA_Time1.replace(/[^0-9.]/g, "") }
-                    if (composedExpA_Time1.includes('mês')) { composedExpA_Time1 = composedExpA_Time1.replace(' mês', ''); composedExpA_Time1 = '0.' + composedExpA_Time1 }
-                    if (composedExpA_Time1.includes('meses')) { composedExpA_Time1 = composedExpA_Time1.replace(' meses', ''); composedExpA_Time1 = '0.' + composedExpA_Time1 }
-
-                    composedExpA_Time1 = parseFloat(composedExpA_Time1)
-
-                }
-
-                function convertComposed_A_ExpTimeIntoNumber_2() {
-
-                    if (composedExpA_Time2.includes('anos') && composedExpA_Time2.includes('mês')) { composedExpA_Time2 = composedExpA_Time2.replace(' anos ', '.'); composedExpA_Time2 = composedExpA_Time2.replace('mês', '') }
-                    if (composedExpA_Time2.includes('anos') && composedExpA_Time2.includes('meses')) { composedExpA_Time2 = composedExpA_Time2.replace(' anos ', '.'); composedExpA_Time2 = composedExpA_Time2.replace('meses', '') }
-                    if (composedExpA_Time2.includes('ano') && composedExpA_Time2.includes('mês')) { composedExpA_Time2 = composedExpA_Time2.replace(' ano ', '.'); composedExpA_Time2 = composedExpA_Time2.replace(' mês', '') }
-                    if (composedExpA_Time2.includes('ano') && composedExpA_Time2.includes('meses')) { composedExpA_Time2 = composedExpA_Time2.replace(' ano ', '.'); composedExpA_Time2 = composedExpA_Time2.replace(' meses', '') }
-
-                    if (composedExpA_Time2.includes('ano')) { composedExpA_Time2 = composedExpA_Time2.replace(/[^0-9.]/g, "") }
-                    if (composedExpA_Time2.includes('mês')) { composedExpA_Time2 = composedExpA_Time2.replace(' mês', ''); composedExpA_Time2 = '0.' + composedExpA_Time2 }
-                    if (composedExpA_Time2.includes('meses')) { composedExpA_Time2 = composedExpA_Time2.replace(' meses', ''); composedExpA_Time2 = '0.' + composedExpA_Time2 }
-
-                    composedExpA_Time2 = parseFloat(composedExpA_Time2)
-
-                }
-
-                function convertComposed_A_ExpTimeIntoNumber_3() {
-
-                    if (composedExpA_Time3.includes('anos') && composedExpA_Time3.includes('mês')) { composedExpA_Time3 = composedExpA_Time3.replace(' anos ', '.'); composedExpA_Time3 = composedExpA_Time3.replace('mês', '') }
-                    if (composedExpA_Time3.includes('anos') && composedExpA_Time3.includes('meses')) { composedExpA_Time3 = composedExpA_Time3.replace(' anos ', '.'); composedExpA_Time3 = composedExpA_Time3.replace('meses', '') }
-                    if (composedExpA_Time3.includes('ano') && composedExpA_Time3.includes('mês')) { composedExpA_Time3 = composedExpA_Time3.replace(' ano ', '.'); composedExpA_Time3 = composedExpA_Time3.replace(' mês', '') }
-                    if (composedExpA_Time3.includes('ano') && composedExpA_Time3.includes('meses')) { composedExpA_Time3 = composedExpA_Time3.replace(' ano ', '.'); composedExpA_Time3 = composedExpA_Time3.replace(' meses', '') }
-
-                    if (composedExpA_Time3.includes('ano')) { composedExpA_Time3 = composedExpA_Time3.replace(/[^0-9.]/g, "") }
-                    if (composedExpA_Time3.includes('mês')) { composedExpA_Time3 = composedExpA_Time3.replace(' mês', ''); composedExpA_Time3 = '0.' + composedExpA_Time3 }
-                    if (composedExpA_Time3.includes('meses')) { composedExpA_Time3 = composedExpA_Time3.replace(' meses', ''); composedExpA_Time3 = '0.' + composedExpA_Time3 }
-
-                    composedExpA_Time3 = parseFloat(composedExpA_Time3)
-
-                }
-
-                function convertComposed_A_ExpTimeIntoNumber_4() {
-
-                    if (composedExpA_Time4.includes('anos') && composedExpA_Time4.includes('mês')) { composedExpA_Time4 = composedExpA_Time4.replace(' anos ', '.'); composedExpA_Time4 = composedExpA_Time4.replace('mês', '') }
-                    if (composedExpA_Time4.includes('anos') && composedExpA_Time4.includes('meses')) { composedExpA_Time4 = composedExpA_Time4.replace(' anos ', '.'); composedExpA_Time4 = composedExpA_Time4.replace('meses', '') }
-                    if (composedExpA_Time4.includes('ano') && composedExpA_Time4.includes('mês')) { composedExpA_Time4 = composedExpA_Time4.replace(' ano ', '.'); composedExpA_Time4 = composedExpA_Time4.replace(' mês', '') }
-                    if (composedExpA_Time4.includes('ano') && composedExpA_Time4.includes('meses')) { composedExpA_Time4 = composedExpA_Time4.replace(' ano ', '.'); composedExpA_Time4 = composedExpA_Time4.replace(' meses', '') }
-
-                    if (composedExpA_Time4.includes('ano')) { composedExpA_Time4 = composedExpA_Time4.replace(/[^0-9.]/g, "") }
-                    if (composedExpA_Time4.includes('mês')) { composedExpA_Time4 = composedExpA_Time4.replace(' mês', ''); composedExpA_Time4 = '0.' + composedExpA_Time4 }
-                    if (composedExpA_Time4.includes('meses')) { composedExpA_Time4 = composedExpA_Time4.replace(' meses', ''); composedExpA_Time4 = '0.' + composedExpA_Time4 }
-
-                    composedExpA_Time4 = parseFloat(composedExpA_Time4)
-
-                }
-
-                function convertComposed_A_ExpTimeIntoNumber_5() {
-
-                    if (composedExpA_Time5.includes('anos') && composedExpA_Time5.includes('mês')) { composedExpA_Time5 = composedExpA_Time5.replace(' anos ', '.'); composedExpA_Time5 = composedExpA_Time5.replace('mês', '') }
-                    if (composedExpA_Time5.includes('anos') && composedExpA_Time5.includes('meses')) { composedExpA_Time5 = composedExpA_Time5.replace(' anos ', '.'); composedExpA_Time5 = composedExpA_Time5.replace('meses', '') }
-                    if (composedExpA_Time5.includes('ano') && composedExpA_Time5.includes('mês')) { composedExpA_Time5 = composedExpA_Time5.replace(' ano ', '.'); composedExpA_Time5 = composedExpA_Time5.replace(' mês', '') }
-                    if (composedExpA_Time5.includes('ano') && composedExpA_Time5.includes('meses')) { composedExpA_Time5 = composedExpA_Time5.replace(' ano ', '.'); composedExpA_Time5 = composedExpA_Time5.replace(' meses', '') }
-
-                    if (composedExpA_Time5.includes('ano')) { composedExpA_Time5 = composedExpA_Time5.replace(/[^0-9.]/g, "") }
-                    if (composedExpA_Time5.includes('mês')) { composedExpA_Time5 = composedExpA_Time5.replace(' mês', ''); composedExpA_Time5 = '0.' + composedExpA_Time5 }
-                    if (composedExpA_Time5.includes('meses')) { composedExpA_Time5 = composedExpA_Time5.replace(' meses', ''); composedExpA_Time5 = '0.' + composedExpA_Time5 }
-
-                    composedExpA_Time5 = parseFloat(composedExpA_Time5)
-
-                }
-
-                function convertComposed_A_ExpTimeIntoNumber_6() {
-
-                    if (composedExpA_Time6.includes('anos') && composedExpA_Time6.includes('mês')) { composedExpA_Time6 = composedExpA_Time6.replace(' anos ', '.'); composedExpA_Time6 = composedExpA_Time6.replace('mês', '') }
-                    if (composedExpA_Time6.includes('anos') && composedExpA_Time6.includes('meses')) { composedExpA_Time6 = composedExpA_Time6.replace(' anos ', '.'); composedExpA_Time6 = composedExpA_Time6.replace('meses', '') }
-                    if (composedExpA_Time6.includes('ano') && composedExpA_Time6.includes('mês')) { composedExpA_Time6 = composedExpA_Time6.replace(' ano ', '.'); composedExpA_Time6 = composedExpA_Time6.replace(' mês', '') }
-                    if (composedExpA_Time6.includes('ano') && composedExpA_Time6.includes('meses')) { composedExpA_Time6 = composedExpA_Time6.replace(' ano ', '.'); composedExpA_Time6 = composedExpA_Time6.replace(' meses', '') }
-
-                    if (composedExpA_Time6.includes('ano')) { composedExpA_Time6 = composedExpA_Time6.replace(/[^0-9.]/g, "") }
-                    if (composedExpA_Time6.includes('mês')) { composedExpA_Time6 = composedExpA_Time6.replace(' mês', ''); composedExpA_Time6 = '0.' + composedExpA_Time6 }
-                    if (composedExpA_Time6.includes('meses')) { composedExpA_Time6 = composedExpA_Time6.replace(' meses', ''); composedExpA_Time6 = '0.' + composedExpA_Time6 }
-
-                    composedExpA_Time6 = parseFloat(composedExpA_Time6)
-
-                }
-
-                // COMPOSED EXP group B
-
-                function convertComposed_B_ExpTimeIntoNumber_0() {
-
-                    if (composedExpB_Time0.includes('anos') && composedExpB_Time0.includes('mês')) { composedExpB_Time0 = composedExpB_Time0.replace(' anos ', '.'); composedExpB_Time0 = composedExpB_Time0.replace('mês', '') }
-                    if (composedExpB_Time0.includes('anos') && composedExpB_Time0.includes('meses')) { composedExpB_Time0 = composedExpB_Time0.replace(' anos ', '.'); composedExpB_Time0 = composedExpB_Time0.replace('meses', '') }
-                    if (composedExpB_Time0.includes('ano') && composedExpB_Time0.includes('mês')) { composedExpB_Time0 = composedExpB_Time0.replace(' ano ', '.'); composedExpB_Time0 = composedExpB_Time0.replace(' mês', '') }
-                    if (composedExpB_Time0.includes('ano') && composedExpB_Time0.includes('meses')) { composedExpB_Time0 = composedExpB_Time0.replace(' ano ', '.'); composedExpB_Time0 = composedExpB_Time0.replace(' meses', '') }
-
-                    if (composedExpB_Time0.includes('ano')) { composedExpB_Time0 = composedExpB_Time0.replace(/[^0-9.]/g, "") }
-                    if (composedExpB_Time0.includes('mês')) { composedExpB_Time0 = composedExpB_Time0.replace(' mês', ''); composedExpB_Time0 = '0.' + composedExpB_Time0 }
-                    if (composedExpB_Time0.includes('meses')) { composedExpB_Time0 = composedExpB_Time0.replace(' meses', ''); composedExpB_Time0 = '0.' + composedExpB_Time0 }
-
-                    composedExpB_Time0 = parseFloat(composedExpB_Time0)
-
-                }
-
-                function convertComposed_B_ExpTimeIntoNumber_1() {
-
-                    if (composedExpB_Time1.includes('anos') && composedExpB_Time1.includes('mês')) { composedExpB_Time1 = composedExpB_Time1.replace(' anos ', '.'); composedExpB_Time1 = composedExpB_Time1.replace('mês', '') }
-                    if (composedExpB_Time1.includes('anos') && composedExpB_Time1.includes('meses')) { composedExpB_Time1 = composedExpB_Time1.replace(' anos ', '.'); composedExpB_Time1 = composedExpB_Time1.replace('meses', '') }
-                    if (composedExpB_Time1.includes('ano') && composedExpB_Time1.includes('mês')) { composedExpB_Time1 = composedExpB_Time1.replace(' ano ', '.'); composedExpB_Time1 = composedExpB_Time1.replace(' mês', '') }
-                    if (composedExpB_Time1.includes('ano') && composedExpB_Time1.includes('meses')) { composedExpB_Time1 = composedExpB_Time1.replace(' ano ', '.'); composedExpB_Time1 = composedExpB_Time1.replace(' meses', '') }
-
-                    if (composedExpB_Time1.includes('ano')) { composedExpB_Time1 = composedExpB_Time1.replace(/[^0-9.]/g, "") }
-                    if (composedExpB_Time1.includes('mês')) { composedExpB_Time1 = composedExpB_Time1.replace(' mês', ''); composedExpB_Time1 = '0.' + composedExpB_Time1 }
-                    if (composedExpB_Time1.includes('meses')) { composedExpB_Time1 = composedExpB_Time1.replace(' meses', ''); composedExpB_Time1 = '0.' + composedExpB_Time1 }
-
-                    composedExpB_Time1 = parseFloat(composedExpB_Time1)
-
-                }
-
-                function convertComposed_B_ExpTimeIntoNumber_2() {
-
-                    if (composedExpB_Time2.includes('anos') && composedExpB_Time2.includes('mês')) { composedExpB_Time2 = composedExpB_Time2.replace(' anos ', '.'); composedExpB_Time2 = composedExpB_Time2.replace('mês', '') }
-                    if (composedExpB_Time2.includes('anos') && composedExpB_Time2.includes('meses')) { composedExpB_Time2 = composedExpB_Time2.replace(' anos ', '.'); composedExpB_Time2 = composedExpB_Time2.replace('meses', '') }
-                    if (composedExpB_Time2.includes('ano') && composedExpB_Time2.includes('mês')) { composedExpB_Time2 = composedExpB_Time2.replace(' ano ', '.'); composedExpB_Time2 = composedExpB_Time2.replace(' mês', '') }
-                    if (composedExpB_Time2.includes('ano') && composedExpB_Time2.includes('meses')) { composedExpB_Time2 = composedExpB_Time2.replace(' ano ', '.'); composedExpB_Time2 = composedExpB_Time2.replace(' meses', '') }
-
-                    if (composedExpB_Time2.includes('ano')) { composedExpB_Time2 = composedExpB_Time2.replace(/[^0-9.]/g, "") }
-                    if (composedExpB_Time2.includes('mês')) { composedExpB_Time2 = composedExpB_Time2.replace(' mês', ''); composedExpB_Time2 = '0.' + composedExpB_Time2 }
-                    if (composedExpB_Time2.includes('meses')) { composedExpB_Time2 = composedExpB_Time2.replace(' meses', ''); composedExpB_Time2 = '0.' + composedExpB_Time2 }
-
-                    composedExpB_Time2 = parseFloat(composedExpB_Time2)
-
-                }
-
-                function convertComposed_B_ExpTimeIntoNumber_3() {
-
-                    if (composedExpB_Time3.includes('anos') && composedExpB_Time3.includes('mês')) { composedExpB_Time3 = composedExpB_Time3.replace(' anos ', '.'); composedExpB_Time3 = composedExpB_Time3.replace('mês', '') }
-                    if (composedExpB_Time3.includes('anos') && composedExpB_Time3.includes('meses')) { composedExpB_Time3 = composedExpB_Time3.replace(' anos ', '.'); composedExpB_Time3 = composedExpB_Time3.replace('meses', '') }
-                    if (composedExpB_Time3.includes('ano') && composedExpB_Time3.includes('mês')) { composedExpB_Time3 = composedExpB_Time3.replace(' ano ', '.'); composedExpB_Time3 = composedExpB_Time3.replace(' mês', '') }
-                    if (composedExpB_Time3.includes('ano') && composedExpB_Time3.includes('meses')) { composedExpB_Time3 = composedExpB_Time3.replace(' ano ', '.'); composedExpB_Time3 = composedExpB_Time3.replace(' meses', '') }
-
-                    if (composedExpB_Time3.includes('ano')) { composedExpB_Time3 = composedExpB_Time3.replace(/[^0-9.]/g, "") }
-                    if (composedExpB_Time3.includes('mês')) { composedExpB_Time3 = composedExpB_Time3.replace(' mês', ''); composedExpB_Time3 = '0.' + composedExpB_Time3 }
-                    if (composedExpB_Time3.includes('meses')) { composedExpB_Time3 = composedExpB_Time3.replace(' meses', ''); composedExpB_Time3 = '0.' + composedExpB_Time3 }
-
-                    composedExpB_Time3 = parseFloat(composedExpB_Time3)
-
-                }
-
-
-                convertExpTimeIntoNumber_0()
-                convertExpTimeIntoNumber_1()
-                convertExpTimeIntoNumber_2()
-                convertExpTimeIntoNumber_3()
-                convertExpTimeIntoNumber_4()
-                convertExpTimeIntoNumber_5()
-                convertExpTimeIntoNumber_6()
-                convertExpTimeIntoNumber_7()
-                convertExpTimeIntoNumber_8()
-
-                convertComposed_A_ExpTimeIntoNumber_0()
-                convertComposed_A_ExpTimeIntoNumber_1()
-                convertComposed_A_ExpTimeIntoNumber_2()
-                convertComposed_A_ExpTimeIntoNumber_3()
-                convertComposed_A_ExpTimeIntoNumber_4()
-                convertComposed_A_ExpTimeIntoNumber_5()
-                convertComposed_A_ExpTimeIntoNumber_6()
-                convertComposed_B_ExpTimeIntoNumber_0()
-                convertComposed_B_ExpTimeIntoNumber_1()
-                convertComposed_B_ExpTimeIntoNumber_2()
-                convertComposed_B_ExpTimeIntoNumber_3()
+                closeChatPoPups()
+                getFirstInfos()
+                runWordCounters()
+                getComposedEXPS_A()
+                getComposedEXPS_B()
+                removeComposedEXPs()
+                getIndividualExperiences()
+                convert_experience_time_strings_into_number()
 
                 // INDIVIDUAL exps
                 if (isNaN(experiencetime0)) { experiencetime0 = 0 }
@@ -659,7 +382,7 @@ async function initialize() {
                 function validateEXP(expTitle, expTime) {
                     let counter = 0
                     lwrCaseExpTitle = expTitle.toLowerCase()
-                    
+
                     // portuguese
                     if (lwrCaseExpTitle.includes('arquiteto')) { counter++ }
                     if (lwrCaseExpTitle.includes('engenheiro')) { counter++ }
@@ -679,7 +402,7 @@ async function initialize() {
                     if (lwrCaseExpTitle.includes('dados')) { counter++ }
                     if (lwrCaseExpTitle.includes('consultor')) { counter++ }
                     if (lwrCaseExpTitle.includes('consultora')) { counter++ }
-        
+
                     // english
                     if (lwrCaseExpTitle.includes('architect')) { counter++ }
                     if (lwrCaseExpTitle.includes('engineer')) { counter++ }
@@ -714,20 +437,19 @@ async function initialize() {
                     if (lwrCaseExpTitle.includes('full stack')) { counter++ }
                     if (lwrCaseExpTitle.includes('head')) { counter++ }
                     if (lwrCaseExpTitle.includes('product')) { counter++ }
-        
+
                     // spanish
                     if (lwrCaseExpTitle.includes('desarrollador')) { counter++ }
                     if (lwrCaseExpTitle.includes('desarrolladora')) { counter++ }
                     if (lwrCaseExpTitle.includes('datos')) { counter++ }
-        
+
                     // end of function
-                    if (counter > 0) { 1 + 1 } else { expTime = 0 } // i could invalidate the title as well, but i want to know what other titles could i be wrongly ignoring
+                    if (counter > 0) { 1 + 1 } else { expTime = 0 } // i could invalidate the title as well, but i want to know what other titles could i be ignoring
                     return expTime
-        
+
                 }
 
                 // individual experiences
-                
                 let individualValidatedExp0 = validateEXP(expTitle0, experiencetime0)
                 let individualValidatedExp1 = validateEXP(expTitle1, experiencetime1)
                 let individualValidatedExp2 = validateEXP(expTitle2, experiencetime2)
@@ -737,8 +459,7 @@ async function initialize() {
                 let individualValidatedExp6 = validateEXP(expTitle6, experiencetime6)
                 let individualValidatedExp7 = validateEXP(expTitle7, experiencetime7)
                 let individualValidatedExp8 = validateEXP(expTitle8, experiencetime8)
-                
-                
+
                 // composed experiences GROUP A
                 let composedA_ValidatedExp0 = validateEXP(composedExpA_Title0, composedExpA_Time0)
                 let composedA_ValidatedExp1 = validateEXP(composedExpA_Title1, composedExpA_Time1)
@@ -753,7 +474,7 @@ async function initialize() {
                 let composedB_ValidatedExp1 = validateEXP(composedExpB_Title1, composedExpB_Time1)
                 let composedB_ValidatedExp2 = validateEXP(composedExpB_Title2, composedExpB_Time2)
                 let composedB_ValidatedExp3 = validateEXP(composedExpB_Title3, composedExpB_Time3)
-        
+
 
                 totalworkingtime = individualValidatedExp0 + individualValidatedExp1 + individualValidatedExp2 + individualValidatedExp3 + individualValidatedExp4 + individualValidatedExp5 + individualValidatedExp6 + individualValidatedExp7 + individualValidatedExp8 + composedA_ValidatedExp0 + composedA_ValidatedExp1 + composedA_ValidatedExp2 + composedA_ValidatedExp3 + composedA_ValidatedExp4 + composedA_ValidatedExp5 + composedA_ValidatedExp6 + composedB_ValidatedExp0 + composedB_ValidatedExp1 + composedB_ValidatedExp2 + composedB_ValidatedExp3
 
@@ -817,7 +538,6 @@ async function initialize() {
                         xAutomation: xautomation,
                         xCypress: xcypress,
                         xSelenium: xselenium,
-                        englishLevel: englishLevel,
 
 
                         firstExperienceTitle: expTitle0,
