@@ -10,7 +10,6 @@ mas photo editor passou, e não tava highlighted.
 
 
 
-
 desenvolvimento
 engenharia
 qualidade
@@ -29,8 +28,8 @@ const fs = require("fs");
 const path = require("path");
 const { first } = require("cheerio/lib/api/traversing");
 const { moveMessagePortToContext } = require("worker_threads");
-const folderToBeScrapped = "./zprofiles/selectedFolder/eval/temp/";
-const selectedFolder = "./zprofiles/selectedFolder/eval/temp/";
+const folderToBeScrapped = "";
+const selectedFolder = "";
 profilesToBeScraped = [];
 
 // Read the file into memory
@@ -54,7 +53,7 @@ async function initialize() {
             });
 
             // this will loop the list of profiles to be scraped
-            for (i = 0; i < 2000; i++) {
+            for (i = 0; i < 3000; i++) {
                 currentProfile = profilesToBeScraped[i];
 
                 // this will READ the looped file and extract the infos below
@@ -62,7 +61,7 @@ async function initialize() {
                 let $ = cheerio.load(html);
                 wholeHTML = $("body").text();
 
-                function closeChatPoPups() {
+                function deleteChatPoPups() {
 
                     for (let i = 0; i < 7; i++) {
                         try { document.querySelector('div[class="display-flex flex-column justify-center overflow-hidden"]').parentElement.parentElement.parentElement.remove() } catch (error) { 1 + 1 }
@@ -344,144 +343,138 @@ async function initialize() {
                     composedExpB_Time3 = convert_Exp_Time_String_Into_Number(composedExpB_TimeString3)
                 }
 
-                closeChatPoPups()
-                getFirstInfos()
-                runWordCounters()
-                getComposedEXPS_A()
-                getComposedEXPS_B()
-                removeComposedEXPs()
-                getIndividualExperiences()
-                convert_experience_time_strings_into_number()
+                function validate_EXP_Time_if_NaN() {
+                    // INDIVIDUAL exps
+                    if (isNaN(experiencetime0)) { experiencetime0 = 0 }
+                    if (isNaN(experiencetime1)) { experiencetime1 = 0 }
+                    if (isNaN(experiencetime2)) { experiencetime2 = 0 }
+                    if (isNaN(experiencetime3)) { experiencetime3 = 0 }
+                    if (isNaN(experiencetime4)) { experiencetime4 = 0 }
+                    if (isNaN(experiencetime5)) { experiencetime5 = 0 }
+                    if (isNaN(experiencetime6)) { experiencetime6 = 0 }
+                    if (isNaN(experiencetime7)) { experiencetime7 = 0 }
+                    if (isNaN(experiencetime8)) { experiencetime8 = 0 }
 
-                // INDIVIDUAL exps
-                if (isNaN(experiencetime0)) { experiencetime0 = 0 }
-                if (isNaN(experiencetime1)) { experiencetime1 = 0 }
-                if (isNaN(experiencetime2)) { experiencetime2 = 0 }
-                if (isNaN(experiencetime3)) { experiencetime3 = 0 }
-                if (isNaN(experiencetime4)) { experiencetime4 = 0 }
-                if (isNaN(experiencetime5)) { experiencetime5 = 0 }
-                if (isNaN(experiencetime6)) { experiencetime6 = 0 }
-                if (isNaN(experiencetime7)) { experiencetime7 = 0 }
-                if (isNaN(experiencetime8)) { experiencetime8 = 0 }
+                    // COMPOSED EXP group A
+                    if (isNaN(composedExpA_Time0)) { composedExpA_Time0 = 0 }
+                    if (isNaN(composedExpA_Time1)) { composedExpA_Time1 = 0 }
+                    if (isNaN(composedExpA_Time2)) { composedExpA_Time2 = 0 }
+                    if (isNaN(composedExpA_Time3)) { composedExpA_Time3 = 0 }
+                    if (isNaN(composedExpA_Time4)) { composedExpA_Time4 = 0 }
+                    if (isNaN(composedExpA_Time5)) { composedExpA_Time5 = 0 }
+                    if (isNaN(composedExpA_Time6)) { composedExpA_Time6 = 0 }
 
-                // COMPOSED EXP group A
-                if (isNaN(composedExpA_Time0)) { composedExpA_Time0 = 0 }
-                if (isNaN(composedExpA_Time1)) { composedExpA_Time1 = 0 }
-                if (isNaN(composedExpA_Time2)) { composedExpA_Time2 = 0 }
-                if (isNaN(composedExpA_Time3)) { composedExpA_Time3 = 0 }
-                if (isNaN(composedExpA_Time4)) { composedExpA_Time4 = 0 }
-                if (isNaN(composedExpA_Time5)) { composedExpA_Time5 = 0 }
-                if (isNaN(composedExpA_Time6)) { composedExpA_Time6 = 0 }
-
-                // COMPOSED EXP group B
-                if (isNaN(composedExpB_Time0)) { composedExpB_Time0 = 0 }
-                if (isNaN(composedExpB_Time1)) { composedExpB_Time1 = 0 }
-                if (isNaN(composedExpB_Time2)) { composedExpB_Time2 = 0 }
-                if (isNaN(composedExpB_Time3)) { composedExpB_Time3 = 0 }
-
-                function validateEXP(expTitle, expTime) {
-                    let counter = 0
-                    lwrCaseExpTitle = expTitle.toLowerCase()
-
-                    // portuguese
-                    if (lwrCaseExpTitle.includes('arquiteto')) { counter++ }
-                    if (lwrCaseExpTitle.includes('engenheiro')) { counter++ }
-                    if (lwrCaseExpTitle.includes('desenvolvedor')) { counter++ }
-                    if (lwrCaseExpTitle.includes('técnico')) { counter++ }
-                    if (lwrCaseExpTitle.includes('tecnico')) { counter++ }
-                    if (lwrCaseExpTitle.includes('técnica')) { counter++ }
-                    if (lwrCaseExpTitle.includes('desenvolvedora')) { counter++ }
-                    if (lwrCaseExpTitle.includes('engenheira')) { counter++ }
-                    if (lwrCaseExpTitle.includes('técnica')) { counter++ }
-                    if (lwrCaseExpTitle.includes('programador')) { counter++ }
-                    if (lwrCaseExpTitle.includes('programadora')) { counter++ }
-                    if (lwrCaseExpTitle.includes('programmer')) { counter++ }
-                    if (lwrCaseExpTitle.includes('líder')) { counter++ }
-                    if (lwrCaseExpTitle.includes('sistemas')) { counter++ }
-                    if (lwrCaseExpTitle.includes('sistema')) { counter++ }
-                    if (lwrCaseExpTitle.includes('dados')) { counter++ }
-                    if (lwrCaseExpTitle.includes('consultor')) { counter++ }
-                    if (lwrCaseExpTitle.includes('consultora')) { counter++ }
-
-                    // english
-                    if (lwrCaseExpTitle.includes('architect')) { counter++ }
-                    if (lwrCaseExpTitle.includes('engineer')) { counter++ }
-                    if (lwrCaseExpTitle.includes('developer')) { counter++ }
-                    if (lwrCaseExpTitle.includes('sdet')) { counter++ }
-                    if (lwrCaseExpTitle.includes('tech')) { counter++ }
-                    if (lwrCaseExpTitle.includes(' bi')) { counter++ }
-                    if (lwrCaseExpTitle.includes('cto')) { counter++ }
-                    if (lwrCaseExpTitle.includes('it')) { counter++ }
-                    if (lwrCaseExpTitle.includes('ux')) { counter++ }
-                    if (lwrCaseExpTitle.includes('ui')) { counter++ }
-                    if (lwrCaseExpTitle.includes('ux/ui')) { counter++ }
-                    if (lwrCaseExpTitle.includes('chief operating office')) { counter++ }
-                    if (lwrCaseExpTitle.includes('lead')) { counter++ }
-                    if (lwrCaseExpTitle.includes('system')) { counter++ }
-                    if (lwrCaseExpTitle.includes('freelance')) { counter++ }
-                    if (lwrCaseExpTitle.includes('data')) { counter++ }
-                    if (lwrCaseExpTitle.includes('cloud')) { counter++ }
-                    if (lwrCaseExpTitle.includes('business intelligence')) { counter++ }
-                    if (lwrCaseExpTitle.includes('business inteligence')) { counter++ }
-                    if (lwrCaseExpTitle.includes('test')) { counter++ }
-                    if (lwrCaseExpTitle.includes('quality assurance')) { counter++ }
-                    if (lwrCaseExpTitle.includes('qa')) { counter++ }
-                    if (lwrCaseExpTitle.includes('machine learning')) { counter++ }
-                    if (lwrCaseExpTitle.includes('consultant')) { counter++ }
-                    if (lwrCaseExpTitle.includes('co-founder')) { counter++ }
-                    if (lwrCaseExpTitle.includes('owner')) { counter++ }
-                    if (lwrCaseExpTitle.includes('founder')) { counter++ }
-                    if (lwrCaseExpTitle.includes('front')) { counter++ }
-                    if (lwrCaseExpTitle.includes('back')) { counter++ }
-                    if (lwrCaseExpTitle.includes('fullstack')) { counter++ }
-                    if (lwrCaseExpTitle.includes('full stack')) { counter++ }
-                    if (lwrCaseExpTitle.includes('head')) { counter++ }
-                    if (lwrCaseExpTitle.includes('product')) { counter++ }
-
-                    // spanish
-                    if (lwrCaseExpTitle.includes('desarrollador')) { counter++ }
-                    if (lwrCaseExpTitle.includes('desarrolladora')) { counter++ }
-                    if (lwrCaseExpTitle.includes('datos')) { counter++ }
-
-                    // end of function
-                    if (counter > 0) { 1 + 1 } else { expTime = 0 } // i could invalidate the title as well, but i want to know what other titles could i be ignoring
-                    return expTime
-
+                    // COMPOSED EXP group B
+                    if (isNaN(composedExpB_Time0)) { composedExpB_Time0 = 0 }
+                    if (isNaN(composedExpB_Time1)) { composedExpB_Time1 = 0 }
+                    if (isNaN(composedExpB_Time2)) { composedExpB_Time2 = 0 }
+                    if (isNaN(composedExpB_Time3)) { composedExpB_Time3 = 0 }
                 }
 
-                // individual experiences
-                let individualValidatedExp0 = validateEXP(expTitle0, experiencetime0)
-                let individualValidatedExp1 = validateEXP(expTitle1, experiencetime1)
-                let individualValidatedExp2 = validateEXP(expTitle2, experiencetime2)
-                let individualValidatedExp3 = validateEXP(expTitle3, experiencetime3)
-                let individualValidatedExp4 = validateEXP(expTitle4, experiencetime4)
-                let individualValidatedExp5 = validateEXP(expTitle5, experiencetime5)
-                let individualValidatedExp6 = validateEXP(expTitle6, experiencetime6)
-                let individualValidatedExp7 = validateEXP(expTitle7, experiencetime7)
-                let individualValidatedExp8 = validateEXP(expTitle8, experiencetime8)
+                function Validate_EXP_Time_if_IT_Experience() {
+                    function validateEXP(expTitle, expTime) {
+                        let counter = 0
+                        lwrCaseExpTitle = expTitle.toLowerCase()
+    
+                        // portuguese
+                        if (lwrCaseExpTitle.includes('arquiteto')) { counter++ }
+                        if (lwrCaseExpTitle.includes('engenheiro')) { counter++ }
+                        if (lwrCaseExpTitle.includes('desenvolvedor')) { counter++ }
+                        if (lwrCaseExpTitle.includes('técnico')) { counter++ }
+                        if (lwrCaseExpTitle.includes('tecnico')) { counter++ }
+                        if (lwrCaseExpTitle.includes('técnica')) { counter++ }
+                        if (lwrCaseExpTitle.includes('desenvolvedora')) { counter++ }
+                        if (lwrCaseExpTitle.includes('engenheira')) { counter++ }
+                        if (lwrCaseExpTitle.includes('técnica')) { counter++ }
+                        if (lwrCaseExpTitle.includes('programador')) { counter++ }
+                        if (lwrCaseExpTitle.includes('programadora')) { counter++ }
+                        if (lwrCaseExpTitle.includes('programmer')) { counter++ }
+                        if (lwrCaseExpTitle.includes('líder')) { counter++ }
+                        if (lwrCaseExpTitle.includes('sistemas')) { counter++ }
+                        if (lwrCaseExpTitle.includes('sistema')) { counter++ }
+                        if (lwrCaseExpTitle.includes('dados')) { counter++ }
+                        if (lwrCaseExpTitle.includes('consultor')) { counter++ }
+                        if (lwrCaseExpTitle.includes('consultora')) { counter++ }
+    
+                        // english
+                        if (lwrCaseExpTitle.includes('architect')) { counter++ }
+                        if (lwrCaseExpTitle.includes('engineer')) { counter++ }
+                        if (lwrCaseExpTitle.includes('developer')) { counter++ }
+                        if (lwrCaseExpTitle.includes('sdet')) { counter++ }
+                        if (lwrCaseExpTitle.includes('tech')) { counter++ }
+                        if (lwrCaseExpTitle.includes(' bi')) { counter++ }
+                        if (lwrCaseExpTitle.includes('cto')) { counter++ }
+                        if (lwrCaseExpTitle.includes('it')) { counter++ }
+                        if (lwrCaseExpTitle.includes('ux')) { counter++ }
+                        if (lwrCaseExpTitle.includes('ui')) { counter++ }
+                        if (lwrCaseExpTitle.includes('ux/ui')) { counter++ }
+                        if (lwrCaseExpTitle.includes('chief operating office')) { counter++ }
+                        if (lwrCaseExpTitle.includes('lead')) { counter++ }
+                        if (lwrCaseExpTitle.includes('system')) { counter++ }
+                        if (lwrCaseExpTitle.includes('freelance')) { counter++ }
+                        if (lwrCaseExpTitle.includes('data')) { counter++ }
+                        if (lwrCaseExpTitle.includes('cloud')) { counter++ }
+                        if (lwrCaseExpTitle.includes('business intelligence')) { counter++ }
+                        if (lwrCaseExpTitle.includes('business inteligence')) { counter++ }
+                        if (lwrCaseExpTitle.includes('test')) { counter++ }
+                        if (lwrCaseExpTitle.includes('quality assurance')) { counter++ }
+                        if (lwrCaseExpTitle.includes('qa')) { counter++ }
+                        if (lwrCaseExpTitle.includes('machine learning')) { counter++ }
+                        if (lwrCaseExpTitle.includes('consultant')) { counter++ }
+                        if (lwrCaseExpTitle.includes('co-founder')) { counter++ }
+                        if (lwrCaseExpTitle.includes('owner')) { counter++ }
+                        if (lwrCaseExpTitle.includes('founder')) { counter++ }
+                        if (lwrCaseExpTitle.includes('front')) { counter++ }
+                        if (lwrCaseExpTitle.includes('back')) { counter++ }
+                        if (lwrCaseExpTitle.includes('fullstack')) { counter++ }
+                        if (lwrCaseExpTitle.includes('full stack')) { counter++ }
+                        if (lwrCaseExpTitle.includes('head')) { counter++ }
+                        if (lwrCaseExpTitle.includes('product')) { counter++ }
+    
+                        // spanish
+                        if (lwrCaseExpTitle.includes('desarrollador')) { counter++ }
+                        if (lwrCaseExpTitle.includes('desarrolladora')) { counter++ }
+                        if (lwrCaseExpTitle.includes('datos')) { counter++ }
+    
+                        // end of function
+                        if (counter > 0) { 1 + 1 } else { expTime = 0 } // i could invalidate the title as well, but i want to know what other titles could i be ignoring
+                        return expTime
+    
+                    }
+    
+                    // individual experiences
+                    individualValidatedExp0 = validateEXP(expTitle0, experiencetime0)
+                    individualValidatedExp1 = validateEXP(expTitle1, experiencetime1)
+                    individualValidatedExp2 = validateEXP(expTitle2, experiencetime2)
+                    individualValidatedExp3 = validateEXP(expTitle3, experiencetime3)
+                    individualValidatedExp4 = validateEXP(expTitle4, experiencetime4)
+                    individualValidatedExp5 = validateEXP(expTitle5, experiencetime5)
+                    individualValidatedExp6 = validateEXP(expTitle6, experiencetime6)
+                    individualValidatedExp7 = validateEXP(expTitle7, experiencetime7)
+                    individualValidatedExp8 = validateEXP(expTitle8, experiencetime8)
+    
+                    // composed experiences GROUP A
+                    composedA_ValidatedExp0 = validateEXP(composedExpA_Title0, composedExpA_Time0)
+                    composedA_ValidatedExp1 = validateEXP(composedExpA_Title1, composedExpA_Time1)
+                    composedA_ValidatedExp2 = validateEXP(composedExpA_Title2, composedExpA_Time2)
+                    composedA_ValidatedExp3 = validateEXP(composedExpA_Title3, composedExpA_Time3)
+                    composedA_ValidatedExp4 = validateEXP(composedExpA_Title4, composedExpA_Time4)
+                    composedA_ValidatedExp5 = validateEXP(composedExpA_Title5, composedExpA_Time5)
+                    composedA_ValidatedExp6 = validateEXP(composedExpA_Title6, composedExpA_Time6)
+    
+                    // composed experiences GROUP B
+                    composedB_ValidatedExp0 = validateEXP(composedExpB_Title0, composedExpB_Time0)
+                    composedB_ValidatedExp1 = validateEXP(composedExpB_Title1, composedExpB_Time1)
+                    composedB_ValidatedExp2 = validateEXP(composedExpB_Title2, composedExpB_Time2)
+                    composedB_ValidatedExp3 = validateEXP(composedExpB_Title3, composedExpB_Time3)
+                }
 
-                // composed experiences GROUP A
-                let composedA_ValidatedExp0 = validateEXP(composedExpA_Title0, composedExpA_Time0)
-                let composedA_ValidatedExp1 = validateEXP(composedExpA_Title1, composedExpA_Time1)
-                let composedA_ValidatedExp2 = validateEXP(composedExpA_Title2, composedExpA_Time2)
-                let composedA_ValidatedExp3 = validateEXP(composedExpA_Title3, composedExpA_Time3)
-                let composedA_ValidatedExp4 = validateEXP(composedExpA_Title4, composedExpA_Time4)
-                let composedA_ValidatedExp5 = validateEXP(composedExpA_Title5, composedExpA_Time5)
-                let composedA_ValidatedExp6 = validateEXP(composedExpA_Title6, composedExpA_Time6)
+                function sum_All_EXP_Time() {
+                    totalworkingtime = individualValidatedExp0 + individualValidatedExp1 + individualValidatedExp2 + individualValidatedExp3 + individualValidatedExp4 + individualValidatedExp5 + individualValidatedExp6 + individualValidatedExp7 + individualValidatedExp8 + composedA_ValidatedExp0 + composedA_ValidatedExp1 + composedA_ValidatedExp2 + composedA_ValidatedExp3 + composedA_ValidatedExp4 + composedA_ValidatedExp5 + composedA_ValidatedExp6 + composedB_ValidatedExp0 + composedB_ValidatedExp1 + composedB_ValidatedExp2 + composedB_ValidatedExp3
+                }
 
-                // composed experiences GROUP B
-                let composedB_ValidatedExp0 = validateEXP(composedExpB_Title0, composedExpB_Time0)
-                let composedB_ValidatedExp1 = validateEXP(composedExpB_Title1, composedExpB_Time1)
-                let composedB_ValidatedExp2 = validateEXP(composedExpB_Title2, composedExpB_Time2)
-                let composedB_ValidatedExp3 = validateEXP(composedExpB_Title3, composedExpB_Time3)
-
-
-                totalworkingtime = individualValidatedExp0 + individualValidatedExp1 + individualValidatedExp2 + individualValidatedExp3 + individualValidatedExp4 + individualValidatedExp5 + individualValidatedExp6 + individualValidatedExp7 + individualValidatedExp8 + composedA_ValidatedExp0 + composedA_ValidatedExp1 + composedA_ValidatedExp2 + composedA_ValidatedExp3 + composedA_ValidatedExp4 + composedA_ValidatedExp5 + composedA_ValidatedExp6 + composedB_ValidatedExp0 + composedB_ValidatedExp1 + composedB_ValidatedExp2 + composedB_ValidatedExp3
-
-                moveToSelectedFolder()
-
-                // this is the code to change the folder's directory
-                async function moveToSelectedFolder() {
+                function moveToSelectedFolder() {
+                    // this is the code to change the folder's directory
                     const currentPath = path.join(__dirname, folderToBeScrapped, currentProfile);
                     const destinationPath = path.join(__dirname, selectedFolder, currentProfile);
                     fs.rename(currentPath, destinationPath, function (err) {
@@ -495,10 +488,7 @@ async function initialize() {
                     });
                 }
 
-
-
-                /////////// send data to xlsx   ///////////////
-                function updateSheet() {
+                function send_Data_to_Excel() {
                     worksheets.Sheet1.push({
                         // "First Name": `${i}`,
                         // Country: {},
@@ -618,15 +608,24 @@ async function initialize() {
                     });
                 }
 
-                updateSheet();
+                deleteChatPoPups()
+                getFirstInfos()
+                runWordCounters()
+                getComposedEXPS_A()
+                getComposedEXPS_B()
+                removeComposedEXPs()
+                getIndividualExperiences()
+                convert_experience_time_strings_into_number()
+                validate_EXP_Time_if_NaN()
+                Validate_EXP_Time_if_IT_Experience()
+                sum_All_EXP_Time()
+                moveToSelectedFolder()
+                send_Data_to_Excel()
 
-                // this updates the xlsx file
-                // it needs to stay below the push method. I tried to put above, but it only works here.
+                
+                // this needs to stay below the push method. I tried to put above, but it only works here.
                 xlsx.utils.sheet_add_json(workbook.Sheets["Sheet1"], worksheets.Sheet1);
                 xlsx.writeFile(workbook, "db.xlsx");
-
-
-
 
             }
         });
