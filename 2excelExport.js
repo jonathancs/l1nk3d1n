@@ -28,12 +28,20 @@ const fs = require("fs");
 const path = require("path");
 const { first } = require("cheerio/lib/api/traversing");
 const { moveMessagePortToContext } = require("worker_threads");
-const folderToBeScrapped = "";
-const selectedFolder = "";
+
+// FROM WITH ENGLISH
+const folderToBeScrapped = "D:/Users/jonat/git/l1nk3d1n/zprofiles/selectedFolder/less than 6years/";
+const selectedFolder = "D:/Users/jonat/git/l1nk3d1n/zprofiles/selectedFolder/zexported/";
+
+// FROM ZEXPORTED
+// const folderToBeScrapped = "D:/Users/jonat/git/l1nk3d1n/zprofiles/selectedFolder/zexported/";
+// const selectedFolder = "D:/Users/jonat/git/l1nk3d1n/zprofiles/selectedFolder/zexported/";
+
+
 profilesToBeScraped = [];
 
 // Read the file into memory
-const workbook = xlsx.readFile("db.xlsx");
+const workbook = xlsx.readFile("lessthan6.xlsx");
 
 // Convert the xlsx to JSON
 let worksheets = {};
@@ -53,7 +61,7 @@ async function initialize() {
             });
 
             // this will loop the list of profiles to be scraped
-            for (i = 0; i < 3000; i++) {
+            for (i = 0; i < 4000; i++) {
                 currentProfile = profilesToBeScraped[i];
 
                 // this will READ the looped file and extract the infos below
@@ -97,17 +105,7 @@ async function initialize() {
                     rawProfileTitle = $(".text-body-medium.break-words").text();
                     profileTitle = rawProfileTitle.trim();
 
-                    // connectionState
-                    connectionStateButton = $(".pvs-profile-actions ").children().eq(1).text();
-
-                    if (connectionStateButton.match(/Conectar/gim)) {
-                        connectionState = "não conectado";
-                    } else if (connectionStateButton.match(/Seguir/gim)) {
-                        connectionState = "inconectável";
-                    } else if (connectionStateButton.match(/enviar/gim)) {
-                        connectionState = "conectado";
-                    }
-
+                    
                     // currentCompany
                     rawCurrentCompany = $("h3.t-16.t-black.t-bold").eq(0).children().text();
                     currentCompany = rawCurrentCompany.replace(/Nome da empresa/gim, "");
@@ -157,7 +155,7 @@ async function initialize() {
 
 
                     // x.net
-                    xnet = (wholeHTML.match(/C#/gim) || []).length;
+                    xnet = ((wholeHTML.match(/C#/gim) || []).length) + ((wholeHTML.match(/.net/gim) || []).length) + ((wholeHTML.match(/dotnet/gim) || []).length);
 
                     // golang
                     xgolang = ((wholeHTML.match(/golang/gim) || []).length) + ((wholeHTML.match(/ go /gim) || []).length)
@@ -267,32 +265,41 @@ async function initialize() {
                 function getIndividualExperiences() {
 
                     let experiencesList = $('li.pv-entity__position-group-pager.pv-profile-section__list-item.ember-view')
-
+                    
                     expTitle0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().eq(0).text()
+                    expDescription0 = experiencesList.eq(0).children().children().children().children().children().eq(2).text()
                     experienceTime_as_String0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
                     expTitle1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().eq(0).text()
+                    expDescription1 = experiencesList.eq(1).children().children().children().children().children().eq(2).text()
                     experienceTime_as_String1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
                     expTitle2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().eq(0).text()
+                    expDescription2 = experiencesList.eq(2).children().children().children().children().children().eq(2).text()
                     experienceTime_as_String2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
                     expTitle3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().eq(0).text()
+                    expDescription3 = experiencesList.eq(3).children().children().children().children().children().eq(2).text()
                     experienceTime_as_String3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
                     expTitle4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().eq(0).text()
+                    expDescription4 = experiencesList.eq(4).children().children().children().children().children().eq(2).text()
                     experienceTime_as_String4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
                     expTitle5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().eq(0).text()
+                    expDescription5 = experiencesList.eq(5).children().children().children().children().children().eq(2).text()
                     experienceTime_as_String5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
                     expTitle6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().eq(0).text()
+                    expDescription6 = experiencesList.eq(6).children().children().children().children().children().eq(2).text()
                     experienceTime_as_String6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
                     expTitle7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().eq(0).text()
+                    expDescription7 = experiencesList.eq(7).children().children().children().children().children().eq(2).text()
                     experienceTime_as_String7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
 
                     expTitle8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().eq(0).text()
+                    expDescription8 = experiencesList.eq(8).children().children().children().children().children().eq(2).text()
                     experienceTime_as_String8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
                 }
 
@@ -377,15 +384,8 @@ async function initialize() {
                         lwrCaseExpTitle = expTitle.toLowerCase()
     
                         // portuguese
-                        if (lwrCaseExpTitle.includes('arquiteto')) { counter++ }
-                        if (lwrCaseExpTitle.includes('engenheiro')) { counter++ }
                         if (lwrCaseExpTitle.includes('desenvolvedor')) { counter++ }
-                        if (lwrCaseExpTitle.includes('técnico')) { counter++ }
-                        if (lwrCaseExpTitle.includes('tecnico')) { counter++ }
-                        if (lwrCaseExpTitle.includes('técnica')) { counter++ }
                         if (lwrCaseExpTitle.includes('desenvolvedora')) { counter++ }
-                        if (lwrCaseExpTitle.includes('engenheira')) { counter++ }
-                        if (lwrCaseExpTitle.includes('técnica')) { counter++ }
                         if (lwrCaseExpTitle.includes('programador')) { counter++ }
                         if (lwrCaseExpTitle.includes('programadora')) { counter++ }
                         if (lwrCaseExpTitle.includes('programmer')) { counter++ }
@@ -397,20 +397,18 @@ async function initialize() {
                         if (lwrCaseExpTitle.includes('consultora')) { counter++ }
     
                         // english
-                        if (lwrCaseExpTitle.includes('architect')) { counter++ }
-                        if (lwrCaseExpTitle.includes('engineer')) { counter++ }
                         if (lwrCaseExpTitle.includes('developer')) { counter++ }
                         if (lwrCaseExpTitle.includes('sdet')) { counter++ }
                         if (lwrCaseExpTitle.includes('tech')) { counter++ }
                         if (lwrCaseExpTitle.includes(' bi')) { counter++ }
                         if (lwrCaseExpTitle.includes('cto')) { counter++ }
-                        if (lwrCaseExpTitle.includes('it')) { counter++ }
-                        if (lwrCaseExpTitle.includes('ux')) { counter++ }
-                        if (lwrCaseExpTitle.includes('ui')) { counter++ }
+                        if (lwrCaseExpTitle.includes('ux ')) { counter++ }
                         if (lwrCaseExpTitle.includes('ux/ui')) { counter++ }
                         if (lwrCaseExpTitle.includes('chief operating office')) { counter++ }
                         if (lwrCaseExpTitle.includes('lead')) { counter++ }
                         if (lwrCaseExpTitle.includes('system')) { counter++ }
+                        if (lwrCaseExpTitle.includes('software')) { counter++ }
+                        if (lwrCaseExpTitle.includes('solutions')) { counter++ }
                         if (lwrCaseExpTitle.includes('freelance')) { counter++ }
                         if (lwrCaseExpTitle.includes('data')) { counter++ }
                         if (lwrCaseExpTitle.includes('cloud')) { counter++ }
@@ -489,7 +487,7 @@ async function initialize() {
                 }
 
                 function send_Data_to_Excel() {
-                    worksheets.Sheet1.push({
+                    worksheets.Plan1.push({
                         // "First Name": `${i}`,
                         // Country: {},
 
@@ -499,7 +497,6 @@ async function initialize() {
                         name: candidateName,
                         location: location,
                         title: profileTitle,
-                        connectionState: connectionState,
                         currentCompany: currentCompany,
                         // yearsOfExperience: yearsOfExperience,
                         xSenior: xsenior,
@@ -531,76 +528,96 @@ async function initialize() {
 
 
                         firstExperienceTitle: expTitle0,
+                        experienceDescription0: expDescription0,
                         firstExperienceTime: individualValidatedExp0,
 
 
                         secondExperienceTitle: expTitle1,
+                        experienceDescription1: expDescription1,
                         secondExperienceTime: individualValidatedExp1,
 
 
                         thirdExperienceTitle: expTitle2,
+                        experienceDescription2: expDescription2,
                         thirdExperienceTime: individualValidatedExp2,
 
 
                         fourthExperienceTitle: expTitle3,
+                        experienceDescription3: expDescription3,
                         fourthExperienceTime: individualValidatedExp3,
 
 
                         fifthExperienceTitle: expTitle4,
+                        experienceDescription4: expDescription4,
                         fifthExperienceTime: individualValidatedExp4,
 
 
                         sixthExperienceTitle: expTitle5,
+                        experienceDescription5: expDescription5,
                         sixthExperienceTime: individualValidatedExp5,
 
 
                         seventhExperienceTitle: expTitle6,
+                        experienceDescription6: expDescription6,
                         seventhExperienceTime: individualValidatedExp6,
 
 
                         eigthExperienceTitle: expTitle7,
+                        experienceDescription7: expDescription7,
                         eigthExperienceTime: individualValidatedExp7,
 
 
                         ninethExperienceTitle: expTitle8,
+                        experienceDescription8: expDescription8,
                         ninethExperienceTime: individualValidatedExp8,
 
                         // COMPOSED EXP
                         // group A
 
                         composedExperienceA_Title0: composedExpA_Title0,
+                        composed_Experience_DescriptionA_0: composedExpDescA_0,
                         composedExperienceA_Time0: composedExpA_Time0,
 
                         composedExperienceA_Title1: composedExpA_Title1,
+                        composed_Experience_DescriptionA_1: composedExpDescA_1,
                         composedExperienceA_Time1: composedExpA_Time1,
 
                         composedExperienceA_Title2: composedExpA_Title2,
+                        composed_Experience_DescriptionA_2: composedExpDescA_2,
                         composedExperienceA_Time2: composedExpA_Time2,
 
                         composedExperienceA_Title3: composedExpA_Title3,
+                        composed_Experience_DescriptionA_3: composedExpDescA_3,
                         composedExperienceA_Time3: composedExpA_Time3,
 
                         composedExperienceA_Title4: composedExpA_Title4,
+                        composed_Experience_DescriptionA_4: composedExpDescA_4,
                         composedExperienceA_Time4: composedExpA_Time4,
 
                         composedExperienceA_Title5: composedExpA_Title5,
+                        composed_Experience_DescriptionA_5: composedExpDescA_5,
                         composedExperienceA_Time5: composedExpA_Time5,
 
                         composedExperienceA_Title6: composedExpA_Title6,
+                        composed_Experience_DescriptionA_6: composedExpDescA_6,
                         composedExperienceA_Time6: composedExpA_Time6,
 
                         // group B
 
                         composedExperienceB_Title0: composedExpB_Title0,
+                        composed_Experience_DescriptionB_0: composedExpDescB_0,
                         composedExperienceB_Time0: composedExpB_Time0,
 
                         composedExperienceB_Title1: composedExpB_Title1,
+                        composed_Experience_DescriptionB_1: composedExpDescB_1,
                         composedExperienceB_Time1: composedExpB_Time1,
 
                         composedExperienceB_Title2: composedExpB_Title2,
+                        composed_Experience_DescriptionB_2: composedExpDescB_2,
                         composedExperienceB_Time2: composedExpB_Time2,
 
                         composedExperienceB_Title3: composedExpB_Title3,
+                        composed_Experience_DescriptionB_3: composedExpDescB_3,
                         composedExperienceB_Time3: composedExpB_Time3,
 
                         totalWorkingTime: totalworkingtime
@@ -610,7 +627,9 @@ async function initialize() {
 
                 deleteChatPoPups()
                 getFirstInfos()
-                runWordCounters()
+                // runWordCounters() 
+                // i deactivated it because i rarely  use this counter in excel.
+                
                 getComposedEXPS_A()
                 getComposedEXPS_B()
                 removeComposedEXPs()
@@ -619,13 +638,13 @@ async function initialize() {
                 validate_EXP_Time_if_NaN()
                 Validate_EXP_Time_if_IT_Experience()
                 sum_All_EXP_Time()
-                moveToSelectedFolder()
+                // moveToSelectedFolder()
                 send_Data_to_Excel()
 
                 
                 // this needs to stay below the push method. I tried to put above, but it only works here.
-                xlsx.utils.sheet_add_json(workbook.Sheets["Sheet1"], worksheets.Sheet1);
-                xlsx.writeFile(workbook, "db.xlsx");
+                xlsx.utils.sheet_add_json(workbook.Sheets["Plan1"], worksheets.Plan1);
+                xlsx.writeFile(workbook, "lessthan6.xlsx");
 
             }
         });
