@@ -264,43 +264,54 @@ async function initialize() {
 
                 function getIndividualExperiences() {
 
-                    let experiencesList = $('li.pv-entity__position-group-pager.pv-profile-section__list-item.ember-view')
+					let experiencesList = $('.pv-profile-section > div > div > a')  
+                    // This selector catches all individual experiences without margin of error, but it goes one level deep inside the element and then you must go back one step to have access to infos
+
+					expTitle0 = experiencesList.eq(0).parent().eq(0).children().children().children().eq(1).text()
+                    companyCountry0 = experiencesList.eq(0).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
+                    expDescription0 = experiencesList.eq(0).parent().eq(0).children().eq(1).text().trim()
+                    experienceTime_as_String0 = experiencesList.eq(0).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
                     
-                    expTitle0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().eq(0).text()
-                    expDescription0 = experiencesList.eq(0).children().children().children().children().children().eq(2).text()
-                    experienceTime_as_String0 = experiencesList.eq(0).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                    expTitle1 = experiencesList.eq(1).parent().eq(0).children().eq(1).text().trim()
+                    companyCountry1 = experiencesList.eq(1).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
+                    expDescription1 = experiencesList.eq(1).parent().eq(0).children().eq(1).text().trim()
+                    experienceTime_as_String1 = experiencesList.eq(1).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().eq(0).text()
-                    expDescription1 = experiencesList.eq(1).children().children().children().children().children().eq(2).text()
-                    experienceTime_as_String1 = experiencesList.eq(1).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                    expTitle2 = experiencesList.eq(2).parent().eq(0).children().eq(1).text().trim()
+                    companyCountry2 = experiencesList.eq(2).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
+                    expDescription2 = experiencesList.eq(2).parent().eq(0).children().eq(1).text().trim()
+                    experienceTime_as_String2 = experiencesList.eq(2).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().eq(0).text()
-                    expDescription2 = experiencesList.eq(2).children().children().children().children().children().eq(2).text()
-                    experienceTime_as_String2 = experiencesList.eq(2).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                    expTitle3 = experiencesList.eq(3).parent().eq(0).children().eq(1).text().trim()
+                    companyCountry3 = experiencesList.eq(3).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
+                    expDescription3 = experiencesList.eq(3).parent().eq(0).children().eq(1).text().trim()
+                    experienceTime_as_String3 = experiencesList.eq(3).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().eq(0).text()
-                    expDescription3 = experiencesList.eq(3).children().children().children().children().children().eq(2).text()
-                    experienceTime_as_String3 = experiencesList.eq(3).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                    expTitle4 = experiencesList.eq(4).parent().eq(0).children().eq(1).text().trim()
+                    companyCountry4 = experiencesList.eq(4).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
+                    expDescription4 = experiencesList.eq(4).parent().eq(0).children().eq(1).text().trim()
+                    experienceTime_as_String4 = experiencesList.eq(4).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().eq(0).text()
-                    expDescription4 = experiencesList.eq(4).children().children().children().children().children().eq(2).text()
-                    experienceTime_as_String4 = experiencesList.eq(4).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                    expTitle5 = experiencesList.eq(5).parent().eq(0).children().eq(1).text().trim()
+                    companyCountry5 = experiencesList.eq(5).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
+                    expDescription5 = experiencesList.eq(5).parent().eq(0).children().eq(1).text().trim()
+                    experienceTime_as_String5 = experiencesList.eq(5).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().eq(0).text()
-                    expDescription5 = experiencesList.eq(5).children().children().children().children().children().eq(2).text()
-                    experienceTime_as_String5 = experiencesList.eq(5).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                    expTitle6 = experiencesList.eq(6).parent().eq(0).children().eq(1).text().trim()
+                    companyCountry6 = experiencesList.eq(6).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
+                    expDescription6 = experiencesList.eq(6).parent().eq(0).children().eq(1).text().trim()
+                    experienceTime_as_String6 = experiencesList.eq(6).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().eq(0).text()
-                    expDescription6 = experiencesList.eq(6).children().children().children().children().children().eq(2).text()
-                    experienceTime_as_String6 = experiencesList.eq(6).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                    expTitle7 = experiencesList.eq(7).parent().eq(0).children().eq(1).text().trim()
+                    companyCountry7 = experiencesList.eq(7).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
+                    expDescription7 = experiencesList.eq(7).parent().eq(0).children().eq(1).text().trim()
+                    experienceTime_as_String7 = experiencesList.eq(7).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().eq(0).text()
-                    expDescription7 = experiencesList.eq(7).children().children().children().children().children().eq(2).text()
-                    experienceTime_as_String7 = experiencesList.eq(7).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
+                    expTitle8 = experiencesList.eq(8).parent().eq(0).children().eq(1).text().trim()
+                    companyCountry8 = experiencesList.eq(8).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
+                    expDescription8 = experiencesList.eq(8).parent().eq(0).children().eq(1).text().trim()
+                    experienceTime_as_String8 = experiencesList.eq(8).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().eq(0).text()
-                    expDescription8 = experiencesList.eq(8).children().children().children().children().children().eq(2).text()
-                    experienceTime_as_String8 = experiencesList.eq(8).children().children().children().children().children().eq(1).children().children().children().eq(3).text()
                 }
 
                 function convert_experience_time_strings_into_number() {
@@ -389,12 +400,9 @@ async function initialize() {
                         if (lwrCaseExpTitle.includes('programador')) { counter++ }
                         if (lwrCaseExpTitle.includes('programadora')) { counter++ }
                         if (lwrCaseExpTitle.includes('programmer')) { counter++ }
-                        if (lwrCaseExpTitle.includes('líder')) { counter++ }
-                        if (lwrCaseExpTitle.includes('sistemas')) { counter++ }
                         if (lwrCaseExpTitle.includes('sistema')) { counter++ }
                         if (lwrCaseExpTitle.includes('dados')) { counter++ }
                         if (lwrCaseExpTitle.includes('consultor')) { counter++ }
-                        if (lwrCaseExpTitle.includes('consultora')) { counter++ }
     
                         // english
                         if (lwrCaseExpTitle.includes('developer')) { counter++ }
@@ -408,7 +416,9 @@ async function initialize() {
                         if (lwrCaseExpTitle.includes('lead')) { counter++ }
                         if (lwrCaseExpTitle.includes('system')) { counter++ }
                         if (lwrCaseExpTitle.includes('software')) { counter++ }
+                        if (lwrCaseExpTitle.includes('scrum')) { counter++ }
                         if (lwrCaseExpTitle.includes('solutions')) { counter++ }
+                        if (lwrCaseExpTitle.includes('project manager')) { counter++ }
                         if (lwrCaseExpTitle.includes('freelance')) { counter++ }
                         if (lwrCaseExpTitle.includes('data')) { counter++ }
                         if (lwrCaseExpTitle.includes('cloud')) { counter++ }
@@ -528,46 +538,55 @@ async function initialize() {
 
 
                         firstExperienceTitle: expTitle0,
+                        experienceLocation: companyCountry0,
                         experienceDescription0: expDescription0,
                         firstExperienceTime: individualValidatedExp0,
 
 
                         secondExperienceTitle: expTitle1,
+                        experienceLocation: companyCountry1,
                         experienceDescription1: expDescription1,
                         secondExperienceTime: individualValidatedExp1,
 
 
                         thirdExperienceTitle: expTitle2,
+                        experienceLocation: companyCountry2,
                         experienceDescription2: expDescription2,
                         thirdExperienceTime: individualValidatedExp2,
 
 
                         fourthExperienceTitle: expTitle3,
+                        experienceLocation: companyCountry3,
                         experienceDescription3: expDescription3,
                         fourthExperienceTime: individualValidatedExp3,
 
 
                         fifthExperienceTitle: expTitle4,
+                        experienceLocation: companyCountry4,
                         experienceDescription4: expDescription4,
                         fifthExperienceTime: individualValidatedExp4,
 
 
                         sixthExperienceTitle: expTitle5,
+                        experienceLocation: companyCountry5,
                         experienceDescription5: expDescription5,
                         sixthExperienceTime: individualValidatedExp5,
 
 
                         seventhExperienceTitle: expTitle6,
+                        experienceLocation: companyCountry6,
                         experienceDescription6: expDescription6,
                         seventhExperienceTime: individualValidatedExp6,
 
 
                         eigthExperienceTitle: expTitle7,
+                        experienceLocation: companyCountry7,
                         experienceDescription7: expDescription7,
                         eigthExperienceTime: individualValidatedExp7,
 
 
                         ninethExperienceTitle: expTitle8,
+                        experienceLocation: companyCountry8,
                         experienceDescription8: expDescription8,
                         ninethExperienceTime: individualValidatedExp8,
 
