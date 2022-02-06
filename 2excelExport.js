@@ -41,7 +41,7 @@ const selectedFolder = "D:/Users/jonat/git/l1nk3d1n/zprofiles/selectedFolder/zex
 profilesToBeScraped = [];
 
 // Read the file into memory
-const workbook = xlsx.readFile("lessthan6.xlsx");
+const workbook = xlsx.readFile("teste.xlsx");
 
 // Convert the xlsx to JSON
 let worksheets = {};
@@ -61,7 +61,7 @@ async function initialize() {
             });
 
             // this will loop the list of profiles to be scraped
-            for (i = 0; i < 4000; i++) {
+            for (i = 0; i < 10; i++) {
                 currentProfile = profilesToBeScraped[i];
 
                 // this will READ the looped file and extract the infos below
@@ -508,136 +508,135 @@ async function initialize() {
                         location: location,
                         title: profileTitle,
                         currentCompany: currentCompany,
-                        // yearsOfExperience: yearsOfExperience,
-                        xSenior: xsenior,
-                        xNode: xnode,
-                        xJava: xjava,
-                        xPython: xpython,
-                        xFlask: xflask,
-                        xdevops: xdevops,
-                        xAWS: xaws,
-                        xdatascience: xdatascience,
-                        xArtificialIntelligence: xartificialintelligence,
-                        xMachineLearning: xmachinelearning,
-                        xDataArchitect: xdataarchitect,
-                        xArchitect: xarchitect,
-                        xNet: xnet,
-                        xGolang: xgolang,
-                        xReact: xreact,
-                        xAngular: xangular,
+                        // xSenior: xsenior,
+                        // xNode: xnode,
+                        // xJava: xjava,
+                        // xPython: xpython,
+                        // xFlask: xflask,
+                        // xdevops: xdevops,
+                        // xAWS: xaws,
+                        // xdatascience: xdatascience,
+                        // xArtificialIntelligence: xartificialintelligence,
+                        // xMachineLearning: xmachinelearning,
+                        // xDataArchitect: xdataarchitect,
+                        // xArchitect: xarchitect,
+                        // xNet: xnet,
+                        // xGolang: xgolang,
+                        // xReact: xreact,
+                        // xAngular: xangular,
                         // xVue: xvue,
                         // xIos: xios,
                         // xAndroid: xandroid,
-                        xReactNative: xreactNative,
-                        xFullstack: xfullstack,
-                        xTest: xtest,
-                        xQuality: xquality,
-                        xAutomation: xautomation,
-                        xCypress: xcypress,
-                        xSelenium: xselenium,
+                        // xReactNative: xreactNative,
+                        // xFullstack: xfullstack,
+                        // xTest: xtest,
+                        // xQuality: xquality,
+                        // xAutomation: xautomation,
+                        // xCypress: xcypress,
+                        // xSelenium: xselenium,
 
 
                         firstExperienceTitle: expTitle0,
-                        experienceLocation: companyCountry0,
+                        experienceLocation0: companyCountry0,
                         experienceDescription0: expDescription0,
                         firstExperienceTime: individualValidatedExp0,
 
 
                         secondExperienceTitle: expTitle1,
-                        experienceLocation: companyCountry1,
+                        experienceLocation1: companyCountry1,
                         experienceDescription1: expDescription1,
                         secondExperienceTime: individualValidatedExp1,
 
 
                         thirdExperienceTitle: expTitle2,
-                        experienceLocation: companyCountry2,
+                        experienceLocation2: companyCountry2,
                         experienceDescription2: expDescription2,
                         thirdExperienceTime: individualValidatedExp2,
 
 
                         fourthExperienceTitle: expTitle3,
-                        experienceLocation: companyCountry3,
+                        experienceLocation3: companyCountry3,
                         experienceDescription3: expDescription3,
                         fourthExperienceTime: individualValidatedExp3,
 
 
                         fifthExperienceTitle: expTitle4,
-                        experienceLocation: companyCountry4,
+                        experienceLocation4: companyCountry4,
                         experienceDescription4: expDescription4,
                         fifthExperienceTime: individualValidatedExp4,
 
 
                         sixthExperienceTitle: expTitle5,
-                        experienceLocation: companyCountry5,
+                        experienceLocation5: companyCountry5,
                         experienceDescription5: expDescription5,
                         sixthExperienceTime: individualValidatedExp5,
 
 
                         seventhExperienceTitle: expTitle6,
-                        experienceLocation: companyCountry6,
+                        experienceLocation6: companyCountry6,
                         experienceDescription6: expDescription6,
                         seventhExperienceTime: individualValidatedExp6,
 
 
                         eigthExperienceTitle: expTitle7,
-                        experienceLocation: companyCountry7,
+                        experienceLocation7: companyCountry7,
                         experienceDescription7: expDescription7,
                         eigthExperienceTime: individualValidatedExp7,
 
 
                         ninethExperienceTitle: expTitle8,
-                        experienceLocation: companyCountry8,
+                        experienceLocation8: companyCountry8,
                         experienceDescription8: expDescription8,
                         ninethExperienceTime: individualValidatedExp8,
 
-                        // COMPOSED EXP
-                        // group A
+                        // // COMPOSED EXP
+                        // // group A
 
-                        composedExperienceA_Title0: composedExpA_Title0,
-                        composed_Experience_DescriptionA_0: composedExpDescA_0,
-                        composedExperienceA_Time0: composedExpA_Time0,
+                        // composedExperienceA_Title0: composedExpA_Title0,
+                        // composed_Experience_DescriptionA_0: composedExpDescA_0,
+                        // composedExperienceA_Time0: composedExpA_Time0,
 
-                        composedExperienceA_Title1: composedExpA_Title1,
-                        composed_Experience_DescriptionA_1: composedExpDescA_1,
-                        composedExperienceA_Time1: composedExpA_Time1,
+                        // composedExperienceA_Title1: composedExpA_Title1,
+                        // composed_Experience_DescriptionA_1: composedExpDescA_1,
+                        // composedExperienceA_Time1: composedExpA_Time1,
 
-                        composedExperienceA_Title2: composedExpA_Title2,
-                        composed_Experience_DescriptionA_2: composedExpDescA_2,
-                        composedExperienceA_Time2: composedExpA_Time2,
+                        // composedExperienceA_Title2: composedExpA_Title2,
+                        // composed_Experience_DescriptionA_2: composedExpDescA_2,
+                        // composedExperienceA_Time2: composedExpA_Time2,
 
-                        composedExperienceA_Title3: composedExpA_Title3,
-                        composed_Experience_DescriptionA_3: composedExpDescA_3,
-                        composedExperienceA_Time3: composedExpA_Time3,
+                        // composedExperienceA_Title3: composedExpA_Title3,
+                        // composed_Experience_DescriptionA_3: composedExpDescA_3,
+                        // composedExperienceA_Time3: composedExpA_Time3,
 
-                        composedExperienceA_Title4: composedExpA_Title4,
-                        composed_Experience_DescriptionA_4: composedExpDescA_4,
-                        composedExperienceA_Time4: composedExpA_Time4,
+                        // composedExperienceA_Title4: composedExpA_Title4,
+                        // composed_Experience_DescriptionA_4: composedExpDescA_4,
+                        // composedExperienceA_Time4: composedExpA_Time4,
 
-                        composedExperienceA_Title5: composedExpA_Title5,
-                        composed_Experience_DescriptionA_5: composedExpDescA_5,
-                        composedExperienceA_Time5: composedExpA_Time5,
+                        // composedExperienceA_Title5: composedExpA_Title5,
+                        // composed_Experience_DescriptionA_5: composedExpDescA_5,
+                        // composedExperienceA_Time5: composedExpA_Time5,
 
-                        composedExperienceA_Title6: composedExpA_Title6,
-                        composed_Experience_DescriptionA_6: composedExpDescA_6,
-                        composedExperienceA_Time6: composedExpA_Time6,
+                        // composedExperienceA_Title6: composedExpA_Title6,
+                        // composed_Experience_DescriptionA_6: composedExpDescA_6,
+                        // composedExperienceA_Time6: composedExpA_Time6,
 
-                        // group B
+                        // // group B
 
-                        composedExperienceB_Title0: composedExpB_Title0,
-                        composed_Experience_DescriptionB_0: composedExpDescB_0,
-                        composedExperienceB_Time0: composedExpB_Time0,
+                        // composedExperienceB_Title0: composedExpB_Title0,
+                        // composed_Experience_DescriptionB_0: composedExpDescB_0,
+                        // composedExperienceB_Time0: composedExpB_Time0,
 
-                        composedExperienceB_Title1: composedExpB_Title1,
-                        composed_Experience_DescriptionB_1: composedExpDescB_1,
-                        composedExperienceB_Time1: composedExpB_Time1,
+                        // composedExperienceB_Title1: composedExpB_Title1,
+                        // composed_Experience_DescriptionB_1: composedExpDescB_1,
+                        // composedExperienceB_Time1: composedExpB_Time1,
 
-                        composedExperienceB_Title2: composedExpB_Title2,
-                        composed_Experience_DescriptionB_2: composedExpDescB_2,
-                        composedExperienceB_Time2: composedExpB_Time2,
+                        // composedExperienceB_Title2: composedExpB_Title2,
+                        // composed_Experience_DescriptionB_2: composedExpDescB_2,
+                        // composedExperienceB_Time2: composedExpB_Time2,
 
-                        composedExperienceB_Title3: composedExpB_Title3,
-                        composed_Experience_DescriptionB_3: composedExpDescB_3,
-                        composedExperienceB_Time3: composedExpB_Time3,
+                        // composedExperienceB_Title3: composedExpB_Title3,
+                        // composed_Experience_DescriptionB_3: composedExpDescB_3,
+                        // composedExperienceB_Time3: composedExpB_Time3,
 
                         totalWorkingTime: totalworkingtime
 
@@ -663,7 +662,7 @@ async function initialize() {
                 
                 // this needs to stay below the push method. I tried to put above, but it only works here.
                 xlsx.utils.sheet_add_json(workbook.Sheets["Plan1"], worksheets.Plan1);
-                xlsx.writeFile(workbook, "lessthan6.xlsx");
+                xlsx.writeFile(workbook, "teste.xlsx");
 
             }
         });
