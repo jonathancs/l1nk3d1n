@@ -30,7 +30,7 @@ const { first } = require("cheerio/lib/api/traversing");
 const { moveMessagePortToContext } = require("worker_threads");
 
 // FROM WITH ENGLISH
-const folderToBeScrapped = "D:/Users/jonat/git/l1nk3d1n/zprofiles/selectedFolder/less than 6years/";
+const folderToBeScrapped = "D:/Users/jonat/git/l1nk3d1n/withEnglish/";
 const selectedFolder = "D:/Users/jonat/git/l1nk3d1n/zprofiles/selectedFolder/zexported/";
 
 // FROM ZEXPORTED
@@ -41,7 +41,7 @@ const selectedFolder = "D:/Users/jonat/git/l1nk3d1n/zprofiles/selectedFolder/zex
 profilesToBeScraped = [];
 
 // Read the file into memory
-const workbook = xlsx.readFile("teste.xlsx");
+const workbook = xlsx.readFile("feb-newversion.xlsx");
 
 // Convert the xlsx to JSON
 let worksheets = {};
@@ -61,7 +61,7 @@ async function initialize() {
             });
 
             // this will loop the list of profiles to be scraped
-            for (i = 0; i < 10; i++) {
+            for (i = 0; i < 3000; i++) {
                 currentProfile = profilesToBeScraped[i];
 
                 // this will READ the looped file and extract the infos below
@@ -73,7 +73,7 @@ async function initialize() {
 
                     for (let i = 0; i < 7; i++) {
                         try { document.querySelector('div[class="display-flex flex-column justify-center overflow-hidden"]').parentElement.parentElement.parentElement.remove() } catch (error) { 1 + 1 }
-    
+
                     }
                 }
 
@@ -105,7 +105,7 @@ async function initialize() {
                     rawProfileTitle = $(".text-body-medium.break-words").text();
                     profileTitle = rawProfileTitle.trim();
 
-                    
+
                     // currentCompany
                     rawCurrentCompany = $("h3.t-16.t-black.t-bold").eq(0).children().text();
                     currentCompany = rawCurrentCompany.replace(/Nome da empresa/gim, "");
@@ -264,50 +264,50 @@ async function initialize() {
 
                 function getIndividualExperiences() {
 
-					let experiencesList = $('.pv-profile-section > div > div > a')  
+                    let experiencesList = $('.pv-profile-section > div > div > a')
                     // This selector catches all individual experiences without margin of error, but it goes one level deep inside the element and then you must go back one step to have access to infos
 
-					expTitle0 = experiencesList.eq(0).parent().eq(0).children().children().children().eq(1).text()
+                    expTitle0 = experiencesList.eq(0).parent().eq(0).children().children().children().eq(1).text()
                     companyCountry0 = experiencesList.eq(0).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
                     expDescription0 = experiencesList.eq(0).parent().eq(0).children().eq(1).text().trim()
                     experienceTime_as_String0 = experiencesList.eq(0).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
-                    
-                    expTitle1 = experiencesList.eq(1).parent().eq(0).children().eq(1).text().trim()
+
+                    expTitle1 = experiencesList.eq(1).parent().eq(0).children().children().children().eq(1).text()
                     companyCountry1 = experiencesList.eq(1).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
                     expDescription1 = experiencesList.eq(1).parent().eq(0).children().eq(1).text().trim()
                     experienceTime_as_String1 = experiencesList.eq(1).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle2 = experiencesList.eq(2).parent().eq(0).children().eq(1).text().trim()
+                    expTitle2 = experiencesList.eq(2).parent().eq(0).children().children().children().eq(1).text()
                     companyCountry2 = experiencesList.eq(2).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
                     expDescription2 = experiencesList.eq(2).parent().eq(0).children().eq(1).text().trim()
                     experienceTime_as_String2 = experiencesList.eq(2).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle3 = experiencesList.eq(3).parent().eq(0).children().eq(1).text().trim()
+                    expTitle3 = experiencesList.eq(3).parent().eq(0).children().children().children().eq(1).text()
                     companyCountry3 = experiencesList.eq(3).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
                     expDescription3 = experiencesList.eq(3).parent().eq(0).children().eq(1).text().trim()
                     experienceTime_as_String3 = experiencesList.eq(3).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle4 = experiencesList.eq(4).parent().eq(0).children().eq(1).text().trim()
+                    expTitle4 = experiencesList.eq(4).parent().eq(0).children().children().children().eq(1).text()
                     companyCountry4 = experiencesList.eq(4).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
                     expDescription4 = experiencesList.eq(4).parent().eq(0).children().eq(1).text().trim()
                     experienceTime_as_String4 = experiencesList.eq(4).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle5 = experiencesList.eq(5).parent().eq(0).children().eq(1).text().trim()
+                    expTitle5 = experiencesList.eq(5).parent().eq(0).children().children().children().eq(1).text()
                     companyCountry5 = experiencesList.eq(5).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
                     expDescription5 = experiencesList.eq(5).parent().eq(0).children().eq(1).text().trim()
                     experienceTime_as_String5 = experiencesList.eq(5).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle6 = experiencesList.eq(6).parent().eq(0).children().eq(1).text().trim()
+                    expTitle6 = experiencesList.eq(6).parent().eq(0).children().children().children().eq(1).text()
                     companyCountry6 = experiencesList.eq(6).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
                     expDescription6 = experiencesList.eq(6).parent().eq(0).children().eq(1).text().trim()
                     experienceTime_as_String6 = experiencesList.eq(6).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle7 = experiencesList.eq(7).parent().eq(0).children().eq(1).text().trim()
+                    expTitle7 = experiencesList.eq(7).parent().eq(0).children().children().children().eq(1).text()
                     companyCountry7 = experiencesList.eq(7).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
                     expDescription7 = experiencesList.eq(7).parent().eq(0).children().eq(1).text().trim()
                     experienceTime_as_String7 = experiencesList.eq(7).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
 
-                    expTitle8 = experiencesList.eq(8).parent().eq(0).children().eq(1).text().trim()
+                    expTitle8 = experiencesList.eq(8).parent().eq(0).children().children().children().eq(1).text()
                     companyCountry8 = experiencesList.eq(8).parent().eq(0).children().eq(0).children().eq(1).children().eq(4).children().eq(1).text()
                     expDescription8 = experiencesList.eq(8).parent().eq(0).children().eq(1).text().trim()
                     experienceTime_as_String8 = experiencesList.eq(8).parent().eq(0).children().eq(0).children().eq(1).children().eq(3).children().eq(1).children().eq(1).text()
@@ -316,21 +316,21 @@ async function initialize() {
 
                 function convert_experience_time_strings_into_number() {
 
-                    function convert_Exp_Time_String_Into_Number (expTimeString) {
+                    function convert_Exp_Time_String_Into_Number(expTimeString) {
 
                         if (expTimeString.includes('anos') && expTimeString.includes('mês')) { expTimeString = expTimeString.replace(' anos ', '.'); expTimeString = expTimeString.replace('mês', '') }
                         if (expTimeString.includes('anos') && expTimeString.includes('meses')) { expTimeString = expTimeString.replace(' anos ', '.'); expTimeString = expTimeString.replace('meses', '') }
                         if (expTimeString.includes('ano') && expTimeString.includes('mês')) { expTimeString = expTimeString.replace(' ano ', '.'); expTimeString = expTimeString.replace(' mês', '') }
                         if (expTimeString.includes('ano') && expTimeString.includes('meses')) { expTimeString = expTimeString.replace(' ano ', '.'); expTimeString = expTimeString.replace(' meses', '') }
-    
+
                         if (expTimeString.includes('ano')) { expTimeString = expTimeString.replace(/[^0-9.]/g, "") }
                         if (expTimeString.includes('mês')) { expTimeString = expTimeString.replace(' mês', ''); expTimeString = '0.' + expTimeString }
                         if (expTimeString.includes('meses')) { expTimeString = expTimeString.replace(' meses', ''); expTimeString = '0.' + expTimeString }
-    
+
                         expTimeString = parseFloat(expTimeString)
                         return expTimeString
-    
-    
+
+
                     }
 
                     // individual
@@ -353,7 +353,7 @@ async function initialize() {
                     composedExpA_Time4 = convert_Exp_Time_String_Into_Number(composedExpA_TimeString4)
                     composedExpA_Time5 = convert_Exp_Time_String_Into_Number(composedExpA_TimeString5)
                     composedExpA_Time6 = convert_Exp_Time_String_Into_Number(composedExpA_TimeString6)
-                    
+
                     // composed Exp group B
                     composedExpB_Time0 = convert_Exp_Time_String_Into_Number(composedExpB_TimeString0)
                     composedExpB_Time1 = convert_Exp_Time_String_Into_Number(composedExpB_TimeString1)
@@ -393,63 +393,61 @@ async function initialize() {
                     function validateEXP(expTitle, expTime) {
                         let counter = 0
                         lwrCaseExpTitle = expTitle.toLowerCase()
-    
-                        // portuguese
-                        if (lwrCaseExpTitle.includes('desenvolvedor')) { counter++ }
-                        if (lwrCaseExpTitle.includes('desenvolvedora')) { counter++ }
-                        if (lwrCaseExpTitle.includes('programador')) { counter++ }
-                        if (lwrCaseExpTitle.includes('programadora')) { counter++ }
-                        if (lwrCaseExpTitle.includes('programmer')) { counter++ }
-                        if (lwrCaseExpTitle.includes('sistema')) { counter++ }
-                        if (lwrCaseExpTitle.includes('dados')) { counter++ }
-                        if (lwrCaseExpTitle.includes('consultor')) { counter++ }
-    
-                        // english
-                        if (lwrCaseExpTitle.includes('developer')) { counter++ }
-                        if (lwrCaseExpTitle.includes('sdet')) { counter++ }
-                        if (lwrCaseExpTitle.includes('tech')) { counter++ }
-                        if (lwrCaseExpTitle.includes(' bi')) { counter++ }
-                        if (lwrCaseExpTitle.includes('cto')) { counter++ }
-                        if (lwrCaseExpTitle.includes('ux ')) { counter++ }
-                        if (lwrCaseExpTitle.includes('ux/ui')) { counter++ }
-                        if (lwrCaseExpTitle.includes('chief operating office')) { counter++ }
-                        if (lwrCaseExpTitle.includes('lead')) { counter++ }
-                        if (lwrCaseExpTitle.includes('system')) { counter++ }
-                        if (lwrCaseExpTitle.includes('software')) { counter++ }
-                        if (lwrCaseExpTitle.includes('scrum')) { counter++ }
-                        if (lwrCaseExpTitle.includes('solutions')) { counter++ }
-                        if (lwrCaseExpTitle.includes('project manager')) { counter++ }
-                        if (lwrCaseExpTitle.includes('freelance')) { counter++ }
-                        if (lwrCaseExpTitle.includes('data')) { counter++ }
-                        if (lwrCaseExpTitle.includes('cloud')) { counter++ }
-                        if (lwrCaseExpTitle.includes('business intelligence')) { counter++ }
-                        if (lwrCaseExpTitle.includes('business inteligence')) { counter++ }
-                        if (lwrCaseExpTitle.includes('test')) { counter++ }
-                        if (lwrCaseExpTitle.includes('quality assurance')) { counter++ }
+
+                        if (lwrCaseExpTitle.includes('quality')) { counter++ }
                         if (lwrCaseExpTitle.includes('qa')) { counter++ }
-                        if (lwrCaseExpTitle.includes('machine learning')) { counter++ }
-                        if (lwrCaseExpTitle.includes('consultant')) { counter++ }
-                        if (lwrCaseExpTitle.includes('co-founder')) { counter++ }
-                        if (lwrCaseExpTitle.includes('owner')) { counter++ }
-                        if (lwrCaseExpTitle.includes('founder')) { counter++ }
+                        if (lwrCaseExpTitle.includes('quality')) { counter++ }
+                        if (lwrCaseExpTitle.includes('test')) { counter++ }
+                        if (lwrCaseExpTitle.includes('sdet')) { counter++ }
+                        if (lwrCaseExpTitle.includes('qualid')) { counter++ }
+
+                        
+                        if (lwrCaseExpTitle.includes('human')) { counter++ }
+                        if (lwrCaseExpTitle.includes('talent')) { counter++ }
+                        if (lwrCaseExpTitle.includes('recruiter')) { counter++ }
+
+                        if (lwrCaseExpTitle.includes('java')) { counter++ }
+                        if (lwrCaseExpTitle.includes('.net')) { counter++ }
+                        if (lwrCaseExpTitle.includes('PHP')) { counter++ }
+                        if (lwrCaseExpTitle.includes('python')) { counter++ }
+
+                        if (lwrCaseExpTitle.includes('react')) { counter++ }
                         if (lwrCaseExpTitle.includes('front')) { counter++ }
                         if (lwrCaseExpTitle.includes('back')) { counter++ }
-                        if (lwrCaseExpTitle.includes('fullstack')) { counter++ }
                         if (lwrCaseExpTitle.includes('full stack')) { counter++ }
-                        if (lwrCaseExpTitle.includes('head')) { counter++ }
-                        if (lwrCaseExpTitle.includes('product')) { counter++ }
-    
-                        // spanish
-                        if (lwrCaseExpTitle.includes('desarrollador')) { counter++ }
-                        if (lwrCaseExpTitle.includes('desarrolladora')) { counter++ }
-                        if (lwrCaseExpTitle.includes('datos')) { counter++ }
-    
+                        if (lwrCaseExpTitle.includes('fullstack')) { counter++ }
+
+                        if (lwrCaseExpTitle.includes('devops')) { counter++ }
+                        if (lwrCaseExpTitle.includes('Infrastructure')) { counter++ }
+                        if (lwrCaseExpTitle.includes('engineer')) { counter++ }
+                        if (lwrCaseExpTitle.includes('engenheir')) { counter++ }
+                        if (lwrCaseExpTitle.includes('architect')) { counter++ }
+                        if (lwrCaseExpTitle.includes('arquitet')) { counter++ }
+                        if (lwrCaseExpTitle.includes('mobile')) { counter++ }
+                        if (lwrCaseExpTitle.includes('software')) { counter++ }
+                        if (lwrCaseExpTitle.includes('developer')) { counter++ }
+                        if (lwrCaseExpTitle.includes('program')) { counter++ }
+                        if (lwrCaseExpTitle.includes('desenvolvedor')) { counter++ }
+                        if (lwrCaseExpTitle.includes('free')) { counter++ }
+                        if (lwrCaseExpTitle.includes('BI')) { counter++ }
+                        if (lwrCaseExpTitle.includes('Business Intelligence')) { counter++ }
+                        if (lwrCaseExpTitle.includes('sistema')) { counter++ }
+                        if (lwrCaseExpTitle.includes('system')) { counter++ }
+                        if (lwrCaseExpTitle.includes('senior')) { counter++ }
+                        if (lwrCaseExpTitle.includes('consultant')) { counter++ }
+                        if (lwrCaseExpTitle.includes('project')) { counter++ }
+                        if (lwrCaseExpTitle.includes('scrum')) { counter++ }
+                        if (lwrCaseExpTitle.includes('ux ')) { counter++ }
+                        if (lwrCaseExpTitle.includes('UX/UI')) { counter++ }
+                        if (lwrCaseExpTitle.includes('data')) { counter++ }
+                        if (lwrCaseExpTitle.includes('machine')) { counter++ }
+                        
                         // end of function
                         if (counter > 0) { 1 + 1 } else { expTime = 0 } // i could invalidate the title as well, but i want to know what other titles could i be ignoring
                         return expTime
-    
+
                     }
-    
+
                     // individual experiences
                     individualValidatedExp0 = validateEXP(expTitle0, experiencetime0)
                     individualValidatedExp1 = validateEXP(expTitle1, experiencetime1)
@@ -460,7 +458,7 @@ async function initialize() {
                     individualValidatedExp6 = validateEXP(expTitle6, experiencetime6)
                     individualValidatedExp7 = validateEXP(expTitle7, experiencetime7)
                     individualValidatedExp8 = validateEXP(expTitle8, experiencetime8)
-    
+
                     // composed experiences GROUP A
                     composedA_ValidatedExp0 = validateEXP(composedExpA_Title0, composedExpA_Time0)
                     composedA_ValidatedExp1 = validateEXP(composedExpA_Title1, composedExpA_Time1)
@@ -469,7 +467,7 @@ async function initialize() {
                     composedA_ValidatedExp4 = validateEXP(composedExpA_Title4, composedExpA_Time4)
                     composedA_ValidatedExp5 = validateEXP(composedExpA_Title5, composedExpA_Time5)
                     composedA_ValidatedExp6 = validateEXP(composedExpA_Title6, composedExpA_Time6)
-    
+
                     // composed experiences GROUP B
                     composedB_ValidatedExp0 = validateEXP(composedExpB_Title0, composedExpB_Time0)
                     composedB_ValidatedExp1 = validateEXP(composedExpB_Title1, composedExpB_Time1)
@@ -479,6 +477,20 @@ async function initialize() {
 
                 function sum_All_EXP_Time() {
                     totalworkingtime = individualValidatedExp0 + individualValidatedExp1 + individualValidatedExp2 + individualValidatedExp3 + individualValidatedExp4 + individualValidatedExp5 + individualValidatedExp6 + individualValidatedExp7 + individualValidatedExp8 + composedA_ValidatedExp0 + composedA_ValidatedExp1 + composedA_ValidatedExp2 + composedA_ValidatedExp3 + composedA_ValidatedExp4 + composedA_ValidatedExp5 + composedA_ValidatedExp6 + composedB_ValidatedExp0 + composedB_ValidatedExp1 + composedB_ValidatedExp2 + composedB_ValidatedExp3
+                }
+
+                function get_competences() {
+
+                    let list_of_competences = $('li.pv-skill-category-entity pv-skill-category-entity--secondary pt4 pv-skill-endorsedSkill-entity relative ember-view')
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                 }
 
                 function moveToSelectedFolder() {
@@ -589,65 +601,71 @@ async function initialize() {
                         experienceDescription8: expDescription8,
                         ninethExperienceTime: individualValidatedExp8,
 
-                        // // COMPOSED EXP
-                        // // group A
+                        // COMPOSED EXP
+                        // group A
 
-                        // composedExperienceA_Title0: composedExpA_Title0,
+                        composedExperienceA_Title0: composedExpA_Title0,
                         // composed_Experience_DescriptionA_0: composedExpDescA_0,
-                        // composedExperienceA_Time0: composedExpA_Time0,
+                        composedExperienceA_Time0: composedExpA_Time0,
 
-                        // composedExperienceA_Title1: composedExpA_Title1,
+                        composedExperienceA_Title1: composedExpA_Title1,
                         // composed_Experience_DescriptionA_1: composedExpDescA_1,
-                        // composedExperienceA_Time1: composedExpA_Time1,
+                        composedExperienceA_Time1: composedExpA_Time1,
 
-                        // composedExperienceA_Title2: composedExpA_Title2,
+                        composedExperienceA_Title2: composedExpA_Title2,
                         // composed_Experience_DescriptionA_2: composedExpDescA_2,
-                        // composedExperienceA_Time2: composedExpA_Time2,
+                        composedExperienceA_Time2: composedExpA_Time2,
 
-                        // composedExperienceA_Title3: composedExpA_Title3,
+                        composedExperienceA_Title3: composedExpA_Title3,
                         // composed_Experience_DescriptionA_3: composedExpDescA_3,
-                        // composedExperienceA_Time3: composedExpA_Time3,
+                        composedExperienceA_Time3: composedExpA_Time3,
 
-                        // composedExperienceA_Title4: composedExpA_Title4,
+                        composedExperienceA_Title4: composedExpA_Title4,
                         // composed_Experience_DescriptionA_4: composedExpDescA_4,
-                        // composedExperienceA_Time4: composedExpA_Time4,
+                        composedExperienceA_Time4: composedExpA_Time4,
 
-                        // composedExperienceA_Title5: composedExpA_Title5,
+                        composedExperienceA_Title5: composedExpA_Title5,
                         // composed_Experience_DescriptionA_5: composedExpDescA_5,
-                        // composedExperienceA_Time5: composedExpA_Time5,
+                        composedExperienceA_Time5: composedExpA_Time5,
 
-                        // composedExperienceA_Title6: composedExpA_Title6,
+                        composedExperienceA_Title6: composedExpA_Title6,
                         // composed_Experience_DescriptionA_6: composedExpDescA_6,
-                        // composedExperienceA_Time6: composedExpA_Time6,
+                        composedExperienceA_Time6: composedExpA_Time6,
 
-                        // // group B
+                        // group B
 
-                        // composedExperienceB_Title0: composedExpB_Title0,
+                        composedExperienceB_Title0: composedExpB_Title0,
                         // composed_Experience_DescriptionB_0: composedExpDescB_0,
-                        // composedExperienceB_Time0: composedExpB_Time0,
+                        composedExperienceB_Time0: composedExpB_Time0,
 
-                        // composedExperienceB_Title1: composedExpB_Title1,
+                        composedExperienceB_Title1: composedExpB_Title1,
                         // composed_Experience_DescriptionB_1: composedExpDescB_1,
-                        // composedExperienceB_Time1: composedExpB_Time1,
+                        composedExperienceB_Time1: composedExpB_Time1,
 
-                        // composedExperienceB_Title2: composedExpB_Title2,
+                        composedExperienceB_Title2: composedExpB_Title2,
                         // composed_Experience_DescriptionB_2: composedExpDescB_2,
-                        // composedExperienceB_Time2: composedExpB_Time2,
+                        composedExperienceB_Time2: composedExpB_Time2,
 
-                        // composedExperienceB_Title3: composedExpB_Title3,
+                        composedExperienceB_Title3: composedExpB_Title3,
                         // composed_Experience_DescriptionB_3: composedExpDescB_3,
-                        // composedExperienceB_Time3: composedExpB_Time3,
+                        composedExperienceB_Time3: composedExpB_Time3,
 
                         totalWorkingTime: totalworkingtime
 
                     });
                 }
 
+                
+                
+                
+                
+                
+
                 deleteChatPoPups()
                 getFirstInfos()
                 // runWordCounters() 
                 // i deactivated it because i rarely  use this counter in excel.
-                
+
                 getComposedEXPS_A()
                 getComposedEXPS_B()
                 removeComposedEXPs()
@@ -659,10 +677,10 @@ async function initialize() {
                 // moveToSelectedFolder()
                 send_Data_to_Excel()
 
-                
+
                 // this needs to stay below the push method. I tried to put above, but it only works here.
                 xlsx.utils.sheet_add_json(workbook.Sheets["Plan1"], worksheets.Plan1);
-                xlsx.writeFile(workbook, "teste.xlsx");
+                xlsx.writeFile(workbook, "feb-newversion.xlsx");
 
             }
         });
